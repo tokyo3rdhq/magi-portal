@@ -2,9 +2,11 @@ import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss'],
+
   typescript: {
     strict: true
   },
+
   app: {
     head: {
       title: 'MAGI Portal',
@@ -22,6 +24,7 @@ export default defineNuxtConfig({
       ]
     }
   },
+
   nitro: {
     preset: 'cloudflare-pages',
     output: {
@@ -37,5 +40,7 @@ export default defineNuxtConfig({
         }
       }
     }
-  }
-}) 
+  },
+
+  compatibilityDate: '2025-01-17'
+})

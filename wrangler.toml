@@ -10,7 +10,7 @@ command = "npm run build"
 
 [env.production]
 name = "magi-portal-prod"
-route = "magi.yourdomain.com/*"
+route = "magi.website/*"
 workers_dev = false
 
 [env.staging]
