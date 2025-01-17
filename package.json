@@ -23,6 +23,7 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250109.0",
     "@nuxt/devtools": "^1.0.8",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@types/node": "^20.11.24",
@@ -36,7 +37,6 @@
     "prettier": "^3.2.5",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
-    "@cloudflare/workers-types": "^4.20240208.0",
     "wrangler": "^3.32.0"
   }
-} 
+}
