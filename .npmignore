@@ -1,0 +1,40 @@
+# Development files
+.nuxt
+.output
+.github
+.vscode
+.idea
+.fleet
+test
+tests
+__tests__
+coverage
+.nyc_output
+*.test.js
+*.spec.js
+
+# Source files
+assets
+components
+layouts
+pages
+plugins
+public
+server
+
+# Config files
+.eslintrc
+.prettierrc
+tsconfig.json
+nuxt.config.ts
+tailwind.config.js
+
+# Documentation
+docs
+*.md
+
+# Misc
+.DS_Store
+*.log
+.env*
+!.env.example 
