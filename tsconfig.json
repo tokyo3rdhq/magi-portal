@@ -1,9 +1,9 @@
 {
-  // 继承 Nuxt 的配置
-  "extends": "./.nuxt/tsconfig.json",
+  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "types": [
-      "@cloudflare/workers-types"
-    ]
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   }
-} 
+}

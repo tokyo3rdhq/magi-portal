@@ -1,0 +1,64 @@
+---
+const features = [
+  {
+    icon: '🚀',
+    title: '高性能',
+    description: '基于 Cloudflare Edge 全球加速，边缘节点覆盖 200+ 城市，平均响应时间 < 50ms',
+  },
+  {
+    icon: '🔒',
+    title: '隐私优先',
+    description: '数据处理透明，用户掌控数据。支持全程加密传输，关键数据可选择本地处理',
+  },
+  {
+    icon: '💡',
+    title: '易于集成',
+    description: '标准 OpenAI API 兼容格式，文档完善，多语言 SDK 支持，快速接入现有项目',
+  },
+  {
+    icon: '🔧',
+    title: '可扩展',
+    description: '模块化架构设计，支持水平扩展，随时添加新功能和接入新的 AI 模型',
+  },
+  {
+    icon: '💰',
+    title: '成本可控',
+    description: '按需付费，无最低消费。免费额度充足，个人项目和小规模使用完全免费',
+  },
+  {
+    icon: '🌐',
+    title: '全球可用',
+    description: '服务全球部署，自动选择最优节点，无论用户身在何处都能获得极速体验',
+  },
+];
+---
+
+<section id="features" class="py-24 px-6 bg-black/20">
+  <div class="max-w-6xl mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <span class="text-primary-400 font-medium mb-4 block">技术特点</span>
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">
+        为什么选择 <span class="text-primary-400">我</span>
+      </h2>
+      <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+        专注于技术深度与用户体验，用心打磨每一个细节
+      </p>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {features.map((feature) => (
+        <div class="group p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary-500/30 transition-all duration-300">
+          <div class="text-4xl mb-4">{feature.icon}</div>
+          <h3 class="text-xl font-semibold mb-3 group-hover:text-primary-300 transition-colors">
+            {feature.title}
+          </h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            {feature.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

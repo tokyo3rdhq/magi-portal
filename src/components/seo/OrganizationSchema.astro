@@ -1,0 +1,20 @@
+---
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Magi",
+  "url": "https://magi.website",
+  "logo": "https://magi.website/logo.svg",
+  "description": "Personal AI Lab - 专注于 AI 产品与服务的个人开发者",
+  "sameAs": [
+    "https://github.com/tokyo3rdhq"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "email": "hi@magi.website",
+    "contactType": "customer service"
+  }
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

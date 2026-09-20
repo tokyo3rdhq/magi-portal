@@ -1,0 +1,46 @@
+---
+import ProductCard from './ProductCard.astro';
+
+const products = [
+  {
+    name: 'Magi API',
+    description: '统一的 AI API 聚合服务，支持多提供商切换、智能路由、请求限流与用量统计',
+    url: 'https://api.magi.website',
+    icon: '⚡',
+  },
+  {
+    name: 'Magi Chat',
+    description: '简洁高效的 AI 对话助手，支持多模型切换、对话管理、上下文记忆',
+    url: 'https://chat.magi.website',
+    icon: '💬',
+  },
+  {
+    name: 'Magi Agent',
+    description: '智能 Agent 服务，支持工具调用、长期记忆、复杂任务分解与执行',
+    url: 'https://agent.magi.website',
+    icon: '🤖',
+  },
+];
+---
+
+<section id="products" class="py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <span class="text-primary-400 font-medium mb-4 block">产品矩阵</span>
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">
+        我的 <span class="text-primary-400">AI 产品</span>
+      </h2>
+      <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+        基于 Cloudflare Edge 构建的高性能 AI 服务，覆盖 API、对话、Agent 三大场景
+      </p>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {products.map((product) => (
+        <ProductCard {...product} />
+      ))}
+    </div>
+  </div>
+</section>

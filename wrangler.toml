@@ -1,28 +1,3 @@
 name = "magi-portal"
-main = ".output/server/index.mjs"
-compatibility_date = "2024-03-01"
-
-[site]
-bucket = ".output/public"
-
-[build]
-command = "npm run build"
-
-[env.production]
-name = "magi-portal-prod"
-route = "magi.website/*"
-workers_dev = false
-
-[env.staging]
-name = "magi-portal-staging"
-workers_dev = true
-
-# KV 命名空间配置
-[[kv_namespaces]]
-binding = "MAGI_STORAGE"
-id = "your-kv-namespace-id"
-preview_id = "your-preview-kv-namespace-id"
-
-# 环境变量配置
-[vars]
-NODE_ENV = "production"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "./dist"
