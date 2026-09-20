@@ -1,0 +1,106 @@
+---
+---
+
+<canvas id="matrix-canvas"></canvas>
+
+<script>
+  // Matrix Rain Effect - inspired by MAGI system terminals
+  const canvas = document.getElementById('matrix-canvas') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d');
+
+  // Set canvas size
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  // Characters for the rain (binary + hex + katakana hints)
+  const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+  const charArray = chars.split('');
+
+  const fontSize = 14;
+  const columns = Math.floor(canvas.width / fontSize);
+  const drops: number[] = new Array(columns).fill(1);
+
+  // Random magenta highlights
+  const magentaChance = 0.02;
+
+  function draw() {
+    // Semi-transparent black to create trail effect
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < drops.length; i++) {
+      // Pick a random character
+      const char = charArray[Math.floor(Math.random() * charArray.length)];
+      
+      // Color: mostly green, occasional magenta or cyan
+      const rand = Math.random();
+      if (rand < magentaChance) {
+        ctx.fillStyle = '#ff00ff'; // Magenta
+      } else if (rand < magentaChance * 2) {
+        ctx.fillStyle = '#00ffff'; // Cyan
+      } else {
+        ctx.fillStyle = '#00ff41'; // Terminal green
+      }
+
+      // Draw the character
+      ctx.font = `${fontSize}px monospace`;
+      ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+      // Reset drop to top with random chance
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  // Run the animation
+  setInterval(draw, 50);
+
+  // Add subtle mouse interaction - particles near cursor
+  document.addEventListener('mousemove', (e) => {
+    const particleCount = 3;
+    for (let i = 0; i < particleCount; i++) {
+      createParticle(e.clientX, e.clientY);
+    }
+  });
+
+  function createParticle(x: number, y: number) {
+    const particle = document.createElement('div');
+    particle.style.cssText = `
+      position: fixed;
+      left: ${x}px;
+      top: ${y}px;
+      width: 2px;
+      height: 2px;
+      background: #00ff41;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 100;
+      box-shadow: 0 0 6px #00ff41;
+      animation: particle-fade 1s ease-out forwards;
+    `;
+    document.body.appendChild(particle);
+    setTimeout(() => particle.remove(), 1000);
+  }
+
+  // Add particle animation
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes particle-fade {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(0);
+      }
+    }
+  `;
+  document.head.appendChild(style);
+</script>

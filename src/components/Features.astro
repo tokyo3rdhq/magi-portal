@@ -1,31 +1,50 @@
 ---
 const featureKeys = ['performance', 'privacy', 'integration', 'scalable', 'cost', 'global'];
+const icons = ['🚀', '🔒', '💡', '🔧', '💰', '🌐'];
 ---
 
-<section id="features" class="py-24 px-6 bg-black/20">
+<section id="features" class="relative py-24 px-4 bg-black/30">
   <div class="max-w-6xl mx-auto">
-    <!-- Section Header -->
-    <div class="text-center mb-16">
-      <span class="text-primary-400 font-medium mb-4 block" data-i18n="features.label">技术特点</span>
-      <h2 class="text-4xl md:text-5xl font-bold mb-6">
-        <span data-i18n="features.title">为什么选择</span> <span class="text-primary-400" data-i18n="features.titleHighlight">我</span>
+    <!-- Section header -->
+    <div class="mb-12">
+      <p class="terminal-dim text-sm mb-2">
+        <span class="text-[#00ff41]/50">$</span> cat /system/specifications.txt
+      </p>
+      <h2 class="text-2xl md:text-4xl font-bold mb-4">
+        <span class="terminal-dim">[</span>
+        <span class="terminal-highlight" data-i18n="features.label">TECHNICAL_FEATURES</span>
+        <span class="terminal-dim">]</span>
       </h2>
-      <p class="text-slate-400 text-lg max-w-2xl mx-auto" data-i18n="features.description">
-        专注于技术深度与用户体验，用心打磨每一个细节
+      <p class="terminal-dim max-w-2xl" data-i18n="features.description">
+        Focused on technical depth and user experience
       </p>
     </div>
 
-    <!-- Features Grid -->
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- Features grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {featureKeys.map((key, index) => (
-        <div class="group p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary-500/30 transition-all duration-300">
-          <div class="text-4xl mb-4">{['🚀', '🔒', '💡', '🔧', '💰', '🌐'][index]}</div>
-          <h3 class="text-xl font-semibold mb-3 group-hover:text-primary-300 transition-colors" data-i18n={`features.items.${key}.title`}>
+        <div class="group p-6 border border-[#00ff41]/20 bg-black/50 hover:border-[#00ffff]/50 hover:bg-[#00ffff]/5 transition-all duration-300">
+          <!-- Icon -->
+          <div class="text-3xl mb-4">{icons[index]}</div>
+          
+          <!-- Title -->
+          <h3 class="text-lg font-bold mb-2 terminal-text group-hover:text-[#00ffff] transition-colors" data-i18n={`features.items.${key}.title`}>
           </h3>
-          <p class="text-slate-400 text-sm leading-relaxed" data-i18n={`features.items.${key}.description`}>
+          
+          <!-- Description -->
+          <p class="text-sm leading-relaxed terminal-dim" data-i18n={`features.items.${key}.description`}>
           </p>
+          
+          <!-- Decorative line -->
+          <div class="mt-4 h-px bg-gradient-to-r from-[#00ff41]/50 to-transparent group-hover:from-[#00ffff]/50 transition-all"></div>
         </div>
       ))}
+    </div>
+    
+    <!-- Command prompt -->
+    <div class="mt-12 terminal-dim text-sm">
+      <span class="text-[#00ff41]/50">$</span> 
+      <span class="cursor-blink text-[#00ff41]">▮</span>
     </div>
   </div>
 </section>

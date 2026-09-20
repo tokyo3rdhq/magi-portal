@@ -2,48 +2,40 @@
 import ProductCard from './ProductCard.astro';
 
 const products = [
-  {
-    key: 'api',
-    url: 'https://api.magi.website',
-  },
-  {
-    key: 'chat',
-    url: 'https://chat.magi.website',
-  },
-  {
-    key: 'agent',
-    url: 'https://agent.magi.website',
-  },
+  { key: 'api', url: 'https://api.magi.website' },
+  { key: 'chat', url: 'https://chat.magi.website' },
+  { key: 'agent', url: 'https://agent.magi.website' },
 ];
 ---
 
-<section id="products" class="py-24 px-6">
+<section id="products" class="relative py-24 px-4">
   <div class="max-w-6xl mx-auto">
-    <!-- Section Header -->
-    <div class="text-center mb-16">
-      <span class="text-primary-400 font-medium mb-4 block" data-i18n="products.label">产品矩阵</span>
-      <h2 class="text-4xl md:text-5xl font-bold mb-6">
-        <span data-i18n="products.title">我的</span> <span class="text-primary-400" data-i18n="products.titleHighlight">AI 产品</span>
+    <!-- Section header -->
+    <div class="mb-12">
+      <p class="terminal-dim text-sm mb-2">
+        <span class="text-[#00ff41]/50">$</span> ls -la /products/
+      </p>
+      <h2 class="text-2xl md:text-4xl font-bold mb-4">
+        <span class="terminal-dim">[</span>
+        <span class="terminal-text" data-i18n="products.label">PRODUCT_PORTFOLIO</span>
+        <span class="terminal-dim">]</span>
       </h2>
-      <p class="text-slate-400 text-lg max-w-2xl mx-auto" data-i18n="products.description">
-        基于 Cloudflare Edge 构建的高性能 AI 服务，覆盖 API、对话、Agent 三大场景
+      <p class="terminal-dim max-w-2xl" data-i18n="products.description">
+        High-performance AI services deployed on Cloudflare Edge network
       </p>
     </div>
 
-    <!-- Products Grid -->
+    <!-- Products grid -->
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <ProductCard
-        key="api"
-        url={products[0].url}
-      />
-      <ProductCard
-        key="chat"
-        url={products[1].url}
-      />
-      <ProductCard
-        key="agent"
-        url={products[2].url}
-      />
+      {products.map((product) => (
+        <ProductCard key={product.key} url={product.url} />
+      ))}
+    </div>
+    
+    <!-- Command prompt -->
+    <div class="mt-12 terminal-dim text-sm">
+      <span class="text-[#00ff41]/50">$</span> 
+      <span class="cursor-blink text-[#00ff41]">▮</span>
     </div>
   </div>
 </section>
