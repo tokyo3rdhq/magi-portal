@@ -99,119 +99,182 @@ const fullTitle = title === 'Home' ? 'MAGI.website - Personal AI Lab' : `${title
 
     <!-- i18n Script -->
     <script is:inline>
-      // i18n translations
       const translations = {
         zh: {
           nav: { home: '首页', products: '产品', features: '特点', about: '关于' },
           hero: {
             badge: 'Personal AI Lab',
-            headline: 'MAGI SYSTEM',
-            subheadline: '专注于 AI 产品与服务的独立开发者，构建边缘智能解决方案',
-            ctaProducts: 'VIEW_PRODUCTS',
-            ctaContact: 'CONTACT_ME',
+            terminal: {
+              title: 'MAGI 系统接口 v3.14.159',
+              command: '[NERV 中央指挥]',
+            },
+            boot: {
+              init: '初始化 MAGI 神经网络...',
+              loading: '加载三个 Magi 子系统...',
+              melchior: 'MELCHIOR 内核已加载',
+              balthasar: 'BALTHASAR 内核已加载',
+              caspar: 'CASPAR 内核已加载',
+              connection: '建立 NERV 总部连接...',
+            },
+            status: '// 系统状态',
+            subtitle: '个人 AI 实验室',
+            role: '独立开发者',
+            subheadline: '专注于 AI 产品与服务开发，在边缘构建智能解决方案',
+            modules: '核心模块',
+            moduleApi: 'API_网关',
+            moduleChat: 'AI_对话',
+            moduleAgent: 'Agent_系统',
+            networkStatus: '网络状态',
+            online: '在线',
+            platform: '部署平台',
+            commands: '可用命令:',
+            ctaProducts: '查看产品',
+            ctaContact: '联系我',
+            awaiting: '等待输入...',
+            scroll: '向下滚动',
           },
           products: {
-            label: 'PRODUCT_PORTFOLIO',
+            label: '产品组合',
             title: '我的',
             titleHighlight: 'AI 产品',
             description: '基于 Cloudflare Edge 构建的高性能 AI 服务，覆盖 API、对话、Agent 三大场景',
-            api: { name: 'MAGI_API', description: '统一的 AI API 聚合服务，支持多提供商切换、智能路由、请求限流与用量统计' },
-            chat: { name: 'MAGI_CHAT', description: '简洁高效的 AI 对话助手，支持多模型切换、对话管理、上下文记忆' },
-            agent: { name: 'MAGI_AGENT', description: '智能 Agent 服务，支持工具调用、长期记忆、复杂任务分解与执行' },
+            api: { name: 'MAGI API', description: '统一的 AI API 聚合服务，支持多提供商切换、智能路由、请求限流与用量统计' },
+            chat: { name: 'MAGI Chat', description: '简洁高效的 AI 对话助手，支持多模型切换、对话管理、上下文记忆' },
+            agent: { name: 'MAGI Agent', description: '智能 Agent 服务，支持工具调用、长期记忆、复杂任务分解与执行' },
           },
           features: {
-            label: 'TECHNICAL_FEATURES',
+            label: '技术特点',
             title: '为什么选择',
             titleHighlight: '我',
             description: '专注于技术深度与用户体验，用心打磨每一个细节',
             items: {
-              performance: { title: 'HIGH_PERFORMANCE', description: '基于 Cloudflare Edge 全球加速，边缘节点覆盖 200+ 城市，平均响应时间 < 50ms' },
-              privacy: { title: 'PRIVACY_FIRST', description: '数据处理透明，用户掌控数据。支持全程加密传输，关键数据可选择本地处理' },
-              integration: { title: 'EASY_INTEGRATION', description: '标准 OpenAI API 兼容格式，文档完善，多语言 SDK 支持，快速接入现有项目' },
-              scalable: { title: 'SCALABLE', description: '模块化架构设计，支持水平扩展，随时添加新功能和接入新的 AI 模型' },
-              cost: { title: 'COST_EFFECTIVE', description: '按需付费，无最低消费。免费额度充足，个人项目和小规模使用完全免费' },
-              global: { title: 'GLOBAL_AVAILABILITY', description: '服务全球部署，自动选择最优节点，无论用户身在何处都能获得极速体验' },
+              performance: { title: '高性能', description: '基于 Cloudflare Edge 全球加速，边缘节点覆盖 200+ 城市，平均响应时间 < 50ms' },
+              privacy: { title: '隐私优先', description: '数据处理透明，用户掌控数据。支持全程加密传输，关键数据可选择本地处理' },
+              integration: { title: '易于集成', description: '标准 OpenAI API 兼容格式，文档完善，多语言 SDK 支持，快速接入现有项目' },
+              scalable: { title: '可扩展', description: '模块化架构设计，支持水平扩展，随时添加新功能和接入新的 AI 模型' },
+              cost: { title: '成本可控', description: '按需付费，无最低消费。免费额度充足，个人项目和小规模使用完全免费' },
+              global: { title: '全球可用', description: '服务全球部署，自动选择最优节点，无论用户身在何处都能获得极速体验' },
             },
           },
           about: {
-            label: 'ABOUT_DEVELOPER',
+            label: '关于开发者',
             title: '你好，我是',
             titleHighlight: 'MAGI',
+            terminalTitle: 'MELCHIOR_VISUALIZATION.exe',
+            supercomputer: '超级计算机系统',
+            namedAfter: '// 以东方三圣贤命名',
+            melchiorRole: '- 逻辑核心',
+            balthasarRole: '- 判断核心',
+            casparRole: '- 智慧核心',
+            systemStatus: '系统状态',
+            operational: '运行中',
             paragraphs: [
               '一名热爱技术的独立开发者，专注于 AI 领域的产品与服务开发。',
               '热衷于探索前沿技术，致力于将复杂的 AI 能力简化为易于使用的产品，让更多人能够享受 AI 带来的便利。',
               '基于 Cloudflare Edge Platform 构建高性能、高可用的 AI 服务，追求极致的用户体验和系统稳定性。',
             ],
-            techStack: 'TECH_STACK',
-            contact: 'CONTACT',
+            techStack: '技术栈',
+            contact: '联系方式',
           },
           footer: {
             brand: 'MAGI',
             tagline: '专注于 AI 产品与服务的独立开发者',
-            quickLinks: 'QUICK_LINKS',
-            followMe: 'CONNECT',
-            copyright: 'ALL_RIGHTS_RESERVED',
-            privacy: 'PRIVACY_POLICY',
-            terms: 'TERMS_OF_SERVICE',
+            quickLinks: '快速链接',
+            followMe: '关注我',
+            copyright: '保留所有权利',
+            privacy: '隐私政策',
+            terms: '服务条款',
           },
         },
         en: {
           nav: { home: 'Home', products: 'Products', features: 'Features', about: 'About' },
           hero: {
             badge: 'Personal AI Lab',
-            headline: 'MAGI SYSTEM',
-            subheadline: 'Independent developer focused on AI products and services, building intelligent solutions at the edge.',
+            terminal: {
+              title: 'MAGI SYSTEM INTERFACE v3.14.159',
+              command: '[NERV CENTRAL COMMAND]',
+            },
+            boot: {
+              init: 'initializing MAGI neural network...',
+              loading: 'loading three Magi subsystems...',
+              melchior: 'MELCHIOR kernel loaded',
+              balthasar: 'BALTHASAR kernel loaded',
+              caspar: 'CASPAR kernel loaded',
+              connection: 'establishing NERV HQ connection...',
+            },
+            status: '// SYSTEM STATUS',
+            subtitle: 'Personal AI Lab',
+            role: 'Independent Developer',
+            subheadline: 'Specialized in AI products and services, building intelligent solutions at the edge.',
+            modules: 'CORE_MODULES',
+            moduleApi: 'API_GATEWAY',
+            moduleChat: 'AI_CHAT',
+            moduleAgent: 'AGENT_SYSTEM',
+            networkStatus: 'NETWORK_STATUS',
+            online: 'ONLINE',
+            platform: 'DEPLOY_PLATFORM',
+            commands: 'available_commands:',
             ctaProducts: 'VIEW_PRODUCTS',
             ctaContact: 'CONTACT_ME',
+            awaiting: 'awaiting input...',
+            scroll: 'SCROLL_DOWN',
           },
           products: {
-            label: 'PRODUCT_PORTFOLIO',
+            label: 'Product Portfolio',
             title: 'My',
             titleHighlight: 'AI Products',
             description: 'High-performance AI services built on Cloudflare Edge, covering API, Chat, and Agent scenarios.',
-            api: { name: 'MAGI_API', description: 'Unified AI API aggregation service with multi-provider switching, intelligent routing, rate limiting, and usage statistics.' },
-            chat: { name: 'MAGI_CHAT', description: 'Clean and efficient AI chat assistant with multi-model switching, conversation management, and context memory.' },
-            agent: { name: 'MAGI_AGENT', description: 'Intelligent Agent service with tool calling, long-term memory, complex task decomposition and execution.' },
+            api: { name: 'MAGI API', description: 'Unified AI API aggregation service with multi-provider switching, intelligent routing, rate limiting, and usage statistics.' },
+            chat: { name: 'MAGI Chat', description: 'Clean and efficient AI chat assistant with multi-model switching, conversation management, and context memory.' },
+            agent: { name: 'MAGI Agent', description: 'Intelligent Agent service with tool calling, long-term memory, complex task decomposition and execution.' },
           },
           features: {
-            label: 'TECHNICAL_FEATURES',
+            label: 'Technical Features',
             title: 'Why Choose',
             titleHighlight: 'Me',
             description: 'Focused on technical depth and user experience, carefully crafting every detail.',
             items: {
-              performance: { title: 'HIGH_PERFORMANCE', description: 'Built on Cloudflare Edge with 200+ city coverage, average response time < 50ms.' },
-              privacy: { title: 'PRIVACY_FIRST', description: 'Transparent data processing, user data control. Full encryption support with optional local processing.' },
-              integration: { title: 'EASY_INTEGRATION', description: 'Standard OpenAI API compatible format, comprehensive documentation, multi-language SDK support.' },
-              scalable: { title: 'SCALABLE', description: 'Modular architecture with horizontal scaling, easily add new features and AI models.' },
-              cost: { title: 'COST_EFFECTIVE', description: 'Pay-as-you-go, no minimum. Generous free tier, completely free for personal projects.' },
-              global: { title: 'GLOBAL_AVAILABILITY', description: 'Global deployment with auto node selection, lightning-fast experience anywhere.' },
+              performance: { title: 'High Performance', description: 'Built on Cloudflare Edge with 200+ city coverage, average response time < 50ms.' },
+              privacy: { title: 'Privacy First', description: 'Transparent data processing, user data control. Full encryption support with optional local processing.' },
+              integration: { title: 'Easy Integration', description: 'Standard OpenAI API compatible format, comprehensive documentation, multi-language SDK support.' },
+              scalable: { title: 'Scalable', description: 'Modular architecture with horizontal scaling, easily add new features and AI models.' },
+              cost: { title: 'Cost Effective', description: 'Pay-as-you-go, no minimum. Generous free tier, completely free for personal projects.' },
+              global: { title: 'Global Availability', description: 'Global deployment with auto node selection, lightning-fast experience anywhere.' },
             },
           },
           about: {
-            label: 'ABOUT_DEVELOPER',
+            label: 'About Developer',
             title: 'Hello, I\'m',
             titleHighlight: 'MAGI',
+            terminalTitle: 'MELCHIOR_VISUALIZATION.exe',
+            supercomputer: 'SUPERCOMPUTER SYSTEM',
+            namedAfter: '// Named after the Three Wise Men',
+            melchiorRole: '- Logic Core',
+            balthasarRole: '- Judgment Core',
+            casparRole: '- Wisdom Core',
+            systemStatus: 'SYSTEM_STATUS',
+            operational: 'OPERATIONAL',
             paragraphs: [
               'An independent developer passionate about technology, focused on AI products and services.',
               'Dedicated to exploring cutting-edge tech and simplifying complex AI capabilities into accessible products.',
               'Building high-performance AI services on Cloudflare Edge Platform, pursuing excellent user experience and system stability.',
             ],
-            techStack: 'TECH_STACK',
-            contact: 'CONTACT',
+            techStack: 'Tech Stack',
+            contact: 'Contact',
           },
           footer: {
             brand: 'MAGI',
             tagline: 'Independent developer focused on AI products and services',
-            quickLinks: 'QUICK_LINKS',
-            followMe: 'CONNECT',
-            copyright: 'ALL_RIGHTS_RESERVED',
-            privacy: 'PRIVACY_POLICY',
-            terms: 'TERMS_OF_SERVICE',
+            quickLinks: 'Quick Links',
+            followMe: 'Follow Me',
+            copyright: 'All rights reserved.',
+            privacy: 'Privacy Policy',
+            terms: 'Terms of Service',
           },
         },
       };
       
-      const locales = { zh: '中文', en: 'English' };
+      const localeNames = { zh: '中文', en: 'English' };
       
       function getLocale() {
         const saved = localStorage.getItem('locale');
@@ -225,14 +288,12 @@ const fullTitle = title === 'Home' ? 'MAGI.website - Personal AI Lab' : `${title
         localStorage.setItem('locale', locale);
         document.documentElement.lang = locale;
         const currentLangEl = document.getElementById('current-lang');
-        if (currentLangEl) currentLangEl.textContent = locales[locale];
+        if (currentLangEl) currentLangEl.textContent = localeNames[locale];
         window.dispatchEvent(new CustomEvent('localechange', { detail: locale }));
       }
       
-      function t(key) {
-        const locale = getLocale();
-        const keys = key.split('.');
-        let value = translations[locale];
+      function getNestedValue(obj, keys) {
+        let value = obj;
         for (const k of keys) {
           const index = parseInt(k, 10);
           if (!isNaN(index) && Array.isArray(value)) {
@@ -241,7 +302,7 @@ const fullTitle = title === 'Home' ? 'MAGI.website - Personal AI Lab' : `${title
             value = value?.[k];
           }
         }
-        return value || key;
+        return value;
       }
       
       function applyTranslations() {
@@ -250,16 +311,7 @@ const fullTitle = title === 'Home' ? 'MAGI.website - Personal AI Lab' : `${title
         document.querySelectorAll('[data-i18n]').forEach(el => {
           const key = el.getAttribute('data-i18n');
           if (!key) return;
-          const keys = key.split('.');
-          let value = trans;
-          for (const k of keys) {
-            const index = parseInt(k, 10);
-            if (!isNaN(index) && Array.isArray(value)) {
-              value = value[index];
-            } else {
-              value = value?.[k];
-            }
-          }
+          const value = getNestedValue(trans, key.split('.'));
           if (value !== undefined) {
             el.textContent = value;
           }
@@ -272,7 +324,7 @@ const fullTitle = title === 'Home' ? 'MAGI.website - Personal AI Lab' : `${title
         document.documentElement.lang = locale;
         const currentLangEl = document.getElementById('current-lang');
         if (currentLangEl) {
-          currentLangEl.textContent = locales[locale];
+          currentLangEl.textContent = localeNames[locale];
         }
         applyTranslations();
         window.addEventListener('localechange', applyTranslations);
@@ -306,7 +358,7 @@ const fullTitle = title === 'Home' ? 'MAGI.website - Personal AI Lab' : `${title
         }
       });
       
-      window.__i18n = { getLocale, setLocale, t };
+      window.__i18n = { getLocale, setLocale, applyTranslations };
     </script>
   </body>
 </html>

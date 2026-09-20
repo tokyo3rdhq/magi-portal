@@ -16,10 +16,10 @@
           <span class="w-3 h-3 rounded-full bg-[#ffaa00]"></span>
           <span class="w-3 h-3 rounded-full bg-[#00ff41]"></span>
         </div>
-        <div class="terminal-dim text-xs">
+        <div class="terminal-dim text-xs" data-i18n="hero.terminal.title">
           MAGI SYSTEM INTERFACE v3.14.159
         </div>
-        <div class="terminal-dim text-xs">
+        <div class="terminal-dim text-xs" data-i18n="hero.terminal.command">
           [NERV CENTRAL COMMAND]
         </div>
       </div>
@@ -29,28 +29,28 @@
         <!-- Boot sequence -->
         <div class="mb-6 space-y-1">
           <p class="terminal-dim">
-            <span class="text-[#00ff41]/50">$</span> initializing MAGI neural network...
+            <span class="text-[#00ff41]/50">$</span> <span data-i18n="hero.boot.init">initializing MAGI neural network...</span>
           </p>
           <p class="terminal-dim">
-            <span class="text-[#00ff41]/50">$</span> loading three Magi subsystems...
+            <span class="text-[#00ff41]/50">$</span> <span data-i18n="hero.boot.loading">loading three Magi subsystems...</span>
           </p>
           <p class="terminal-text">
-            <span class="text-[#00ffff]">[OK]</span> MELCHIOR kernel loaded
+            <span class="text-[#00ffff]">[OK]</span> <span data-i18n="hero.boot.melchior">MELCHIOR kernel loaded</span>
           </p>
           <p class="terminal-text">
-            <span class="text-[#00ffff]">[OK]</span> BALTHASAR kernel loaded
+            <span class="text-[#00ffff]">[OK]</span> <span data-i18n="hero.boot.balthasar">BALTHASAR kernel loaded</span>
           </p>
           <p class="terminal-text">
-            <span class="text-[#00ffff]">[OK]</span> CASPAR kernel loaded
+            <span class="text-[#00ffff]">[OK]</span> <span data-i18n="hero.boot.caspar">CASPAR kernel loaded</span>
           </p>
           <p class="terminal-dim">
-            <span class="text-[#00ff41]/50">$</span> establishing NERV HQ connection...
+            <span class="text-[#00ff41]/50">$</span> <span data-i18n="hero.boot.connection">establishing NERV HQ connection...</span>
           </p>
         </div>
         
         <!-- Main message -->
         <div class="mb-8">
-          <p class="terminal-dim mb-2">// SYSTEM STATUS</p>
+          <p class="terminal-dim mb-2" data-i18n="hero.status">// SYSTEM STATUS</p>
           <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 glitch">
             <span class="terminal-text">MAGI</span>
             <span class="text-[#ff00ff]">.</span>
@@ -58,12 +58,11 @@
           </h1>
           <div class="terminal-dim text-lg md:text-xl max-w-2xl">
             <p class="mb-2">
-              > <span class="terminal-text">Personal AI Lab</span> // 
-              <span class="text-[#ffaa00]">Independent Developer</span>
+              > <span class="terminal-text" data-i18n="hero.subtitle">Personal AI Lab</span> // 
+              <span class="text-[#ffaa00]" data-i18n="hero.role">Independent Developer</span>
             </p>
-            <p class="text-[#00ff41]/70">
-              > Specialized in AI products and services, 
-              building intelligent solutions at the edge.
+            <p class="text-[#00ff41]/70" data-i18n="hero.subheadline">
+              Specialized in AI products and services, building intelligent solutions at the edge.
             </p>
           </div>
         </div>
@@ -71,17 +70,17 @@
         <!-- System info -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 p-4 border border-[#00ff41]/20 bg-[#00ff41]/5">
           <div>
-            <p class="terminal-dim text-xs mb-1">CORE_MODULES</p>
-            <p class="terminal-text text-sm">API_GATEWAY</p>
-            <p class="terminal-text text-sm">AI_CHAT</p>
-            <p class="terminal-text text-sm">AGENT_SYSTEM</p>
+            <p class="terminal-dim text-xs mb-1" data-i18n="hero.modules">CORE_MODULES</p>
+            <p class="terminal-text text-sm" data-i18n="hero.moduleApi">API_GATEWAY</p>
+            <p class="terminal-text text-sm" data-i18n="hero.moduleChat">AI_CHAT</p>
+            <p class="terminal-text text-sm" data-i18n="hero.moduleAgent">AGENT_SYSTEM</p>
           </div>
           <div>
-            <p class="terminal-dim text-xs mb-1">NETWORK_STATUS</p>
-            <p class="terminal-text text-sm pulse-glow inline-block px-2 py-0.5">ONLINE</p>
+            <p class="terminal-dim text-xs mb-1" data-i18n="hero.networkStatus">NETWORK_STATUS</p>
+            <p class="terminal-text text-sm pulse-glow inline-block px-2 py-0.5" data-i18n="hero.online">ONLINE</p>
           </div>
           <div>
-            <p class="terminal-dim text-xs mb-1">DEPLOY_PLATFORM</p>
+            <p class="terminal-dim text-xs mb-1" data-i18n="hero.platform">DEPLOY_PLATFORM</p>
             <p class="text-[#00ffff] text-sm">CLOUDFLARE_EDGE</p>
           </div>
         </div>
@@ -90,7 +89,7 @@
         <div class="terminal-dim">
           <p class="mb-4">
             <span class="text-[#00ff41]/50">$</span> 
-            <span class="terminal-text">available_commands:</span>
+            <span class="terminal-text" data-i18n="hero.commands">available_commands:</span>
           </p>
           <div class="flex flex-col sm:flex-row gap-4">
             <a href="#products" class="btn btn-terminal">
@@ -107,7 +106,7 @@
         <!-- Blinking cursor -->
         <div class="mt-6 flex items-center">
           <span class="terminal-text text-2xl cursor-blink">▮</span>
-          <span class="terminal-dim ml-2 text-sm">awaiting input...</span>
+          <span class="terminal-dim ml-2 text-sm" data-i18n="hero.awaiting">awaiting input...</span>
         </div>
       </div>
     </div>
@@ -121,7 +120,7 @@
   
   <!-- Scroll indicator -->
   <div class="absolute bottom-8 left-1/2 -translate-x-1/2 terminal-dim text-sm flex flex-col items-center gap-2">
-    <span>SCROLL_DOWN</span>
+    <span data-i18n="hero.scroll">SCROLL_DOWN</span>
     <span class="cursor-blink">▼</span>
   </div>
 </section>
