@@ -1,13 +1,19 @@
 ---
 interface Props {
-  name: string;
-  description: string;
+  key: string;
   url: string;
-  icon: string;
   status?: 'active' | 'coming-soon';
 }
 
-const { name, description, url, icon, status = 'active' } = Astro.props;
+const { key, url, status = 'active' } = Astro.props;
+
+const icons: Record<string, string> = {
+  api: '⚡',
+  chat: '💬',
+  agent: '🤖',
+};
+
+const icon = icons[key] || '📦';
 ---
 
 <a
@@ -24,11 +30,9 @@ const { name, description, url, icon, status = 'active' } = Astro.props;
   </div>
 
   <!-- Content -->
-  <h3 class="text-xl font-semibold mb-2 group-hover:text-primary-300 transition-colors">
-    {name}
+  <h3 class="text-xl font-semibold mb-2 group-hover:text-primary-300 transition-colors" data-i18n={`products.${key}.name`}>
   </h3>
-  <p class="text-slate-400 text-sm leading-relaxed">
-    {description}
+  <p class="text-slate-400 text-sm leading-relaxed" data-i18n={`products.${key}.description`}>
   </p>
 
   <!-- Status Badge -->

@@ -1,4 +1,5 @@
 ---
+const techStack = ['Astro', 'TypeScript', 'Cloudflare Workers', 'Tailwind CSS', 'Python', 'AI/ML'];
 ---
 
 <section id="about" class="py-24 px-6">
@@ -20,29 +21,21 @@
 
       <!-- Content -->
       <div class="order-1 md:order-2">
-        <span class="text-primary-400 font-medium mb-4 block">关于我</span>
+        <span class="text-primary-400 font-medium mb-4 block" data-i18n="about.label">关于我</span>
         <h2 class="text-4xl font-bold mb-6">
-          你好，我是 <span class="text-primary-400">Magi</span>
+          <span data-i18n="about.title">你好，我是</span> <span class="text-primary-400" data-i18n="about.titleHighlight">Magi</span>
         </h2>
         <div class="space-y-4 text-slate-300">
-          <p>
-            一名热爱技术的独立开发者，专注于 AI 领域的产品与服务开发。
-          </p>
-          <p>
-            热衷于探索前沿技术，致力于将复杂的 AI 能力简化为易于使用的产品，
-            让更多人能够享受 AI 带来的便利。
-          </p>
-          <p>
-            基于 Cloudflare Edge Platform 构建高性能、高可用的 AI 服务，
-            追求极致的用户体验和系统稳定性。
-          </p>
+          <p data-i18n="about.paragraphs.0"></p>
+          <p data-i18n="about.paragraphs.1"></p>
+          <p data-i18n="about.paragraphs.2"></p>
         </div>
 
         <!-- Tech Stack -->
         <div class="mt-8">
-          <h4 class="text-sm font-medium text-slate-400 mb-3">技术栈</h4>
+          <h4 class="text-sm font-medium text-slate-400 mb-3" data-i18n="about.techStack">技术栈</h4>
           <div class="flex flex-wrap gap-2">
-            {['Astro', 'TypeScript', 'Cloudflare Workers', 'Tailwind CSS', 'Python', 'AI/ML'].map((tech) => (
+            {techStack.map((tech) => (
               <span class="px-3 py-1 text-sm bg-white/10 rounded-full border border-white/10">
                 {tech}
               </span>
@@ -52,7 +45,7 @@
 
         <!-- Contact -->
         <div class="mt-8 pt-8 border-t border-white/10">
-          <h4 class="text-sm font-medium text-slate-400 mb-4">联系方式</h4>
+          <h4 class="text-sm font-medium text-slate-400 mb-4" data-i18n="about.contact">联系方式</h4>
           <div class="flex gap-4">
             <a
               href="mailto:hi@magi.website"
