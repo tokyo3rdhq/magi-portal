@@ -53,6 +53,57 @@ magi.website (主站)
 - **Cloudflare AI Gateway**: 统一管理多个 LLM 提供商（OpenAI、Anthropic、Google 等）
 - **兼容 OpenAI API 格式**: 降低接入成本，方便扩展
 
+## i18n 国际化方案
+
+### 实现方式
+
+使用客户端 JavaScript 实现动态翻译，优点：
+- 无需 SSR，静态生成即可
+- 用户切换语言无刷新
+- 语言选择持久化到 localStorage
+
+### 翻译文件结构
+
+```typescript
+// src/i18n/translations.ts
+export const translations = {
+  zh: { /* 中文翻译 */ },
+  en: { /* 英文翻译 */ },
+};
+
+// 翻译键路径示例:
+// hero.badge, hero.headline, hero.subheadline
+// products.label, products.api.name, products.api.description
+// features.items.performance.title
+```
+
+### 语言检测优先级
+
+1. **localStorage** - 用户手动选择
+2. **浏览器语言** - navigator.language
+3. **默认中文** - fallback
+
+### 语言切换器
+
+- 位置：页面右上角
+- 支持：中文 / English
+- 状态持久化：localStorage
+
+### 使用方式
+
+```astro
+<!-- 在组件中使用 data-i18n 属性 -->
+<h1 data-i18n="hero.headline">探索 AI 的无限可能</h1>
+<p data-i18n="hero.subheadline">专注于 AI 产品与服务...</p>
+
+<!-- 客户端自动替换翻译 -->
+```
+
+### SEO 考虑
+
+- `<html lang="zh-CN">` 或 `<html lang="en-US">`
+- 目前为单语言版本，多语言 SEO 可后续扩展为 `/zh/` 和 `/en/` 路径方案
+
 ## SEO 方案
 
 ### 整体策略
@@ -393,10 +444,15 @@ pages_build_output_dir = "./dist"
 - [ ] Magi Chat - AI Chat Worker  
 - [ ] Magi Agent - Agent Worker + D1 + Vectorize
 
-### Phase 5: 增值功能
+### Phase 5: 国际化 (i18n)
+- [x] 多语言支持 (中文/英文)
+- [x] 浏览器语言自动检测
+- [x] 手动语言切换器
+- [x] 语言选择持久化 (localStorage)
+
+### Phase 6: 增值功能
 - [ ] 访问统计 (可选：Umami / Plausible)
 - [ ] 性能监控
-- [ ] 国际化 (i18n) 预留
 
 ## 项目结构 (推荐)
 
@@ -408,10 +464,13 @@ magi-portal/
 ├── tsconfig.json
 ├── .gitignore
 ├── wrangler.toml              # Cloudflare Pages 配置
+├── .github/
+│   └── workflows/             # CI/CD 配置
 ├── public/
 │   ├── favicon.svg
 │   ├── robots.txt
-│   └── og-default.png
+│   ├── og-default.svg
+│   └── _headers              # 安全 headers
 ├── src/
 │   ├── layouts/
 │   │   └── Layout.astro
@@ -426,8 +485,14 @@ magi-portal/
 │   │       ├── SEO.astro
 │   │       ├── OrganizationSchema.astro
 │   │       └── ProductSchema.astro
+│   ├── i18n/
+│   │   ├── index.ts           # i18n 工具函数
+│   │   ├── zh.ts             # 中文翻译
+│   │   ├── en.ts             # 英文翻译
+│   │   └── client.ts         # 客户端翻译脚本
 │   ├── pages/
-│   │   └── index.astro
+│   │   ├── index.astro
+│   │   └── sitemap.xml.ts    # 站点地图
 │   ├── lib/
 │   │   └── og-image.ts
 │   └── styles/
