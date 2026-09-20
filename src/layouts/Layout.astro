@@ -88,12 +88,12 @@ const fullTitle = title === 'Home' ? `${siteName}.website - Personal AI Lab` : `
     <div class="fixed top-4 right-4 z-50 flex items-center gap-2" id="lang-switcher">
       <button
         id="lang-btn"
-        class="px-3 py-1.5 border border-[#00ff41]/30 bg-black/80 hover:border-[#00ff41] hover:bg-[#00ff41]/10 transition-all text-sm flex items-center gap-2 font-mono"
+        class="px-2.5 py-1.5 border border-[#00ff41]/30 bg-black/80 hover:border-[#00ff41] hover:bg-[#00ff41]/10 transition-all text-sm flex items-center font-mono"
+        aria-label="Switch Language"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
         </svg>
-        <span id="current-lang">{locales[locale]}</span>
       </button>
       <div id="lang-dropdown" class="hidden absolute top-full right-0 mt-2 py-2 bg-black/90 border border-[#00ff41]/30 shadow-lg shadow-[#00ff41]/10 min-w-[120px]">
         {(Object.entries(locales) as [keyof typeof locales, string][]).map(([code, name]) => (
@@ -304,8 +304,6 @@ const fullTitle = title === 'Home' ? `${siteName}.website - Personal AI Lab` : `
       function setLocale(locale) {
         localStorage.setItem('locale', locale);
         document.documentElement.lang = locale;
-        const currentLangEl = document.getElementById('current-lang');
-        if (currentLangEl) currentLangEl.textContent = localeNames[locale];
         window.dispatchEvent(new CustomEvent('localechange', { detail: locale }));
       }
       
@@ -339,10 +337,6 @@ const fullTitle = title === 'Home' ? `${siteName}.website - Personal AI Lab` : `
       document.addEventListener('DOMContentLoaded', () => {
         const locale = getLocale();
         document.documentElement.lang = locale;
-        const currentLangEl = document.getElementById('current-lang');
-        if (currentLangEl) {
-          currentLangEl.textContent = localeNames[locale];
-        }
         applyTranslations();
         window.addEventListener('localechange', applyTranslations);
       });

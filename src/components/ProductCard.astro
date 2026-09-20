@@ -19,9 +19,9 @@ const icon = icons[key] || '📦';
 <a
   href={status === 'coming-soon' ? undefined : url}
   class:list={[
-    "group relative block p-6 border transition-all duration-300",
-    status === 'active' && "border-[#00ff41]/30 bg-black/50 hover:border-[#00ff41] hover:bg-[#00ff41]/10 hover:shadow-lg hover:shadow-[#00ff41]/20",
-    status === 'coming-soon' && "border-[#ffaa00]/30 bg-black/30 opacity-60 cursor-not-allowed"
+    "group relative block p-6 border transition-all duration-300 backdrop-blur-sm",
+    status === 'active' && "border-[#00ff41]/30 bg-black/80 hover:border-[#00ff41] hover:bg-[#00ff41]/10 hover:shadow-lg hover:shadow-[#00ff41]/20",
+    status === 'coming-soon' && "border-[#ffaa00]/30 bg-black/60 opacity-60 cursor-not-allowed"
   ]}
 >
   <!-- Corner decorations -->

@@ -3,7 +3,7 @@ const featureKeys = ['performance', 'privacy', 'integration', 'scalable', 'cost'
 const icons = ['🚀', '🔒', '💡', '🔧', '💰', '🌐'];
 ---
 
-<section id="features" class="relative py-24 px-4 bg-black/30">
+<section id="features" class="relative py-24 px-4">
   <div class="max-w-6xl mx-auto">
     <!-- Section header -->
     <div class="mb-12">
@@ -23,7 +23,7 @@ const icons = ['🚀', '🔒', '💡', '🔧', '💰', '🌐'];
     <!-- Features grid -->
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {featureKeys.map((key, index) => (
-        <div class="group p-6 border border-[#00ff41]/20 bg-black/50 hover:border-[#00ffff]/50 hover:bg-[#00ffff]/5 transition-all duration-300">
+        <div class="group p-6 border border-[#00ff41]/20 bg-black/80 backdrop-blur-sm hover:border-[#00ffff]/50 hover:bg-[#00ffff]/5 transition-all duration-300">
           <!-- Icon -->
           <div class="text-3xl mb-4">{icons[index]}</div>
           
