@@ -3,6 +3,11 @@ import '../styles/global.css';
 import { getLocale, locales } from '../i18n';
 import MatrixBackground from '../components/MatrixBackground.astro';
 
+// Environment variables
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://magi.website';
+const siteName = import.meta.env.PUBLIC_SITE_NAME || 'MAGI';
+const gaId = import.meta.env.PUBLIC_GA_ID || '';
+
 interface Props {
   title?: string;
   description?: string;
@@ -10,12 +15,11 @@ interface Props {
 
 const {
   title = 'Home',
-  description = 'MAGI - Personal AI Lab. Independent developer focused on AI products and services.',
+  description = `${siteName} - Personal AI Lab. Independent developer focused on AI products and services.`,
 } = Astro.props;
 
 const locale = getLocale();
-const siteUrl = 'https://magi.website';
-const fullTitle = title === 'Home' ? 'MAGI.website - Personal AI Lab' : `${title} | MAGI`;
+const fullTitle = title === 'Home' ? `${siteName}.website - Personal AI Lab` : `${title} | ${siteName}`;
 ---
 
 <!doctype html>
@@ -39,7 +43,7 @@ const fullTitle = title === 'Home' ? 'MAGI.website - Personal AI Lab' : `${title
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={`${siteUrl}/og-default.png`} />
-    <meta property="og:site_name" content="MAGI" />
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
 
     <!-- Twitter -->
@@ -59,6 +63,19 @@ const fullTitle = title === 'Home' ? 'MAGI.website - Personal AI Lab' : `${title
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Google Analytics -->
+    {gaId && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+        <script is:inline define:vars={{ gaId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', gaId);
+        </script>
+      </>
+    )}
 
     <!-- JSON-LD -->
     <slot name="jsonld" />

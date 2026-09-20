@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = () => {
-  const siteUrl = 'https://magi.website';
+  const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://magi.website';
   
   const pages = [
     {
