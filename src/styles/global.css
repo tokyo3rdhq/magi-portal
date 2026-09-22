@@ -6,10 +6,24 @@
 
 @layer base {
   html {
+    /* shorter ease for anchor jumps — closer to macOS native */
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   body {
@@ -29,24 +43,30 @@
     color: #f5f5f7;
   }
 
-  /* Scrollbar — minimal */
+  /* Scrollbar — Apple-style: 6px thin rail, only visible while scrolling */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  }
   ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 6px;
+    height: 6px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0);
     border-radius: 999px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
+    transition: background 240ms ease-out;
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.22);
-    background-clip: padding-box;
-    border: 2px solid transparent;
+  body.scrolling::-webkit-scrollbar-thumb,
+  body:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+  }
+  body.scrolling::-webkit-scrollbar-thumb:hover,
+  body:hover::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.32);
   }
 
   a {

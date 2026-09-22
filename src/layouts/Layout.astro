@@ -339,6 +339,17 @@ const currentYear = new Date().getFullYear();
             });
           });
         }
+
+        // Apple-style: show the thin scrollbar thumb only while actively scrolling.
+        let scrollTimer = null;
+        const SCROLL_VISIBLE_MS = 800;
+        window.addEventListener('scroll', () => {
+          document.body.classList.add('scrolling');
+          if (scrollTimer) clearTimeout(scrollTimer);
+          scrollTimer = setTimeout(() => {
+            document.body.classList.remove('scrolling');
+          }, SCROLL_VISIBLE_MS);
+        }, { passive: true });
       });
     </script>
   </body>
