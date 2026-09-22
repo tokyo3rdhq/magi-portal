@@ -6,7 +6,7 @@ AI 编程助手项目指南 - MAGI Portal
 
 magi.website 是一个基于 Astro + Tailwind CSS 的静态站点，作为个人 AI 产品与服务的统一入口门户。主域名展示产品矩阵，二级域名（api/chat/agent.magi.website）承载具体 AI 产品。
 
-设计灵感来自《新世纪福音战士》(EVA) 中的 MAGI 超级计算机系统（以东方三圣贤 Melchior/Balthasar/Caspar 命名），采用终端/命令行风格的暗色科技感设计。
+设计语言为深色淡灰渐变 + 单一品牌绿高亮 + Inter 字体（Apple 风格）：巨字标题、大量留白、轻盈边框、克制的色彩。
 
 ## 技术栈
 
@@ -16,14 +16,14 @@ magi.website 是一个基于 Astro + Tailwind CSS 的静态站点，作为个人
 | 样式 | Tailwind CSS 3.x | 原子化 CSS |
 | 部署 | Cloudflare Pages | 边缘部署 |
 | 语言 | TypeScript | 类型安全 |
-| 字体 | JetBrains Mono + Orbitron | 终端字体 + 标题字体 |
+| 字体 | Inter (Google Fonts) | 单一字体，含 CJK fallback |
 
 ## 项目结构
 
 ```
 magi-portal/
 ├── astro.config.mjs       # Astro 配置
-├── tailwind.config.mjs    # Tailwind 主题配置
+├── tailwind.config.mjs    # Tailwind 主题 (Apple-style tokens)
 ├── wrangler.toml          # Cloudflare Pages 配置
 ├── tsconfig.json          # TypeScript 配置
 ├── package.json
@@ -35,49 +35,51 @@ magi-portal/
 │   ├── favicon.svg
 │   ├── og-default.svg
 │   ├── robots.txt
-│   └── _headers           # Cloudflare 安全 headers
+│   ├── _headers           # Cloudflare 安全 headers
+│   ├── _redirects         # Cloudflare 路由重定向
+│   └── skill.md           # Agent skill manifest (SKILL.md 规范)
 ├── .github/
 │   └── workflows/         # CI/CD 配置
 └── src/
     ├── layouts/
-    │   └── Layout.astro           # 基础布局 + 语言切换器
+    │   └── Layout.astro           # 基础布局 + top nav + 内联 footer + 内联 i18n 脚本
     ├── components/
-    │   ├── Hero.astro             # 终端启动序列
-    │   ├── MatrixBackground.astro # 数字雨背景
-    │   ├── Products.astro         # 产品矩阵
+    │   ├── Hero.astro             # 全屏居中巨字标题 + 双 CTA
+    │   ├── Products.astro         # 3 列 bento 产品卡片
     │   ├── ProductCard.astro
-    │   ├── Features.astro
-    │   ├── About.astro            # MAGI 系统可视化
-    │   ├── Footer.astro
+    │   ├── Features.astro         # 4 个交替 split section (copy + visual)
+    │   ├── About.astro            # editorial 双栏 (bio + tech chips | contact cards)
+    │   ├── MatrixBackground.astro # 极简 CSS radial glow (无 JS)
     │   └── seo/                   # SEO 组件
     ├── i18n/
-    │   ├── index.ts               # i18n 工具函数
-    │   ├── zh.ts                  # 中文翻译
-    │   ├── en.ts                  # 英文翻译
-    │   ├── client.ts              # 客户端翻译脚本
-    │   └── translations.ts        # 浏览器端翻译
+    │   └── index.ts               # locales 注册表 (Layout 内联 i18n 用)
     ├── pages/
     │   ├── index.astro            # 首页
     │   └── sitemap.xml.ts         # 站点地图
     └── styles/
-        └── global.css             # 全局样式 + 动画
+        └── global.css             # Tailwind layers + Apple-style components (.eyebrow / .display / .btn-primary / .card-surface ...)
 ```
 
 ## 核心约定
 
 ### 1. 设计风格
 
-- **配色**: 黑底 `#0D0D0D` + 终端绿 `#00FF41`
-- **强调色**: 青色 `#00FFFF`、品红 `#FF00FF`、琥珀 `#FFAA00`
-- **字体**: JetBrains Mono (代码/正文) + Orbitron (标题)
-- **元素**: CRT 扫描线、闪烁光标、脉冲发光、故障效果 (Glitch)
+- **背景**: `#000` → `#1d1d1f` 顶部到底部淡灰渐变 (固定附着)
+- **品牌色**: `#00C853` (accent) — CTA / 链接 / eyebrow
+- **文字**: `#f5f5f7` 主 / `#86868b` 次 / `#6e6e73` 弱
+- **卡片**: `rgba(255,255,255,0.04)` 底 + 1px `rgba(255,255,255,0.08)` 边
+- **字体**: Inter (含 `font-feature-settings` 抗锯齿优化)
+- **尺寸感**: Hero headline `text-7xl~8xl`、section title `text-4xl~6xl`、正文 `text-base~xl`
+- **节奏**: section 间距 `py-32 md:py-40`，巨大留白
+
+样式 token 集中在 `tailwind.config.mjs` (colors: `bg/ink/accent/line`)。组件 utility 集中在 `src/styles/global.css` 的 `@layer components` (`.eyebrow`、`.display`、`.section-title`、`.btn-primary`、`.btn-secondary`、`.link-arrow`、`.card-surface`、`.nav-link`)。
 
 ### 2. i18n 多语言
 
-- 支持中文（zh）和英文（en）
-- 自动检测浏览器语言
-- 手动切换器在页面右上角
-- 语言选择持久化到 localStorage
+- 翻译字典内联在 `Layout.astro` 的 `<script is:inline>` 块中（`translations.en`、`translations.zh`）
+- 顶层 nav 右上角语言切换器，下拉选择 zh/en
+- 选择持久化到 `localStorage('locale')`，默认跟随浏览器语言
+- `src/i18n/index.ts` 仅导出 `locales` 字典（zh→"中文"、en→"EN"）给 Layout 显示用
 
 **使用方式**：
 ```astro
@@ -87,9 +89,10 @@ magi-portal/
 
 **注意**：
 - 所有用户可见的文本必须使用 `data-i18n` 属性
-- 翻译键路径使用点号分隔（如 `about.paragraphs.0`）
-- 修改 Layout.astro 中的 `translations` 对象添加新翻译
-- 避免硬编码中英文混用
+- 翻译键路径使用点号分隔（如 `features.items.0.headline`）
+- 修改 `Layout.astro` 内联脚本的 `translations` 对象添加/修改词条
+- 数组索引也作为 key 段（如 `about.paragraphs.0`）
+- 避免硬编码用户可见文本
 
 ### 3. 环境变量
 
@@ -118,6 +121,12 @@ magi-portal/
 - 断点：`md:` (768px), `lg:` (1024px)
 - 触摸目标 ≥ 44px
 
+### 6. 公共资产
+
+- `public/skill.md`：agent skill manifest，遵循 SKILL.md 规范（YAML frontmatter + Markdown）。任何 agent 集成对接站点能力时 curl 此文件
+- `public/_redirects`：Cloudflare Pages 路由重定向（`_headers` 中的 `Location` 指令对不存在的路径不生效，必须用 `_redirects`）
+- `public/_headers`：安全头 + 缓存策略
+
 ## 开发命令
 
 ```bash
@@ -143,7 +152,7 @@ npx wrangler pages deploy dist --project-name=magi-portal
 
 ```bash
 npm run build
-npx wrangler pages deploy dist --project-name=magi-portal --commit-dirty=true
+npx wrangler pages deploy dist --project-name=magi-portal
 ```
 
 ### Cloudflare Pages 配置
@@ -157,24 +166,26 @@ NODE_VERSION: 20
 ## 添加新组件
 
 1. 在 `src/components/` 创建 `.astro` 文件
-2. 使用 `data-i18n` 属性标记所有文本
-3. 复用 `Layout.astro` 中的样式工具类（`terminal-text`, `terminal-dim`, `terminal-highlight` 等）
-4. 在 `src/pages/index.astro` 中导入使用
+2. 复用 `tailwind.config.mjs` 中的语义色 token (`bg-*` / `ink-*` / `accent` / `line-*`)
+3. 复用 `global.css` 的组件 utility（`.card-surface` / `.eyebrow` / `.display` / `.btn-primary` 等）
+4. 使用 `data-i18n` 属性标记所有用户可见文本
+5. 在 `src/pages/index.astro` 中导入使用
 
 ## 添加新语言
 
-1. 在 `src/i18n/` 创建新语言文件（如 `ja.ts`）
-2. 在 `Layout.astro` 的 `translations` 对象中添加
-3. 在 `getLocale()` 函数中添加新语言判断
-4. 在语言切换器中添加新选项
+1. 在 `Layout.astro` 内联脚本的 `translations` 对象中添加新 locale 键
+2. 在 `src/i18n/index.ts` 的 `locales` 字典添加显示名
+3. 在 `getLocale()` 函数中添加识别规则
+4. 在 `<html lang>` 和 `setLocale` 的 `document.documentElement.lang` 同步更新
 
 ## 注意事项
 
 - **不要**直接修改 `node_modules/` 或 `.astro/` 中的文件
 - **不要**提交 `.env` 文件（已加入 .gitignore）
-- **不要**在代码中硬编码文本，所有用户可见内容必须支持 i18n
+- **不要**在代码中硬编码用户可见文本，必须用 `data-i18n`
 - 修改 `wrangler.toml` 时需谨慎，错误的配置会导致部署失败
 - 添加新依赖前检查是否与 Astro 4 兼容
+- 不要重新引入 CRT / 终端风的样式 token (`.terminal-text` / `.pulse-glow` / `.glitch` 等已移除)
 
 ## 相关文档
 
