@@ -1,73 +1,72 @@
-# Magi Portal
+# MAGI Portal
 
-Personal AI Lab - 专注于 AI 产品与服务的个人开发者门户
+Personal AI Lab portal — static site at https://magi.website that links to three Cloudflare Edge services (API, Chat, Agent) operated by an independent developer.
 
-## 🛠️ 技术栈
+## Stack
 
-- **框架**: [Astro](https://astro.build) v4
-- **样式**: [Tailwind CSS](https://tailwindcss.com)
-- **部署**: [Cloudflare Pages](https://pages.cloudflare.com)
-- **域名**: magi.website
+- [Astro 4](https://astro.build) — static site generator, zero JS by default
+- [Tailwind CSS 3](https://tailwindcss.com) — utility-first styling with Apple-style design tokens (`bg-*`, `ink-*`, `accent`, `line-*`)
+- [TypeScript](https://www.typescriptlang.org) (strict)
+- [Cloudflare Pages](https://pages.cloudflare.com) — edge deployment
+- Inter (Google Fonts) with CJK fallback
 
-## ✨ 功能特性
-
-- 🚀 基于 Astro 的高性能静态站点
-- 🎨 终端科技感暗色主题（EVA MAGI 风格）
-- 🔍 完整的 SEO 优化 (Meta, Sitemap, JSON-LD)
-- 📱 移动端优先的响应式布局
-- 🌐 多语言支持 (i18n)
-- ⚡ Cloudflare Edge 全球加速
-
-## 📦 开发
+## Develop
 
 ```bash
-# 安装依赖
 npm install
-
-# 本地开发
-npm run dev
-
-# 构建生产版本
-npm run build
-
-# 预览构建结果
-npm run preview
+npm run dev        # http://localhost:4321
+npm run build      # outputs to dist/
+npm run preview    # preview the build
 ```
 
-## 🚀 部署
+## Deploy
 
-通过 Wrangler CLI 手动部署：
+Manual deploy via Wrangler:
 
 ```bash
-# 构建
 npm run build
-
-# 部署到 Cloudflare Pages
 npx wrangler pages deploy dist --project-name=magi-portal
 ```
 
-## 📁 项目结构
+Cloudflare Pages build settings:
+- Build command: `npm run build`
+- Build output: `dist`
+- Node version: 20
+
+## Project layout
 
 ```
 magi-portal/
+├── public/                    static assets, copied verbatim to dist/
+│   ├── skill.md               SKILL.md manifest for AI agents
+│   ├── _headers               Cloudflare security headers + cache policy
+│   ├── _redirects             Cloudflare route redirects
+│   ├── favicon.svg, og-default.svg, robots.txt
 ├── src/
-│   ├── components/     # 组件
-│   ├── layouts/        # 布局
-│   ├── pages/          # 页面
-│   └── styles/         # 样式
-├── public/             # 静态资源
-├── docs/
-│   └── plan.md         # 项目规划
-└── AGENTS.md           # AI 编程助手指南
+│   ├── layouts/Layout.astro   shell (head, sticky nav, footer, inline i18n)
+│   ├── components/            Hero / Products / ProductCard / Features / About / MatrixBackground + seo/
+│   ├── i18n/                  types.ts + locales/{en,zh}.ts + translations + locales-meta + index
+│   ├── pages/                 index.astro + sitemap.xml.ts
+│   └── styles/global.css      Tailwind layers + Apple-style component utilities
+├── docs/plan.md               architecture and history
+├── AGENTS.md                  AI assistant conventions (auto-loaded)
+└── wrangler.toml              Cloudflare Pages config
 ```
 
-## 🔗 相关链接
+## Services
 
-- [Astro 文档](https://docs.astro.build)
-- [Tailwind CSS 文档](https://tailwindcss.com/docs)
-- [Cloudflare Pages 文档](https://developers.cloudflare.com/pages/)
-- [Cloudflare Workers 文档](https://developers.cloudflare.com/workers/)
+| Subdomain | Service |
+| --- | --- |
+| https://api.magi.website | MAGI API — unified AI API gateway |
+| https://chat.magi.website | MAGI Chat — AI chat assistant |
+| https://agent.magi.website | MAGI Agent — long-running AI agents |
 
-## 📄 许可证
+## Links
+
+- [Astro docs](https://docs.astro.build)
+- [Tailwind docs](https://tailwindcss.com/docs)
+- [Cloudflare Pages docs](https://developers.cloudflare.com/pages/)
+
+## License
 
 MIT

@@ -1,460 +1,209 @@
-# magi.website 重建计划
+# magi.website 重建计划与决策记录
+
+> 这份文档记录**当前架构**与**决策历史**。它是项目结构的权威说明——如果代码与本文档冲突，以代码为准，并提 PR 同步本文档。
 
 ## 概述
 
-将 magi.website 打造成个人 AI 产品与服务的统一入口站，通过主域名承载产品矩阵介绍，二级域名独立承载具体 AI 产品/服务。
+magi.website 是一个基于 Astro + Tailwind CSS 的静态站点，作为个人 AI 产品与服务的统一入口门户。
 
-## 架构规划
+- **主域名 (magi.website)**：产品矩阵介绍、关于、联系方式
+- **二级域名**：独立承载具体 AI 产品 / 服务
+
+## 架构
 
 ```
-magi.website (主站)
-├── Landing Page / 产品介绍 / 关于我
+magi.website (主站, Astro 静态)
+├── Landing Page / 产品介绍 / 关于 / 联系方式
 └── 产品矩阵展示 + 外链跳转
 
-├── api.magi.website     (API 聚合服务 - Cloudflare Worker)
-├── chat.magi.website    (AI 对话助手 - Cloudflare Worker)
-├── agent.magi.website   (AI Agent 服务 - Cloudflare Worker)
-└── [更多产品待定...]
+├── api.magi.website     (API 聚合服务, Cloudflare Worker)
+├── chat.magi.website    (AI 对话助手, Cloudflare Worker)
+└── agent.magi.website   (AI Agent 服务, Cloudflare Worker)
 ```
 
-## 技术栈选择
+主站是**纯静态**——不接数据库、不跑 SSR、不需要冷启动。子域名产品各自独立部署在 Cloudflare Workers / Pages。
 
-### 主站 (magi.website)
+## 技术栈
 
-| 用途 | 技术选型 | 理由 |
-|------|----------|------|
-| 框架 | **Astro** | 静态站点性能最优，SSR/SSG 灵活，支持多框架组件混用 |
-| 样式 | **Tailwind CSS** | 原子化 CSS，开发效率高，与 Cloudflare Pages 完美兼容 |
-| 交互 | **Vue 3 / React** (可选) | 按需引入复杂交互组件 |
-| 部署 | **Cloudflare Pages** | 与 Worker 生态深度集成，全球边缘部署，免费额度充足 |
-| 图标 | **Lucide** 或 **Heroicons** | 开源、轻量、风格统一 |
-| 字体 | **Geist** / **Noto Sans SC** | 现代感 + 中文支持 |
+### 主站
 
-### SEO 工具链
-
-| 工具 | 用途 | 说明 |
+| 用途 | 选型 | 理由 |
 |------|------|------|
-| **astro-seo** | Meta 标签管理 | 统一管理 head 中的 SEO 元素 |
-| **@astrojs/sitemap** | Sitemap 生成 | 自动生成 sitemap-index.xml |
-| **@astrojs/rss** | RSS Feed | 可选，博客/内容站需要 |
-| **astro-compress** | 资源压缩 | HTML/CSS/JS/图片压缩 |
-| **@resvg/resvg-js** | OG 图片生成 | SVG → PNG/WebP 渲染 |
+| 框架 | Astro 4.x | 静态站点性能最优，零 JS 默认，TTFB 低 |
+| 样式 | Tailwind CSS 3.x | 原子化 CSS，与 Cloudflare Pages 完美兼容 |
+| 类型 | TypeScript (strict) | i18n 字典编译期一致性 |
+| 部署 | Cloudflare Pages | 与 Worker 生态深度集成，全球边缘，免费额度充足 |
+| 字体 | Inter (Google Fonts) | 现代无衬线，CJK fallback 到 PingFang/Hiragino |
 
-### 子域名产品 (Cloudflare Workers)
+### 已废弃（不要重新引入）
 
-| 产品 | 技术选型 | 说明 |
-|------|----------|------|
-| API Gateway | CF Worker + R2/KV | API 聚合、key 管理、限流 |
-| AI Chat | CF Worker + AI Gateway | 对接多个 LLM，提供统一对话接口 |
-| AI Agent | CF Worker + D1 + Vectorize | Agent 记忆、工具调用、向量检索 |
+- ~~JetBrains Mono + Orbitron~~ → Inter
+- ~~EVA MAGI 终端风 / CRT / Glitch / Matrix Rain / 闪烁光标~~ → Apple 风格深色渐变
+- ~~astro-seo / @astrojs/sitemap 集成~~ → 自写 `sitemap.xml.ts` + Layout 内联 meta
+- ~~Vue 3 / React (按需引入)~~ → 当前只有 .astro，纯静态
+- ~~OG 图片自动生成 (satori + resvg)~~ → 静态 `og-default.svg`
 
-### 推荐 LLM 接入方案
+### 子域名产品（规划中）
 
-- **Cloudflare AI Gateway**: 统一管理多个 LLM 提供商（OpenAI、Anthropic、Google 等）
-- **兼容 OpenAI API 格式**: 降低接入成本，方便扩展
+| 产品 | 选型 |
+|------|------|
+| API Gateway | CF Worker + R2/KV，OpenAI 兼容 |
+| AI Chat | CF Worker + AI Gateway |
+| AI Agent | CF Worker + D1 + Vectorize |
 
-## i18n 国际化方案
+## 设计语言（当前）
+
+- **背景**: `#000` → `#1d1d1f` 顶部到底部淡灰渐变 (固定附着)
+- **品牌色**: `#00C853` (accent)
+- **文字**: `#f5f5f7` / `#86868b` / `#6e6e73` 三档
+- **Hero 文案**: `AI you can trust. Built to last.` / `可信的 AI，可托付长远。`
+- **节奏**: section 间距 `py-32 md:py-40`
+- **Tailwind tokens**: `bg-*` / `ink-*` / `accent` / `line-*`
+- **组件 utility**: `.eyebrow` / `.display` / `.section-title` / `.btn-primary` / `.btn-secondary` / `.link-arrow` / `.card-surface` / `.nav-link`
+
+详细规范见 `AGENTS.md`。
+
+## i18n 国际化
 
 ### 实现方式
 
-使用客户端 JavaScript 实现动态翻译，优点：
-- 无需 SSR，静态生成即可
+- 客户端 JS 实现，**不需要 SSR**
 - 用户切换语言无刷新
-- 语言选择持久化到 localStorage
+- 语言选择持久化到 `localStorage`
+- 文案独立成模块（`src/i18n/locales/{en,zh}.ts`），类型系统强制 zh/en 同构
 
 ### 翻译文件结构
 
-```typescript
-// src/i18n/translations.ts
-export const translations = {
-  zh: { /* 中文翻译 */ },
-  en: { /* 英文翻译 */ },
+```ts
+// src/i18n/types.ts
+export type TranslationTree = {
+  nav: { products: string; features: string; about: string };
+  hero: { eyebrow: string; headline: string; subhead: string; ctaPrimary: string; ctaSecondary: string };
+  products: { eyebrow: string; headline: string; subhead: string; api: { name: string; description: string }; chat: { ... }; agent: { ... } };
+  features: { eyebrow: string; items: Array<{ eyebrow: string; headline: string; body: string }> };
+  about: { eyebrow: string; headline: string; body: string; tech: string; contact: string; emailLabel: string; githubLabel: string };
 };
-
-// 翻译键路径示例:
-// hero.badge, hero.headline, hero.subheadline
-// products.label, products.api.name, products.api.description
-// features.items.performance.title
 ```
 
 ### 语言检测优先级
 
-1. **localStorage** - 用户手动选择
-2. **浏览器语言** - navigator.language
-3. **默认中文** - fallback
-
-### 语言切换器
-
-- 位置：页面右上角
-- 支持：中文 / English
-- 状态持久化：localStorage
+1. `localStorage.locale`（用户手动选择）
+2. `navigator.language` startsWith 'en' → en
+3. fallback: en
 
 ### 使用方式
 
 ```astro
-<!-- 在组件中使用 data-i18n 属性 -->
-<h1 data-i18n="hero.headline">探索 AI 的无限可能</h1>
-<p data-i18n="hero.subheadline">专注于 AI 产品与服务...</p>
-
-<!-- 客户端自动替换翻译 -->
+<h1 data-i18n="hero.headline">原文</h1>
+<p data-i18n="products.api.description">原文</p>
 ```
 
-### SEO 考虑
+`Layout.astro` 内联 i18n bootstrap 扫描所有 `[data-i18n]` 元素，按 `key.split('.')` 路径查字典并替换 `textContent`。数组索引也作为 key 段（如 `features.items.0.headline`）。
 
-- `<html lang="zh-CN">` 或 `<html lang="en-US">`
-- 目前为单语言版本，多语言 SEO 可后续扩展为 `/zh/` 和 `/en/` 路径方案
+### 已废弃
+
+- ~~`zh.ts` / `en.ts` 顶层翻译文件 + `client.ts` / `translations.ts` 客户端工具~~ → 合并到 `locales/{en,zh}.ts` + Layout 内联 bootstrap
+- ~~`<html lang>` 通过 SSR 决定~~ → 客户端根据 `localStorage` 切换
 
 ## SEO 方案
 
-### 整体策略
+### 当前实现
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        SEO 架构                              │
-├─────────────────────────────────────────────────────────────┤
-│  基础设施层    │  性能优化 (Core Web Vitals)                   │
-├─────────────────────────────────────────────────────────────┤
-│  Meta 标记层   │  Title / Description / OG / Twitter Card    │
-├─────────────────────────────────────────────────────────────┤
-│  技术 SEO 层   │  Sitemap / Robots.txt / Canonical / hreflang│
-├─────────────────────────────────────────────────────────────┤
-│  结构化数据层   │  JSON-LD (Organization, Product, FAQ...)  │
-├─────────────────────────────────────────────────────────────┤
-│  内容优化层    │  语义 HTML / Heading 层级 / 内链策略         │
-└─────────────────────────────────────────────────────────────┘
-```
+- `<head>` 在 `Layout.astro` 内联：title、description、canonical、OG、Twitter Card
+- JSON-LD `Organization` schema 在 `OrganizationSchema.astro`
+- Sitemap：自写 `src/pages/sitemap.xml.ts`（非 `@astrojs/sitemap` 集成）
+- `robots.txt`: 允许所有爬虫，禁用 Bytespider 与 AhrefsBot
+- `_headers`: 安全头（X-Frame-Options DENY 等）+ 缓存策略
+- `_redirects`: 路由重定向（`/skills.md → /skill.md 301`）
 
-### SEO 组件设计
+### Cloudflare `_headers` vs `_redirects` 区别
 
-```astro
----
-// src/components/seo/SEO.astro
-interface Props {
-  title: string;
-  description: string;
-  canonical?: string;
-  ogImage?: string;
-  type?: 'website' | 'article';
-  noindex?: boolean;
-}
+- `_headers` 的 `Location:` 只对**真实存在**的静态文件生效
+- 不存在的路径会被 SPA fallback 到 `index.html`（200），不会触发 `Location`
+- 想重写 `/foo → /bar` 这种**不存在→存在**的路径，必须用 `_redirects`
 
-const {
-  title,
-  description,
-  canonical = Astro.url.href,
-  ogImage = '/og-default.png',
-  type = 'website',
-  noindex = false,
-} = Astro.props;
+### SEO Checklist
 
-const siteUrl = 'https://magi.website';
-const fullTitle = title === 'Home' ? 'Magi - Personal AI Lab' : `${title} | Magi`;
----
+| 类别 | 项 | 状态 |
+|------|----|------|
+| Meta | Title 唯一且含关键词 | ✅ |
+| Meta | Description < 160 字符 | ✅ |
+| Meta | Canonical URL 正确 | ✅ |
+| OG | OG Image 1200x630 | ⚠️ 当前为 SVG，未来生成 PNG |
+| OG | OG Title/Description | ✅ |
+| Twitter | Twitter Card | ✅ |
+| 结构 | Sitemap | ✅ |
+| 结构 | Robots.txt | ✅ |
+| 结构化 | JSON-LD Organization | ✅ |
+| 移动 | 响应式 + 触控 44px+ | ✅ |
 
-<!-- Primary Meta Tags -->
-<title>{fullTitle}</title>
-<meta name="title" content={fullTitle} />
-<meta name="description" content={description} />
+## 站点内容
 
-<!-- Canonical -->
-<link rel="canonical" href={canonical} />
+### 当前页面
 
-<!-- Robots -->
-{noindex && <meta name="robots" content="noindex, nofollow" />}
+单页 `src/pages/index.astro`，section 顺序：
 
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content={type} />
-<meta property="og:url" content={canonical} />
-<meta property="og:title" content={fullTitle} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={`${siteUrl}${ogImage}`} />
-<meta property="og:site_name" content="Magi" />
+1. **Hero** — eyebrow (`Personal AI Lab` / `个人 AI 实验室`) + 巨字标题 (`AI you can trust. Built to last.` / `可信的 AI，可托付长远。`) + 双 CTA (`View Products` / `Contact Me`)
+2. **Products** — 3 列 bento (API / Chat / Agent)
+3. **Features** — 4 个交替 split section (Performance / Privacy / Integration / Scale)
+4. **About** — editorial 双栏 (bio + tech chips | contact cards)
+5. **Footer** — 单行版权 + 联系邮箱
 
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content={canonical} />
-<meta name="twitter:title" content={fullTitle} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
+### Hero Section
 
-<!-- JSON-LD (可选，根据页面类型) -->
-<slot name="jsonld" />
-```
+- **标语**: `AI you can trust. Built to last.` (en) / `可信的 AI，可托付长远。` (zh)
+- **CTA**: `View Products` / `Contact Me`
 
-### JSON-LD 结构化数据
+### Products Section
 
-```astro
----
-// src/components/seo/OrganizationSchema.astro
----
-<script type="application/ld+json" set:html={JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Magi",
-  "url": "https://magi.website",
-  "logo": "https://magi.website/logo.png",
-  "description": "Personal AI Lab - 专注于 AI 产品与服务",
-  "sameAs": [
-    "https://github.com/tokyo3rdhq",
-    "https://twitter.com/xxx"
-  ],
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "email": "hi@magi.website",
-    "contactType": "customer service"
-  }
-})} />
-```
-
-```astro
----
-// src/components/seo/ProductSchema.astro
-interface Props {
-  name: string;
-  description: string;
-  url: string;
-  price?: string;
-}
-
-const { name, description, url, price } = Astro.props;
----
-<script type="application/ld+json" set:html={JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "name": name,
-  "description": description,
-  "url": url,
-  ...(price && {
-    "offers": {
-      "@type": "Offer",
-      "price": price,
-      "priceCurrency": "USD"
-    }
-  })
-})} />
-```
-
-### Sitemap 配置
-
-```js
-// astro.config.mjs
-import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
-
-export default defineConfig({
-  site: 'https://magi.website',
-  integrations: [
-    sitemap({
-      changefreq: 'weekly',
-      priority: 0.7,
-      lastmod: new Date(),
-      serialize(item) {
-        if (item.url.includes('/products/')) {
-          return { ...item, priority: 0.9 };
-        }
-        return item;
-      }
-    })
-  ],
-});
-```
-
-### Robots.txt
-
-```txt
-# public/robots.txt
-User-agent: *
-Allow: /
-
-# Sitemap
-Sitemap: https://magi.website/sitemap-index.xml
-
-# Cloudflare Pages 爬虫
-User-agent: Bytespider
-Disallow: /
-
-User-agent: AhrefsBot
-Disallow: /
-```
-
-### OG 图片生成
-
-```typescript
-// src/lib/og-image.ts
-import satori from 'satori';
-import { Resvg } from '@resvg/resvg-js';
-
-export async function generateOgImage(title: string): Promise<Buffer> {
-  const font = await fetch('https://fonts.gstatic.com/s/inter/v12/...').then(r => r.arrayBuffer());
-  
-  const svg = await satori(
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        color: 'white',
-        fontFamily: 'Inter',
-      }}
-    >
-      <h1 style={{ fontSize: 60, fontWeight: 'bold' }}>{title}</h1>
-      <p style={{ fontSize: 24 }}>magi.website</p>
-    </div>,
-    {
-      width: 1200,
-      height: 630,
-      fonts: [{ name: 'Inter', data: font, style: 'normal', weight: 400 }]
-    }
-  );
-
-  const resvg = new Resvg(svg);
-  return resvg.render().asPng();
-}
-```
-
-### Cloudflare Pages 配置
-
-```toml
-# wrangler.toml
-name = "magi-portal"
-compatibility_date = "2024-01-01"
-pages_build_output_dir = "./dist"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-```
-
-### SEO 检查清单
-
-| 类别 | 检查项 | 状态 |
-|------|--------|------|
-| **Meta** | Title 唯一且含关键词 | ⬜ |
-| **Meta** | Description < 160 字符 | ⬜ |
-| **Meta** | Canonical URL 正确 | ⬜ |
-| **OG** | OG Image 1200x630 | ⬜ |
-| **OG** | OG Title/Description 填写 | ⬜ |
-| **Twitter** | Twitter Card 配置 | ⬜ |
-| **结构** | Sitemap 提交 Search Console | ⬜ |
-| **结构** | Robots.txt 允许爬取 | ⬜ |
-| **性能** | LCP < 2.5s | ⬜ |
-| **性能** | FID < 100ms | ⬜ |
-| **性能** | CLS < 0.1 | ⬜ |
-| **结构化** | JSON-LD Organization | ⬜ |
-| **内容** | H1 唯一且含主关键词 | ⬜ |
-| **内容** | H2-H6 层级清晰 | ⬜ |
-| **图片** | Alt 文本完整 | ⬜ |
-| **图片** | WebP/AVIF 格式 | ⬜ |
-| **移动** | 响应式布局 | ⬜ |
-| **移动** | 触控友好 (44px+) | ⬜ |
-
-### Astro SEO 优势
-
-| 优势 | 说明 |
+| 产品 | 链接 |
 |------|------|
-| **零 JS 默认** | 页面秒开 → LCP/CLS 优秀 |
-| **静态生成** | TTFB 低 → 爬取友好 |
-| **语义化 HTML** | 更好的 DOM 树结构 |
-| **Cloudflare Pages** | 全球边缘 → 访问速度一致 |
-
-## 站点内容规划
-
-### 主站页面结构
-
-```
-/
-├── Hero Section          # 一句话介绍 + CTA
-├── Products Section      # 产品矩阵卡片展示
-│   ├── API 服务
-│   ├── Chat 助手
-│   └── Agent 服务
-├── Features Section      # 技术特点/优势
-├── About Section         # 关于我
-└── Footer                # 链接/版权
-```
-
-### 页面内容
-
-#### 1. Hero Section
-- **标语**: "探索 AI 的无限可能" / "Personal AI Lab"
-- **副标题**: 专注于 AI 产品与服务的个人开发者
-- **CTA 按钮**: "查看产品" / "联系我"
-
-#### 2. Products Section (产品矩阵)
-每个产品卡片包含：
-- 产品图标
-- 产品名称
-- 简短描述
-- 跳转链接 (跳转至对应子域名)
-
-示例产品：
-| 产品 | 描述 | 链接 |
-|------|------|------|
-| **Magi API** | 统一的 AI API 聚合服务 | api.magi.website |
-| **Magi Chat** | 简洁高效的 AI 对话助手 | chat.magi.website |
-| **Magi Agent** | 智能 Agent，满足复杂任务 | agent.magi.website |
-
-#### 3. Features Section
-- 🚀 **高性能**: 基于 Cloudflare Edge 全球加速
-- 🔒 **隐私优先**: 数据处理透明，用户掌控数据
-- 💡 **易于集成**: 标准 API，文档完善
-- 🔧 **可扩展**: 模块化设计，随时添加新功能
-
-#### 4. About Section
-- 个人介绍（开发者背景）
-- 技术栈偏好
-- 联系方式 (Email / GitHub / Twitter)
-
-#### 5. Footer
-- 版权声明
-- 隐私政策链接
-- 友链区域 (可选)
+| MAGI API | api.magi.website |
+| MAGI Chat | chat.magi.website |
+| MAGI Agent | agent.magi.website |
 
 ## 开发计划
 
-### Phase 1: 主站基础建设
-- [ ] 初始化 Astro 项目
-- [ ] 配置 Tailwind CSS
-- [ ] 开发 Hero / Products / Features / About / Footer 组件
-- [ ] 响应式适配 (Mobile First)
-- [ ] 部署至 Cloudflare Pages
+### ✅ Phase 1 — 主站基础建设（完成）
 
-### Phase 2: SEO 完善
-- [ ] 集成 astro-seo 组件
-- [ ] 配置 @astrojs/sitemap
-- [ ] 添加 JSON-LD 结构化数据
-- [ ] 生成 OG 图片
-- [ ] 配置 robots.txt
-- [ ] 提交 Search Console
+- Astro 项目脚手架
+- Tailwind CSS 配置
+- Hero / Products / Features / About / Footer 组件
+- 响应式适配
+- 部署到 Cloudflare Pages
 
-### Phase 3: CI/CD 完善
-- [ ] GitHub Actions 自动部署
-- [ ] 环境变量管理
-- [ ] 预览部署 (Preview Deployments)
+### ✅ Phase 2 — SEO（完成）
 
-### Phase 4: 子域名产品开发 (可选)
-- [ ] Magi API - API Gateway Worker
-- [ ] Magi Chat - AI Chat Worker  
-- [ ] Magi Agent - Agent Worker + D1 + Vectorize
+- 内联 head meta
+- 自写 sitemap
+- JSON-LD Organization
+- robots.txt
+- `_headers` / `_redirects`
 
-### Phase 5: 国际化 (i18n)
-- [x] 多语言支持 (中文/英文)
-- [x] 浏览器语言自动检测
-- [x] 手动语言切换器
-- [x] 语言选择持久化 (localStorage)
+### ✅ Phase 5 — i18n（完成）
 
-### Phase 6: 增值功能
-- [ ] 访问统计 (可选：Umami / Plausible)
-- [ ] 性能监控
+- zh / en 双语
+- localStorage 持久化
+- 浏览器语言检测
+- 顶部 nav 切换器
 
-## 项目结构 (推荐)
+### ⏳ Phase 3 — CI/CD
+
+- 当前手动 wrangler 部署
+- 可选：GitHub Actions 自动部署
+
+### ⏳ Phase 4 — 子域名产品
+
+- Magi API (API Gateway Worker)
+- Magi Chat (AI Chat Worker)
+- Magi Agent (Agent Worker + D1 + Vectorize)
+
+### ⏳ Phase 6 — 增值
+
+- OG 图片自动生成（satori + resvg）替代静态 SVG
+- 访问统计（Umami / Plausible）
+
+## 项目结构
 
 ```
 magi-portal/
@@ -463,91 +212,73 @@ magi-portal/
 ├── package.json
 ├── tsconfig.json
 ├── .gitignore
-├── wrangler.toml              # Cloudflare Pages 配置
-├── .github/
-│   └── workflows/             # CI/CD 配置
+├── wrangler.toml
 ├── public/
 │   ├── favicon.svg
-│   ├── robots.txt
 │   ├── og-default.svg
-│   └── _headers              # 安全 headers
+│   ├── robots.txt
+│   ├── _headers
+│   ├── _redirects
+│   └── skill.md             # Agent skill manifest
 ├── src/
 │   ├── layouts/
-│   │   └── Layout.astro
+│   │   └── Layout.astro     # head + sticky nav + footer + inline i18n bootstrap
 │   ├── components/
 │   │   ├── Hero.astro
-│   │   ├── ProductCard.astro
 │   │   ├── Products.astro
+│   │   ├── ProductCard.astro
 │   │   ├── Features.astro
 │   │   ├── About.astro
-│   │   ├── Footer.astro
+│   │   ├── MatrixBackground.astro   # 极简 CSS radial glow
 │   │   └── seo/
-│   │       ├── SEO.astro
 │   │       ├── OrganizationSchema.astro
-│   │       └── ProductSchema.astro
+│   │       ├── ProductSchema.astro  # 未在 Layout 启用
+│   │       └── SEO.astro             # 未在 Layout 启用 (Layout 内联了 meta)
 │   ├── i18n/
-│   │   ├── index.ts           # i18n 工具函数
-│   │   ├── zh.ts             # 中文翻译
-│   │   ├── en.ts             # 英文翻译
-│   │   └── client.ts         # 客户端翻译脚本
+│   │   ├── index.ts          # barrel
+│   │   ├── types.ts          # TranslationTree 类型
+│   │   ├── translations.ts   # { en, zh } 注册表
+│   │   ├── locales-meta.ts   # { en: 'EN', zh: '中文' }
+│   │   └── locales/
+│   │       ├── en.ts
+│   │       └── zh.ts
 │   ├── pages/
 │   │   ├── index.astro
-│   │   └── sitemap.xml.ts    # 站点地图
-│   ├── lib/
-│   │   └── og-image.ts
+│   │   └── sitemap.xml.ts
 │   └── styles/
 │       └── global.css
 └── docs/
     └── plan.md
 ```
 
-## 部署流程
+## 部署
 
 ```bash
-# 1. 安装依赖
 npm install
-
-# 2. 本地开发
-npm run dev
-
-# 3. 构建
 npm run build
-
-# 4. 部署 (通过 Wrangler)
-npx wrangler pages deploy dist/
+npx wrangler pages deploy dist --project-name=magi-portal
 ```
 
-## 域名配置 (Cloudflare)
+Cloudflare Pages 配置：
+- Build command: `npm run build`
+- Build output: `dist`
+- NODE_VERSION: 20
 
-```
-DNS 设置:
-- A 记录: @ -> 192.0.2.1 (Cloudflare Pages 虚拟 IP)
-- CNAME: www -> @
+## 预算
 
-Pages 项目绑定:
-- 主站: magi.website
-- API 产品: api.magi.website
-- Chat 产品: chat.magi.website
-- Agent 产品: agent.magi.website
-```
+| 项目 | 费用 |
+|------|------|
+| 域名 (.website) | ~$10–15/年 |
+| Cloudflare Pages | 免费 |
+| Cloudflare Workers | 免费 (10 万请求/天) |
+| Cloudflare D1 | 免费 (5GB) |
+| Cloudflare Vectorize | 免费 (30M 维向量) |
+| **总计** | **~$10–15/年** |
 
-## 预算估算
-
-| 项目 | 费用 | 备注 |
-|------|------|------|
-| 域名 | ~$10-15/年 | .website 后缀 |
-| Cloudflare Pages | **免费** | 无限带宽，500 构建分钟/月 |
-| Cloudflare Workers | **免费** | 100,000 请求/天 |
-| Cloudflare D1 | **免费** | 5GB 存储 |
-| Cloudflare Vectorize | **免费** | 30M 维向量 |
-| **总计** | **~$10-15/年** | 极低成本 |
-
-## 参考资料
+## 参考
 
 - [Astro 文档](https://docs.astro.build)
 - [Cloudflare Pages 文档](https://developers.cloudflare.com/pages/)
-- [Cloudflare Workers 文档](https://developers.cloudflare.com/workers/)
-- [Tailwind CSS 文档](https://tailwindcss.com)
 - [Cloudflare AI Gateway](https://developers.cloudflare.com/ai-gateway/)
-- [astro-seo GitHub](https://github.com/jonasmerlin/astro-seo)
-- [Google SEO 最佳实践](https://developers.google.com/search/docs)
+- [Tailwind CSS 文档](https://tailwindcss.com)
+- [SKILL.md 规范](https://github.com/anthropics/skills)

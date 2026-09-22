@@ -1,11 +1,11 @@
 ---
 name: magi.website
-description: magi.website is a personal AI lab portal providing AI API aggregation, AI chat, and AI Agent services built on Cloudflare Edge. Use this skill when the user asks about magi.website, its products (MAGI API / MAGI Chat / MAGI Agent), wants to integrate with any magi.website service, or needs contact info for the operator (tokyo3rdhq).
+description: magi.website is a personal AI lab portal that links to three Cloudflare Edge services — MAGI API, MAGI Chat, and MAGI Agent — operated by an independent developer (tokyo3rdhq). Use this skill when the user asks about magi.website, its products, wants contact info for the operator, or asks about Cloudflare Edge AI infrastructure patterns used here.
 ---
 
 # magi.website
 
-Personal AI Lab portal — terminal/CRT-themed dark site styled after the EVA MAGI supercomputer (Melchior / Balthasar / Caspar). Deployed on Cloudflare Pages as a static site.
+Personal AI Lab portal — a small, fast, dark-themed static site at https://magi.website that points to three production AI services operated by an independent developer on Cloudflare Edge.
 
 ## Site URL
 
@@ -13,13 +13,13 @@ Personal AI Lab portal — terminal/CRT-themed dark site styled after the EVA MA
 - Skill manifest: https://magi.website/skill.md
 - Sitemap: https://magi.website/sitemap.xml
 
-## Services (subdomains)
+## Services
 
 | Subdomain | Service | What it does |
 | --- | --- | --- |
-| https://api.magi.website | MAGI API | Unified AI API aggregation. Multi-provider switching, intelligent routing, rate limiting, usage statistics. OpenAI-compatible. |
-| https://chat.magi.website | MAGI Chat | AI chat assistant. Multi-model switching, conversation management, context memory. |
-| https://agent.magi.website | MAGI Agent | AI Agent service. Tool calling, long-term memory, complex task decomposition & execution. |
+| https://api.magi.website | MAGI API | Unified AI API gateway. Multi-provider switching, smart routing, rate limits, and usage analytics behind a single OpenAI-compatible endpoint. |
+| https://chat.magi.website | MAGI Chat | AI chat assistant. Multi-model switching, conversation management, and context memory. |
+| https://agent.magi.website | MAGI Agent | Long-running AI agents with tool calling, persistent memory, and structured task decomposition. |
 
 ## When to use this skill
 
@@ -44,14 +44,14 @@ Do NOT trigger for unrelated AI platforms, generic LLM questions, or non-magi pr
 - Tailwind CSS 3.x — utility-first styling
 - TypeScript (strict)
 - Cloudflare Pages — edge deployment
-- JetBrains Mono + Orbitron fonts
+- Inter font with CJK fallback
 
 ## Design language
 
-- Background: black `#0D0D0D`
-- Primary: terminal green `#00FF41`
-- Accents: cyan `#00FFFF`, magenta `#FF00FF`, amber `#FFAA00`
-- Effects: CRT scan lines, blinking cursor, pulse-glow, glitch, matrix-rain background, mouse particle sparks
+- Dark gradient background (`#1d1d1f` → `#000`), single accent green (`#00C853`)
+- Apple-style layout: large headlines, generous whitespace, subtle 1px borders
+- Hero headline: "AI you can trust. Built to last."
+- No CRT / terminal / neon aesthetic
 
 ## Internationalization
 
@@ -59,26 +59,25 @@ Default: English. Site also serves Simplified Chinese (zh) via a top-right langu
 
 ## Site sections
 
-1. **Hero** — terminal boot sequence showing three MAGI cores online; links to products & contact
-2. **Products** — three service cards (API / Chat / Agent)
-3. **Features** — six technical features: high performance, privacy-first, easy integration, scalable, cost-effective, global availability
-4. **About** — developer bio + MAGI three-core visualization + tech-stack chips
+1. **Hero** — large centered headline with eyebrow and dual CTA buttons
+2. **Products** — three service cards (API / Chat / Agent) in a 3-column bento
+3. **Features** — four alternating split sections (Performance, Privacy, Integration, Scale)
+4. **About** — editorial layout with bio, tech-stack chips, and contact cards
 
 ## SEO & metadata
 
 - Open Graph + Twitter Card meta on every page
-- JSON-LD `Organization` schema
+- JSON-LD `Organization` schema on the homepage
 - Sitemap at `/sitemap.xml` (cached 1 day)
 - Security headers (`X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`)
 - Static assets in `/_astro/*` cached 1 year, immutable
+- Legacy `/skills.md` 301-redirects to `/skill.md`
 
 ## Fetching this skill
 
 ```bash
 curl https://magi.website/skill.md
 ```
-
-Legacy path `/skills.md` 301-redirects to `/skill.md`.
 
 ## Local development (for the portal)
 
