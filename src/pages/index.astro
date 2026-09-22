@@ -4,22 +4,17 @@ import Hero from '../components/Hero.astro';
 import Products from '../components/Products.astro';
 import Features from '../components/Features.astro';
 import About from '../components/About.astro';
-import Footer from '../components/Footer.astro';
 import OrganizationSchema from '../components/seo/OrganizationSchema.astro';
 ---
 
 <Layout
   title="Home"
-  description="Magi - Personal AI Lab. 专注于 AI 产品与服务的个人开发者，提供 API 聚合、AI 对话、Agent 等智能解决方案。"
+  description="MAGI — Personal AI Lab. Independent developer building AI products and services on Cloudflare Edge."
 >
   <OrganizationSchema slot="jsonld" />
 
-  <main>
-    <Hero />
-    <Products />
-    <Features />
-    <About />
-  </main>
-
-  <Footer />
+  <Hero />
+  <Products />
+  <Features />
+  <About />
 </Layout>

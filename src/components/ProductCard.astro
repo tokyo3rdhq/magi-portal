@@ -7,56 +7,37 @@ interface Props {
 
 const { key, url, status = 'active' } = Astro.props;
 
-const icons: Record<string, string> = {
-  api: '⚡',
-  chat: '💬',
-  agent: '🤖',
+const labels: Record<string, string> = {
+  api: 'API',
+  chat: 'Chat',
+  agent: 'Agent',
 };
-
-const icon = icons[key] || '📦';
 ---
 
 <a
   href={status === 'coming-soon' ? undefined : url}
   class:list={[
-    "group relative block p-6 border transition-all duration-300 backdrop-blur-sm",
-    status === 'active' && "border-[#00ff41]/30 bg-black/80 hover:border-[#00ff41] hover:bg-[#00ff41]/10 hover:shadow-lg hover:shadow-[#00ff41]/20",
-    status === 'coming-soon' && "border-[#ffaa00]/30 bg-black/60 opacity-60 cursor-not-allowed"
+    'card-surface group flex h-full flex-col p-8 md:p-10 no-underline',
+    status === 'coming-soon' && 'opacity-50 cursor-not-allowed',
   ]}
 >
-  <!-- Corner decorations -->
-  <div class="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#00ff41]/30 group-hover:border-[#00ff41] transition-colors"></div>
-  <div class="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#00ff41]/30 group-hover:border-[#00ff41] transition-colors"></div>
-  <div class="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[#00ff41]/30 group-hover:border-[#00ff41] transition-colors"></div>
-  <div class="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[#00ff41]/30 group-hover:border-[#00ff41] transition-colors"></div>
-
-  <!-- Status indicator -->
-  <div class="absolute top-3 right-3">
-    {status === 'active' ? (
-      <span class="w-2 h-2 rounded-full bg-[#00ff41] pulse-glow"></span>
-    ) : (
-      <span class="text-[#ffaa00] text-xs">COMING_SOON</span>
-    )}
-  </div>
-
-  <!-- Icon -->
-  <div class="w-12 h-12 mb-4 rounded border border-[#00ff41]/30 flex items-center justify-center text-xl group-hover:border-[#00ff41] group-hover:shadow-lg group-hover:shadow-[#00ff41]/30 transition-all">
-    {icon}
-  </div>
-
-  <!-- Content -->
-  <h3 class="text-lg font-bold mb-2 terminal-text group-hover:text-[#00ffff] transition-colors" data-i18n={`products.${key}.name`}>
-  </h3>
-  <p class="text-sm leading-relaxed terminal-dim group-hover:text-[#00ff41]/80 transition-colors" data-i18n={`products.${key}.description`}>
+  <p class="text-xs font-medium uppercase tracking-[0.18em] text-accent mb-8">
+    {labels[key] ?? key}
   </p>
 
-  <!-- Arrow -->
+  <h3 class="text-2xl md:text-3xl font-semibold tracking-tighter text-ink-primary mb-4">
+    <span data-i18n={`products.${key}.name`}>MAGI</span>
+  </h3>
+
+  <p
+    class="text-base leading-relaxed text-ink-secondary mb-10 grow"
+    data-i18n={`products.${key}.description`}
+  ></p>
+
   {status === 'active' && (
-    <div class="mt-4 flex items-center gap-2 terminal-dim text-sm group-hover:text-[#00ff41] transition-colors">
-      <span>ACCESS_SYSTEM</span>
-      <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-      </svg>
-    </div>
+    <span class="inline-flex items-center gap-1 text-sm font-medium text-accent transition-opacity group-hover:opacity-80">
+      <span>Learn more</span>
+      <span class="transition-transform group-hover:translate-x-0.5">›</span>
+    </span>
   )}
 </a>

@@ -8,34 +8,29 @@ const products = [
 ];
 ---
 
-<section id="products" class="relative py-24 px-4">
-  <div class="max-w-6xl mx-auto">
-    <!-- Section header -->
-    <div class="mb-12">
-      <p class="terminal-dim text-sm mb-2">
-        <span class="text-[#00ff41]/50">$</span> ls -la /products/
-      </p>
-      <h2 class="text-2xl md:text-4xl font-bold mb-4">
-        <span class="terminal-dim">[</span>
-        <span class="terminal-highlight" data-i18n="products.label">PRODUCT_PORTFOLIO</span>
-        <span class="terminal-dim">]</span>
+<section id="products" class="relative px-6 py-32 md:py-40">
+  <div class="mx-auto max-w-page">
+    <div class="mx-auto max-w-wide text-center mb-16 md:mb-20">
+      <p class="eyebrow mb-5" data-i18n="products.eyebrow">Products</p>
+      <h2
+        class="section-title text-4xl md:text-5xl lg:text-6xl text-balance whitespace-pre-line"
+        data-i18n="products.headline"
+      >
+        Three systems.
+One platform.
       </h2>
-      <p class="terminal-dim max-w-2xl" data-i18n="products.description">
-        High-performance AI services deployed on Cloudflare Edge network
+      <p
+        class="mt-5 text-lg md:text-xl text-ink-secondary max-w-prose mx-auto text-balance"
+        data-i18n="products.subhead"
+      >
+        Production-grade AI services, deployed at the edge.
       </p>
     </div>
 
-    <!-- Products grid -->
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid gap-6 md:grid-cols-3">
       {products.map((product) => (
         <ProductCard key={product.key} url={product.url} />
       ))}
-    </div>
-    
-    <!-- Command prompt -->
-    <div class="mt-12 terminal-dim text-sm">
-      <span class="text-[#00ff41]/50">$</span> 
-      <span class="cursor-blink text-[#00ff41]">▮</span>
     </div>
   </div>
 </section>

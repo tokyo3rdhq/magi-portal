@@ -1,50 +1,74 @@
 ---
-const featureKeys = ['performance', 'privacy', 'integration', 'scalable', 'cost', 'global'];
-const icons = ['🚀', '🔒', '💡', '🔧', '💰', '🌐'];
+const features = [
+  {
+    key: 'performance',
+    icon: 'speed',
+  },
+  {
+    key: 'privacy',
+    icon: 'lock',
+  },
+  {
+    key: 'integration',
+    icon: 'plug',
+  },
+  {
+    key: 'scale',
+    icon: 'scale',
+  },
+];
 ---
 
-<section id="features" class="relative py-24 px-4">
-  <div class="max-w-6xl mx-auto">
-    <!-- Section header -->
-    <div class="mb-12">
-      <p class="terminal-dim text-sm mb-2">
-        <span class="text-[#00ff41]/50">$</span> cat /system/specifications.txt
-      </p>
-      <h2 class="text-2xl md:text-4xl font-bold mb-4">
-        <span class="terminal-dim">[</span>
-        <span class="terminal-highlight" data-i18n="features.label">TECHNICAL_FEATURES</span>
-        <span class="terminal-dim">]</span>
+<section id="features" class="relative px-6 py-32 md:py-40 border-t border-line">
+  <div class="mx-auto max-w-page">
+    <div class="mx-auto max-w-wide text-center mb-24 md:mb-32">
+      <p class="eyebrow mb-5" data-i18n="features.eyebrow">Features</p>
+      <h2 class="section-title text-4xl md:text-5xl lg:text-6xl text-balance">
+        Engineered for production.
       </h2>
-      <p class="terminal-dim max-w-2xl" data-i18n="features.description">
-        Focused on technical depth and user experience
-      </p>
     </div>
 
-    <!-- Features grid -->
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {featureKeys.map((key, index) => (
-        <div class="group p-6 border border-[#00ff41]/20 bg-black/80 backdrop-blur-sm hover:border-[#00ffff]/50 hover:bg-[#00ffff]/5 transition-all duration-300">
-          <!-- Icon -->
-          <div class="text-3xl mb-4">{icons[index]}</div>
-          
-          <!-- Title -->
-          <h3 class="text-lg font-bold mb-2 terminal-text group-hover:text-[#00ffff] transition-colors" data-i18n={`features.items.${key}.title`}>
-          </h3>
-          
-          <!-- Description -->
-          <p class="text-sm leading-relaxed terminal-dim" data-i18n={`features.items.${key}.description`}>
-          </p>
-          
-          <!-- Decorative line -->
-          <div class="mt-4 h-px bg-gradient-to-r from-[#00ff41]/50 to-transparent group-hover:from-[#00ffff]/50 transition-all"></div>
+    <div class="space-y-32 md:space-y-40">
+      {features.map((feature, index) => (
+        <div
+          class:list={[
+            'grid gap-10 md:gap-16 md:grid-cols-2 items-center',
+            index % 2 === 1 && 'md:[&>*:first-child]:order-2',
+          ]}
+        >
+          <!-- Copy side -->
+          <div class="max-w-prose">
+            <p
+              class="eyebrow mb-5"
+              data-i18n={`features.items.${index}.eyebrow`}
+            >
+              {feature.key}
+            </p>
+            <h3
+              class="section-title text-3xl md:text-4xl lg:text-5xl mb-6 text-balance"
+              data-i18n={`features.items.${index}.headline`}
+            >
+              Headline
+            </h3>
+            <p
+              class="text-lg md:text-xl text-ink-secondary leading-relaxed text-balance"
+              data-i18n={`features.items.${index}.body`}
+            >
+              Body
+            </p>
+          </div>
+
+          <!-- Visual side — abstract accent block -->
+          <div class="aspect-[4/3] w-full rounded-2xl border border-line bg-bg-card overflow-hidden relative">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,200,83,0.12),transparent_60%)]"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="text-[120px] md:text-[160px] font-semibold tracking-tightest text-ink-primary/[0.04] select-none">
+                {String(index + 1).padStart(2, '0')}
+              </div>
+            </div>
+          </div>
         </div>
       ))}
-    </div>
-    
-    <!-- Command prompt -->
-    <div class="mt-12 terminal-dim text-sm">
-      <span class="text-[#00ff41]/50">$</span> 
-      <span class="cursor-blink text-[#00ff41]">▮</span>
     </div>
   </div>
 </section>

@@ -1,9 +1,8 @@
 ---
 import '../styles/global.css';
-import { getLocale, locales } from '../i18n';
+import { locales } from '../i18n';
 import MatrixBackground from '../components/MatrixBackground.astro';
 
-// Environment variables
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://magi.website';
 const siteName = import.meta.env.PUBLIC_SITE_NAME || 'MAGI';
 const gaId = import.meta.env.PUBLIC_GA_ID || '';
@@ -15,56 +14,56 @@ interface Props {
 
 const {
   title = 'Home',
-  description = `${siteName} - Personal AI Lab. Independent developer focused on AI products and services.`,
+  description = `${siteName} — Personal AI Lab. Independent developer building AI products and services on Cloudflare Edge.`,
 } = Astro.props;
 
-const locale = getLocale();
-const fullTitle = title === 'Home' ? `${siteName}.website - Personal AI Lab` : `${title} | ${siteName}`;
+const fullTitle = title === 'Home' ? `${siteName} — Personal AI Lab` : `${title} | ${siteName}`;
+
+const navItems = [
+  { key: 'products', href: '#products' },
+  { key: 'features', href: '#features' },
+  { key: 'about', href: '#about' },
+];
+
+const currentYear = new Date().getFullYear();
 ---
 
 <!doctype html>
-<html lang={locale}>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Primary Meta Tags -->
     <title>{fullTitle}</title>
     <meta name="title" content={fullTitle} />
     <meta name="description" content={description} />
 
-    <!-- Canonical -->
     <link rel="canonical" href={Astro.url.href} />
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url.href} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={`${siteUrl}/og-default.png`} />
     <meta property="og:site_name" content={siteName} />
-    <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+    <meta property="og:locale" content="en_US" />
 
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={Astro.url.href} />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={`${siteUrl}/og-default.png`} />
 
-    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Google Analytics -->
     {gaId && (
       <>
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
@@ -77,314 +76,218 @@ const fullTitle = title === 'Home' ? `${siteName}.website - Personal AI Lab` : `
       </>
     )}
 
-    <!-- JSON-LD -->
     <slot name="jsonld" />
   </head>
-  <body class="min-h-screen text-[#00ff41] relative overflow-x-hidden">
-    <!-- Matrix Background -->
+  <body class="min-h-screen relative overflow-x-hidden">
     <MatrixBackground />
 
-    <!-- Language Switcher -->
-    <div class="fixed top-4 right-4 z-50 flex items-center gap-2" id="lang-switcher">
-      <button
-        id="lang-btn"
-        class="px-2.5 py-1.5 border border-[#00ff41]/30 bg-black/80 hover:border-[#00ff41] hover:bg-[#00ff41]/10 transition-all text-sm flex items-center font-mono"
-        aria-label="Switch Language"
-      >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
-        </svg>
-      </button>
-      <div id="lang-dropdown" class="hidden absolute top-full right-0 mt-2 py-2 bg-black/90 border border-[#00ff41]/30 shadow-lg shadow-[#00ff41]/10 min-w-[120px]">
-        {(Object.entries(locales) as [keyof typeof locales, string][]).map(([code, name]) => (
-          <button
-            data-locale={code}
-            class:list={[
-              "w-full px-4 py-2 text-left text-sm hover:bg-[#00ff41]/10 transition-colors font-mono",
-              code === locale ? "text-[#00ffff] bg-[#00ffff]/10 font-bold" : "text-[#00ff41]"
-            ]}
+    <!-- Top navigation -->
+    <header class="sticky top-0 z-40 backdrop-blur-xl bg-black/60 border-b border-line">
+      <nav class="mx-auto flex h-11 max-w-page items-center justify-between px-6">
+        <a href="/" class="text-sm font-semibold text-ink-primary tracking-tight">
+          MAGI
+        </a>
+        <ul class="hidden md:flex items-center gap-8">
+          {navItems.map((item) => (
+            <li>
+              <a href={item.href} class="nav-link" data-i18n={`nav.${item.key}`}>
+                {item.key}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div class="flex items-center gap-4">
+          <a
+            href="https://github.com/tokyo3rdhq"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-ink-secondary hover:text-ink-primary transition-colors"
+            aria-label="GitHub"
           >
-            {name}
-          </button>
-        ))}
-      </div>
-    </div>
+            <svg class="h-[18px] w-[18px]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
+            </svg>
+          </a>
+          <div id="lang-switcher" class="relative">
+            <button
+              id="lang-btn"
+              class="text-xs font-medium text-ink-secondary hover:text-ink-primary transition-colors"
+              aria-label="Switch language"
+            >
+              <span id="current-lang">{locales.en}</span>
+              <span class="ml-0.5">▾</span>
+            </button>
+            <div
+              id="lang-dropdown"
+              class="hidden absolute right-0 top-full mt-2 min-w-[120px] rounded-xl border border-line bg-bg-raised/95 backdrop-blur-xl shadow-2xl overflow-hidden"
+            >
+              {Object.entries(locales).map(([code, name]) => (
+                <button
+                  data-locale={code}
+                  class="block w-full px-4 py-2 text-left text-xs text-ink-secondary hover:bg-white/5 hover:text-ink-primary transition-colors"
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
 
     <main class="relative z-10">
       <slot />
     </main>
 
-    <!-- i18n Script -->
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-line mt-32">
+      <div class="mx-auto max-w-page px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ink-tertiary">
+        <p>
+          Copyright © {currentYear} MAGI. All rights reserved.
+        </p>
+        <p>
+          Built on Cloudflare Edge.
+          <a
+            href="mailto:hi@magi.website"
+            class="text-ink-secondary hover:text-ink-primary transition-colors ml-1"
+          >hi@magi.website</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Locale switcher + i18n -->
     <script is:inline>
       const translations = {
-        zh: {
-          nav: { home: '首页', products: '产品', features: '特点', about: '关于' },
-          hero: {
-            badge: 'Personal AI Lab',
-            terminal: {
-              title: 'MAGI 系统接口 v3.14.159',
-              command: '[NERV 中央指挥]',
-            },
-            boot: {
-              init: '初始化 MAGI 神经网络...',
-              loading: '加载三个 Magi 子系统...',
-              melchior: 'MELCHIOR 内核已加载',
-              balthasar: 'BALTHASAR 内核已加载',
-              caspar: 'CASPAR 内核已加载',
-              connection: '建立 NERV 总部连接...',
-            },
-            status: '// 系统状态',
-            subtitle: '个人 AI 实验室',
-            role: '独立开发者',
-            subheadline: '专注于 AI 产品与服务开发，在边缘构建智能解决方案',
-            modules: '核心模块',
-            moduleApi: 'API_网关',
-            moduleChat: 'AI_对话',
-            moduleAgent: 'Agent_系统',
-            networkStatus: '网络状态',
-            online: '在线',
-            platform: '部署平台',
-            commands: '可用命令:',
-            ctaProducts: '查看产品',
-            ctaContact: '联系我',
-            awaiting: '等待输入...',
-            scroll: '向下滚动',
-          },
-          products: {
-            label: '产品组合',
-            title: '我的',
-            titleHighlight: 'AI 产品',
-            description: '基于 Cloudflare Edge 构建的高性能 AI 服务，覆盖 API、对话、Agent 三大场景',
-            api: { name: 'MAGI API', description: '统一的 AI API 聚合服务，支持多提供商切换、智能路由、请求限流与用量统计' },
-            chat: { name: 'MAGI Chat', description: '简洁高效的 AI 对话助手，支持多模型切换、对话管理、上下文记忆' },
-            agent: { name: 'MAGI Agent', description: '智能 Agent 服务，支持工具调用、长期记忆、复杂任务分解与执行' },
-          },
-          features: {
-            label: '技术特点',
-            title: '为什么选择',
-            titleHighlight: '我',
-            description: '专注于技术深度与用户体验，用心打磨每一个细节',
-            items: {
-              performance: { title: '高性能', description: '基于 Cloudflare Edge 全球加速，边缘节点覆盖 200+ 城市，平均响应时间 < 50ms' },
-              privacy: { title: '隐私优先', description: '数据处理透明，用户掌控数据。支持全程加密传输，关键数据可选择本地处理' },
-              integration: { title: '易于集成', description: '标准 OpenAI API 兼容格式，文档完善，多语言 SDK 支持，快速接入现有项目' },
-              scalable: { title: '可扩展', description: '模块化架构设计，支持水平扩展，随时添加新功能和接入新的 AI 模型' },
-              cost: { title: '成本可控', description: '按需付费，无最低消费。免费额度充足，个人项目和小规模使用完全免费' },
-              global: { title: '全球可用', description: '服务全球部署，自动选择最优节点，无论用户身在何处都能获得极速体验' },
-            },
-          },
-          about: {
-            label: '关于开发者',
-            title: '你好，我是',
-            titleHighlight: 'MAGI',
-            terminalTitle: 'MELCHIOR_VISUALIZATION.exe',
-            supercomputer: '超级计算机系统',
-            namedAfter: '// 以东方三圣贤命名',
-            melchiorRole: '- 逻辑核心',
-            balthasarRole: '- 判断核心',
-            casparRole: '- 智慧核心',
-            systemStatus: '系统状态',
-            operational: '运行中',
-            paragraphs: [
-              '一名热爱技术的独立开发者，专注于 AI 领域的产品与服务开发。',
-              '热衷于探索前沿技术，致力于将复杂的 AI 能力简化为易于使用的产品，让更多人能够享受 AI 带来的便利。',
-              '基于 Cloudflare Edge Platform 构建高性能、高可用的 AI 服务，追求极致的用户体验和系统稳定性。',
-            ],
-            techStack: '技术栈',
-            contact: '联系方式',
-          },
-          footer: {
-            brand: 'MAGI',
-            tagline: '专注于 AI 产品与服务的独立开发者',
-            quickLinks: '快速链接',
-            followMe: '关注我',
-            copyright: '保留所有权利',
-            privacy: '隐私政策',
-            terms: '服务条款',
-          },
-        },
         en: {
-          nav: { home: 'Home', products: 'Products', features: 'Features', about: 'About' },
+          nav: { products: 'Products', features: 'Features', about: 'About' },
           hero: {
-            badge: 'Personal AI Lab',
-            terminal: {
-              title: 'MAGI SYSTEM INTERFACE v3.14.159',
-              command: '[NERV CENTRAL COMMAND]',
-            },
-            boot: {
-              init: 'initializing MAGI neural network...',
-              loading: 'loading three Magi subsystems...',
-              melchior: 'MELCHIOR kernel loaded',
-              balthasar: 'BALTHASAR kernel loaded',
-              caspar: 'CASPAR kernel loaded',
-              connection: 'establishing NERV HQ connection...',
-            },
-            status: '// SYSTEM STATUS',
-            subtitle: 'Personal AI Lab',
-            role: 'Independent Developer',
-            subheadline: 'Specialized in AI products and services, building intelligent solutions at the edge.',
-            modules: 'CORE_MODULES',
-            moduleApi: 'API_GATEWAY',
-            moduleChat: 'AI_CHAT',
-            moduleAgent: 'AGENT_SYSTEM',
-            networkStatus: 'NETWORK_STATUS',
-            online: 'ONLINE',
-            platform: 'DEPLOY_PLATFORM',
-            commands: 'available_commands:',
-            ctaProducts: 'VIEW_PRODUCTS',
-            ctaContact: 'CONTACT_ME',
-            awaiting: 'awaiting input...',
-            scroll: 'SCROLL_DOWN',
+            eyebrow: 'Personal AI Lab',
+            headline: 'Personal AI,\nat the edge.',
+            subhead: 'High-performance AI services for API, chat, and agents — built by an independent developer on Cloudflare Edge.',
+            ctaPrimary: 'View Products',
+            ctaSecondary: 'Contact Me',
           },
           products: {
-            label: 'Product Portfolio',
-            title: 'My',
-            titleHighlight: 'AI Products',
-            description: 'High-performance AI services built on Cloudflare Edge, covering API, Chat, and Agent scenarios.',
-            api: { name: 'MAGI API', description: 'Unified AI API aggregation service with multi-provider switching, intelligent routing, rate limiting, and usage statistics.' },
-            chat: { name: 'MAGI Chat', description: 'Clean and efficient AI chat assistant with multi-model switching, conversation management, and context memory.' },
-            agent: { name: 'MAGI Agent', description: 'Intelligent Agent service with tool calling, long-term memory, complex task decomposition and execution.' },
+            eyebrow: 'Products',
+            headline: 'Three systems.\nOne platform.',
+            subhead: 'Production-grade AI services, deployed at the edge.',
+            api: { name: 'MAGI API', description: 'A unified AI API gateway. Multi-provider switching, smart routing, rate limits, and usage analytics — all behind a single OpenAI-compatible endpoint.' },
+            chat: { name: 'MAGI Chat', description: 'A clean, fast AI chat assistant. Switch models mid-conversation, keep context, and manage history without friction.' },
+            agent: { name: 'MAGI Agent', description: 'Long-running AI agents with tool calling, persistent memory, and structured task decomposition for real workflows.' },
           },
           features: {
-            label: 'Technical Features',
-            title: 'Why Choose',
-            titleHighlight: 'Me',
-            description: 'Focused on technical depth and user experience, carefully crafting every detail.',
-            items: {
-              performance: { title: 'High Performance', description: 'Built on Cloudflare Edge with 200+ city coverage, average response time < 50ms.' },
-              privacy: { title: 'Privacy First', description: 'Transparent data processing, user data control. Full encryption support with optional local processing.' },
-              integration: { title: 'Easy Integration', description: 'Standard OpenAI API compatible format, comprehensive documentation, multi-language SDK support.' },
-              scalable: { title: 'Scalable', description: 'Modular architecture with horizontal scaling, easily add new features and AI models.' },
-              cost: { title: 'Cost Effective', description: 'Pay-as-you-go, no minimum. Generous free tier, completely free for personal projects.' },
-              global: { title: 'Global Availability', description: 'Global deployment with auto node selection, lightning-fast experience anywhere.' },
-            },
+            eyebrow: 'Features',
+            items: [
+              {
+                eyebrow: 'Performance',
+                headline: 'Built for speed.',
+                body: 'Cloudflare Edge network with 200+ cities. Average response time under 50ms anywhere on Earth.',
+              },
+              {
+                eyebrow: 'Privacy',
+                headline: 'Your data stays yours.',
+                body: 'Transparent processing, full encryption in transit, and local-only modes for sensitive workloads.',
+              },
+              {
+                eyebrow: 'Integration',
+                headline: 'Plug into anything.',
+                body: 'OpenAI-compatible API, first-class SDKs, and reference integrations — go live in minutes, not weeks.',
+              },
+              {
+                eyebrow: 'Scale',
+                headline: 'Scales without surprises.',
+                body: 'Modular architecture that grows with you. Add a model, swap a provider, or extend with new endpoints without re-platforming.',
+              },
+            ],
           },
           about: {
-            label: 'About Developer',
-            title: 'Hello, I\'m',
-            titleHighlight: 'MAGI',
-            terminalTitle: 'MELCHIOR_VISUALIZATION.exe',
-            supercomputer: 'SUPERCOMPUTER SYSTEM',
-            namedAfter: '// Named after the Three Wise Men',
-            melchiorRole: '- Logic Core',
-            balthasarRole: '- Judgment Core',
-            casparRole: '- Wisdom Core',
-            systemStatus: 'SYSTEM_STATUS',
-            operational: 'OPERATIONAL',
-            paragraphs: [
-              'An independent developer passionate about technology, focused on AI products and services.',
-              'Dedicated to exploring cutting-edge tech and simplifying complex AI capabilities into accessible products.',
-              'Building high-performance AI services on Cloudflare Edge Platform, pursuing excellent user experience and system stability.',
-            ],
-            techStack: 'Tech Stack',
-            contact: 'Contact',
-          },
-          footer: {
-            brand: 'MAGI',
-            tagline: 'Independent developer focused on AI products and services',
-            quickLinks: 'Quick Links',
-            followMe: 'Follow Me',
-            copyright: 'All rights reserved.',
-            privacy: 'Privacy Policy',
-            terms: 'Terms of Service',
+            eyebrow: 'About',
+            headline: 'Built by one.\nMaintained with care.',
+            body: 'I am an independent developer focused on AI products and services. MAGI is named after the three-core supercomputer in Neon Genesis Evangelion — three systems reasoning together to reach the right answer.',
+            tech: 'Tech',
+            contact: 'Get in touch',
+            emailLabel: 'Email',
+            githubLabel: 'GitHub',
           },
         },
       };
-      
-      const localeNames = { zh: '中文', en: 'English' };
-      
+
+      const localeNames = { en: 'EN', zh: '中文' };
+
       function getLocale() {
         const saved = localStorage.getItem('locale');
-        if (saved && (saved === 'zh' || saved === 'en')) return saved;
-        const browserLang = navigator.language.toLowerCase();
-        if (browserLang.startsWith('en')) return 'en';
-        return 'zh';
+        if (saved === 'zh' || saved === 'en') return saved;
+        return 'en';
       }
-      
+
       function setLocale(locale) {
+        if (locale !== 'zh' && locale !== 'en') return;
         localStorage.setItem('locale', locale);
-        document.documentElement.lang = locale;
-        window.dispatchEvent(new CustomEvent('localechange', { detail: locale }));
+        document.documentElement.lang = locale === 'zh' ? 'zh-CN' : 'en';
+        applyTranslations();
+        syncActiveLocaleButton();
       }
-      
+
       function getNestedValue(obj, keys) {
         let value = obj;
         for (const k of keys) {
           const index = parseInt(k, 10);
-          if (!isNaN(index) && Array.isArray(value)) {
-            value = value[index];
-          } else {
-            value = value?.[k];
-          }
+          if (!isNaN(index) && Array.isArray(value)) value = value[index];
+          else value = value?.[k];
         }
         return value;
       }
-      
+
       function applyTranslations() {
         const locale = getLocale();
-        const trans = translations[locale];
-        document.querySelectorAll('[data-i18n]').forEach(el => {
+        const trans = translations[locale] || translations.en;
+        document.querySelectorAll('[data-i18n]').forEach((el) => {
           const key = el.getAttribute('data-i18n');
           if (!key) return;
           const value = getNestedValue(trans, key.split('.'));
-          if (value !== undefined) {
-            el.textContent = value;
-          }
+          if (typeof value === 'string') el.textContent = value;
         });
+        const currentEl = document.getElementById('current-lang');
+        if (currentEl) currentEl.textContent = localeNames[locale];
       }
-      
-      // Initialize
-      document.addEventListener('DOMContentLoaded', () => {
-        const locale = getLocale();
-        document.documentElement.lang = locale;
-        applyTranslations();
-        syncActiveLocaleButton();
-        window.addEventListener('localechange', () => {
-          applyTranslations();
-          syncActiveLocaleButton();
-        });
-      });
 
       function syncActiveLocaleButton() {
         const dropdown = document.getElementById('lang-dropdown');
         if (!dropdown) return;
         const active = getLocale();
-        dropdown.querySelectorAll('button[data-locale]').forEach(b => {
+        dropdown.querySelectorAll('button[data-locale]').forEach((b) => {
           const isActive = b.dataset.locale === active;
-          b.classList.toggle('text-[#00ffff]', isActive);
-          b.classList.toggle('bg-[#00ffff]/10', isActive);
-          b.classList.toggle('font-bold', isActive);
+          b.classList.toggle('text-ink-primary', isActive);
+          b.classList.toggle('bg-white/5', isActive);
         });
       }
 
-      // Language switcher
       document.addEventListener('DOMContentLoaded', () => {
+        const locale = getLocale();
+        document.documentElement.lang = locale === 'zh' ? 'zh-CN' : 'en';
+        applyTranslations();
+        syncActiveLocaleButton();
+
         const langBtn = document.getElementById('lang-btn');
         const langDropdown = document.getElementById('lang-dropdown');
-
         if (langBtn && langDropdown) {
           langBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             langDropdown.classList.toggle('hidden');
           });
-
-          document.addEventListener('click', () => {
-            langDropdown.classList.add('hidden');
-          });
-
-          langDropdown.querySelectorAll('button').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const locale = btn.dataset.locale;
-              if (locale) {
-                setLocale(locale);
+          document.addEventListener('click', () => langDropdown.classList.add('hidden'));
+          langDropdown.querySelectorAll('button[data-locale]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const code = btn.dataset.locale;
+              if (code) {
+                setLocale(code);
                 langDropdown.classList.add('hidden');
               }
             });
           });
         }
       });
-      
-      window.__i18n = { getLocale, setLocale, applyTranslations };
     </script>
   </body>
 </html>
