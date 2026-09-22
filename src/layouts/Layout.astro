@@ -101,7 +101,7 @@ const fullTitle = title === 'Home' ? `${siteName}.website - Personal AI Lab` : `
             data-locale={code}
             class:list={[
               "w-full px-4 py-2 text-left text-sm hover:bg-[#00ff41]/10 transition-colors font-mono",
-              code === locale && "text-[#00ffff] bg-[#00ffff]/5"
+              code === locale ? "text-[#00ffff] bg-[#00ffff]/10 font-bold" : "text-[#00ff41]"
             ]}
           >
             {name}
@@ -338,31 +338,46 @@ const fullTitle = title === 'Home' ? `${siteName}.website - Personal AI Lab` : `
         const locale = getLocale();
         document.documentElement.lang = locale;
         applyTranslations();
-        window.addEventListener('localechange', applyTranslations);
+        syncActiveLocaleButton();
+        window.addEventListener('localechange', () => {
+          applyTranslations();
+          syncActiveLocaleButton();
+        });
       });
-      
+
+      function syncActiveLocaleButton() {
+        const dropdown = document.getElementById('lang-dropdown');
+        if (!dropdown) return;
+        const active = getLocale();
+        dropdown.querySelectorAll('button[data-locale]').forEach(b => {
+          const isActive = b.dataset.locale === active;
+          b.classList.toggle('text-[#00ffff]', isActive);
+          b.classList.toggle('bg-[#00ffff]/10', isActive);
+          b.classList.toggle('font-bold', isActive);
+        });
+      }
+
       // Language switcher
       document.addEventListener('DOMContentLoaded', () => {
         const langBtn = document.getElementById('lang-btn');
         const langDropdown = document.getElementById('lang-dropdown');
-        
+
         if (langBtn && langDropdown) {
           langBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             langDropdown.classList.toggle('hidden');
           });
-          
+
           document.addEventListener('click', () => {
             langDropdown.classList.add('hidden');
           });
-          
+
           langDropdown.querySelectorAll('button').forEach(btn => {
             btn.addEventListener('click', () => {
               const locale = btn.dataset.locale;
               if (locale) {
                 setLocale(locale);
                 langDropdown.classList.add('hidden');
-                applyTranslations();
               }
             });
           });
