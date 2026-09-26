@@ -22,8 +22,8 @@ const features = [
 <section id="features" class="relative px-6 py-32 md:py-40 border-t border-line">
   <div class="mx-auto max-w-page">
     <div class="mx-auto max-w-wide text-center mb-24 md:mb-32">
-      <p class="eyebrow mb-5" data-i18n="features.eyebrow">Features</p>
-      <h2 class="section-title text-4xl md:text-5xl lg:text-6xl text-balance">
+      <p class="magi-eyebrow mb-5" data-i18n="features.eyebrow">Features</p>
+      <h2 class="magi-h2 text-4xl md:text-5xl lg:text-6xl text-balance">
         Engineered for production.
       </h2>
     </div>
@@ -39,13 +39,13 @@ const features = [
           <!-- Copy side -->
           <div class="max-w-prose">
             <p
-              class="eyebrow mb-5"
+              class="magi-eyebrow mb-5"
               data-i18n={`features.items.${index}.eyebrow`}
             >
               {feature.key}
             </p>
             <h3
-              class="section-title text-3xl md:text-4xl lg:text-5xl mb-6 text-balance"
+              class="magi-h3 text-3xl md:text-4xl lg:text-5xl mb-6 text-balance"
               data-i18n={`features.items.${index}.headline`}
             >
               Headline
@@ -58,9 +58,13 @@ const features = [
             </p>
           </div>
 
-          <!-- Visual side — abstract accent block -->
+          <!-- Visual side — abstract accent block.
+               bg-[...] now references --magi-accent (per spec §29: no duplicate values). -->
           <div class="aspect-[4/3] w-full rounded-2xl border border-line bg-bg-card overflow-hidden relative">
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,200,83,0.12),transparent_60%)]"></div>
+            <div
+              class="absolute inset-0"
+              style="background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--magi-accent) 12%, transparent) 0%, transparent 60%);"
+            ></div>
             <div class="absolute inset-0 flex items-center justify-center">
               <div class="text-[120px] md:text-[160px] font-semibold tracking-tightest text-ink-primary/[0.04] select-none">
                 {String(index + 1).padStart(2, '0')}

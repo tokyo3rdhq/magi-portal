@@ -78,7 +78,7 @@ const currentYear = new Date().getFullYear();
 
     <slot name="jsonld" />
   </head>
-  <body class="min-h-screen relative overflow-x-hidden">
+  <body class="min-h-screen relative overflow-x-hidden" data-magi-app>
     <MatrixBackground />
 
     <!-- Top navigation -->
@@ -238,13 +238,15 @@ const currentYear = new Date().getFullYear();
         }
 
         // Apple-style: show the thin scrollbar thumb only while actively scrolling.
+        // Sets data-scrolling on <body> so @magi/design-system's scrollbar rules
+        // (which target body[data-magi-app][data-scrolling]) take effect.
         let scrollTimer = null;
         const SCROLL_VISIBLE_MS = 800;
         window.addEventListener('scroll', () => {
-          document.body.classList.add('scrolling');
+          document.body.dataset.scrolling = '';
           if (scrollTimer) clearTimeout(scrollTimer);
           scrollTimer = setTimeout(() => {
-            document.body.classList.remove('scrolling');
+            delete document.body.dataset.scrolling;
           }, SCROLL_VISIBLE_MS);
         }, { passive: true });
       });

@@ -5,27 +5,36 @@ export default {
     extend: {
       colors: {
         bg: {
-          base: '#000000',
-          raised: '#1d1d1f',
-          card: 'rgba(255, 255, 255, 0.04)',
+          base: 'var(--magi-bg-base)',
+          raised: 'var(--magi-bg-raised)',
+          card: 'var(--magi-bg-card)',
         },
         ink: {
-          primary: '#f5f5f7',
-          secondary: '#86868b',
-          tertiary: '#6e6e73',
+          primary: 'var(--magi-text-primary)',
+          secondary: 'var(--magi-text-secondary)',
+          tertiary: 'var(--magi-text-tertiary)',
         },
         accent: {
-          DEFAULT: '#00c853',
-          hover: '#00e676',
-          soft: 'rgba(0, 200, 83, 0.08)',
+          DEFAULT: 'var(--magi-accent)',
+          hover: 'var(--magi-accent-hover)',
+          soft: 'var(--magi-accent-soft)',
         },
         line: {
-          DEFAULT: 'rgba(255, 255, 255, 0.08)',
-          strong: 'rgba(255, 255, 255, 0.14)',
+          DEFAULT: 'var(--magi-border)',
+          strong: 'var(--magi-border-strong)',
         },
       },
       fontFamily: {
-        sans: ['Inter', '"SF Pro Display"', '"PingFang SC"', '"Hiragino Sans GB"', 'system-ui', 'sans-serif'],
+        sans: [
+          'Inter',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"SF Pro Display"',
+          '"PingFang SC"',
+          '"Hiragino Sans GB"',
+          'system-ui',
+          'sans-serif',
+        ],
       },
       letterSpacing: {
         tightest: '-0.045em',

@@ -187,6 +187,19 @@ export type TranslationTree = {
 - 浏览器语言检测
 - 顶部 nav 切换器
 
+### ✅ Phase 7 — 接入共享设计系统（完成）
+
+- 安装 [`@tokyo3rdhq/magi-design-system`](https://github.com/tokyo3rdhq/magi-design-system) `0.1.x` 作为 dependencies
+- `tailwind.config.mjs` 颜色 token 全部改为 `var(--magi-*)` CSS 变量（`bg`/`ink`/`accent`/`line`）
+- `src/styles/global.css` 导入 `@tokyo3rdhq/magi-design-system/styles.css`，删除重复的 reset/globals/typography 规则
+- `<body>` 加 `data-magi-app`，scrollbar 行为改用 design-system 的 `[data-scrolling]` 选择器
+- 组件 class 名升级：`.eyebrow` → `.magi-eyebrow`，`.display` → `.magi-display`，`.section-title` → `.magi-h2`/`.magi-h3`
+- 删除组件里硬编码的 `rgba(0, 200, 83, ...)`，改用 `color-mix(in srgb, var(--magi-accent) N%, transparent)`
+- 保留本地 `.btn-primary`/`.btn-secondary`/`.card-surface`/`.nav-link`/`.link-arrow`（Astro 不直接消费 React 组件），但所有视觉值已切换为 design-system 变量
+- 视觉零回归（dark gradient backdrop、accent #00c853、focus ring、滚动条行为全部一致）
+
+后续：引入 `@astrojs/react` 后，`.btn-primary` 等本地类可逐步替换为 `<Button variant="primary">` 等 React 组件，进一步减少本地 CSS。
+
 ### ⏳ Phase 3 — CI/CD
 
 - 当前手动 wrangler 部署
