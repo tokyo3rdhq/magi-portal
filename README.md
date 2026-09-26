@@ -6,6 +6,7 @@ Personal AI Lab portal — static site at https://magi.website that links to thr
 
 - [Astro 4](https://astro.build) — static site generator, zero JS by default
 - [Tailwind CSS 3](https://tailwindcss.com) — utility-first styling with Apple-style design tokens (`bg-*`, `ink-*`, `accent`, `line-*`)
+- [`@tokyo3rdhq/magi-design-system`](https://github.com/tokyo3rdhq/magi-design-system) — shared MAGI design system (CSS tokens + utility classes; consumed via `var(--magi-*)`)
 - [TypeScript](https://www.typescriptlang.org) (strict)
 - [Cloudflare Pages](https://pages.cloudflare.com) — edge deployment
 - Inter (Google Fonts) with CJK fallback
