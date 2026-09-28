@@ -34,4 +34,19 @@ export type TranslationTree = {
     emailLabel: string;
     githubLabel: string;
   };
+  footer: {
+    brand: string;
+    tagline: string;
+    community: string;
+    resources: string;
+    legal: string;
+    docs: string;
+    status: string;
+    privacy: string;
+    terms: string;
+    copyright: string;
+    brandName: string;
+    rights: string;
+    contact: string;
+  };
 };

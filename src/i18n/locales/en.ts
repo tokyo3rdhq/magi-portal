@@ -68,6 +68,22 @@ const en: TranslationTree = {
     emailLabel: 'Email',
     githubLabel: 'GitHub',
   },
+
+  footer: {
+    brand: 'MAGI',
+    tagline: 'Personal AI Lab.',
+    community: 'Community',
+    resources: 'Resources',
+    legal: 'Legal',
+    docs: 'Documentation',
+    status: 'Status',
+    privacy: 'Privacy',
+    terms: 'Terms',
+    copyright: 'Copyright',
+    brandName: 'MAGI',
+    rights: 'All rights reserved.',
+    contact: 'hi@magi.website',
+  },
 };
 
 export default en;

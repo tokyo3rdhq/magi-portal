@@ -65,6 +65,22 @@ const zh: TranslationTree = {
     emailLabel: '邮箱',
     githubLabel: 'GitHub',
   },
+
+  footer: {
+    brand: 'MAGI',
+    tagline: '个人 AI 实验室。',
+    community: '社区',
+    resources: '资源',
+    legal: '法律',
+    docs: '文档',
+    status: '状态',
+    privacy: '隐私',
+    terms: '条款',
+    copyright: '版权所有',
+    brandName: 'MAGI',
+    rights: '保留所有权利。',
+    contact: 'hi@magi.website',
+  },
 };
 
 export default zh;
