@@ -29,7 +29,7 @@ const currentYear = new Date().getFullYear();
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-magi-app>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -78,14 +78,27 @@ const currentYear = new Date().getFullYear();
 
     <slot name="jsonld" />
   </head>
-  <body class="min-h-screen relative overflow-x-hidden" data-magi-app>
+  <body class="min-h-screen relative overflow-x-hidden">
     <MatrixBackground />
 
     <!-- Top navigation -->
     <header class="sticky top-0 z-40 backdrop-blur-xl bg-black/60 border-b border-line">
       <nav class="mx-auto flex h-11 max-w-page items-center justify-between px-6">
-        <a href="/" class="text-sm font-semibold text-ink-primary tracking-tight">
-          MAGI
+        <a href="/" aria-label="MAGI — home" class="text-ink-primary">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 280 64"
+            width="80"
+            height="18"
+            class="h-[18px] w-auto opacity-90 hover:opacity-100 transition-opacity"
+            aria-hidden="true"
+            fill="currentColor"
+          >
+            <circle cx="32" cy="14" r="6" />
+            <circle cx="14" cy="48" r="6" />
+            <circle cx="50" cy="48" r="6" />
+            <text x="80" y="50" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', system-ui, sans-serif" font-size="48" font-weight="700" letter-spacing="-2.16">MAGI</text>
+          </svg>
         </a>
         <ul class="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
