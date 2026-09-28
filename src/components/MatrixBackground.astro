@@ -3,7 +3,8 @@
 //
 // Layered gradients reference design-system tokens via color-mix() so the
 // accent stop follows whatever accent the consuming app declares (magi-
-// portal uses green; future products may override via <ProductTheme>).
+// portal uses green; future products may override via <AppTheme> or
+// <div data-magi-accent="..."> subtree attributes).
 ---
 
 <div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 overflow-hidden">

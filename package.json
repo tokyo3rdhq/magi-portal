@@ -12,7 +12,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
     "@astrojs/tailwind": "^5.1.4",
-    "@tokyo3rdhq/magi-design-system": "^0.1.0",
+    "@tokyo3rdhq/magi-design-system": "^0.4.2",
     "astro": "^4.16.18",
     "tailwindcss": "^3.4.17"
   },
