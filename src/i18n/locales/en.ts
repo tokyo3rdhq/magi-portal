@@ -40,6 +40,7 @@ const en: TranslationTree = {
 
   features: {
     eyebrow: 'Features',
+    headline: 'Engineered for production.',
     items: [
       {
         eyebrow: 'Performance',

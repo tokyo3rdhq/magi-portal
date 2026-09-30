@@ -24,6 +24,7 @@ export type TranslationTree = {
   };
   features: {
     eyebrow: string;
+    headline: string;
     items: Array<{ eyebrow: string; headline: string; body: string }>;
   };
   about: {
