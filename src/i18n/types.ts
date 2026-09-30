@@ -39,7 +39,7 @@ export type TranslationTree = {
     brand: string;
     tagline: string;
     community: string;
-    support: string;
+    resources: string;
     legal: string;
     docs: string;
     status: string;

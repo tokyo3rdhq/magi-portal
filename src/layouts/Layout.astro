@@ -261,16 +261,19 @@ const currentYear = new Date().getFullYear();
     <!--
       Per docs/guidelines.md §12 (Footer) and §13 (Product vs System boundary):
       - Brand-required zones: brand + legal (Privacy / Terms) + copyright
-      - Product-owned zones: Community / Support / column structure
+      - Product-owned zones: Community / Resources / column structure
 
-      IA (revised 2026-09-30 — audit follow-up):
+      IA (revised 2026-09-30 — audit follow-up, final):
         Brand       — required
         Community   — GitHub, Discord   (moved from header utility)
-        Support     — Status            (moved from header utility)
+        Resources   — Documentation, Status  (both are product destinations)
         Legal       — Privacy, Terms     (required)
 
-      Documents is now a primary nav item (header center). Status lives
-      in footer Support — operational, not destination.
+      The earlier Support column (with Status only) was redundant since
+      Status is also a destination link — it now lives in Resources next
+      to Documentation. Documents remains a primary nav item in the
+      header, but is also surfaced in the footer for users who scroll
+      to the bottom.
     -->
     <footer class="relative z-10 border-t border-line mt-32">
       <div class="mx-auto max-w-page px-6 py-12">
@@ -311,8 +314,17 @@ const currentYear = new Date().getFullYear();
           </div>
 
           <div>
-            <div class="magi-eyebrow mb-4" data-i18n="footer.support">Support</div>
+            <div class="magi-eyebrow mb-4" data-i18n="footer.resources">Resources</div>
             <ul class="space-y-2 text-sm">
+              <li>
+                <a
+                  href="/docs"
+                  class="text-ink-secondary hover:text-ink-primary transition-colors"
+                  data-i18n="footer.docs"
+                >
+                  Documentation
+                </a>
+              </li>
               <li>
                 <a
                   href="/status"

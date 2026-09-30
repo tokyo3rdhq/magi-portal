@@ -78,7 +78,7 @@ const en: TranslationTree = {
     brand: 'MAGI',
     tagline: 'Personal AI Lab.',
     community: 'Community',
-    support: 'Support',
+    resources: 'Resources',
     legal: 'Legal',
     docs: 'Documentation',
     status: 'Status',
