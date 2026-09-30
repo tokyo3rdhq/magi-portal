@@ -35,29 +35,6 @@
    * tokens (var(--magi-*)) — no hex, no rgba duplication. See spec §29.
    */
 
-  /* Header logo link — wraps the inline MAGI lockup SVG.
-   *
-   * The SVG itself is inlined via <span set:html> from the DS canonical
-   * `node_modules/@tokyo3rdhq/magi-design-system/dist/assets/logo/
-   * magi-lockup.svg` (audit F-001/F-006). The canonical SVG has only a
-   * `viewBox` attribute — no intrinsic width/height. Without explicit
-   * dimensions, a flex parent collapses the SVG to 0×0 (the bug the
-   * previous fix missed). */
-  .logo-link {
-    display: inline-flex;
-    align-items: center;
-  }
-  .logo-link > span {
-    display: inline-flex;
-    width: 80px;
-    height: 18px;
-  }
-  .logo-link svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-
   /* Apple-style primary CTA — accent filled pill.
    * Foreground uses --magi-text-inverse (per DS Button contract). No raw
    * `text-black` Tailwind class — the @apply chain references DS tokens
