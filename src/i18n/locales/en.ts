@@ -80,7 +80,7 @@ const en: TranslationTree = {
     community: 'Community',
     resources: 'Resources',
     legal: 'Legal',
-    docs: 'Documentation',
+    docs: 'Documents',
     status: 'Status',
     privacy: 'Privacy',
     terms: 'Terms',
