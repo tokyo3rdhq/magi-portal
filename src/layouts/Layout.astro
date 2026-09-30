@@ -64,19 +64,31 @@ const currentYear = new Date().getFullYear();
     </script>
     {/* Theme FOUC prevention. Set <html data-magi-theme> synchronously
         before paint so the chosen theme (dark or light) applies on
-        first render. Default 'dark' per DS canonical MAGI presentation.
-        Mirrors the i18n FOUC fix above; the <ThemeToggle> component at
-        runtime keeps localStorage + attribute + icon state in sync. */}
+        first render. Resolution: localStorage explicit choice →
+        prefers-color-scheme media query → default 'dark' per DS
+        canonical MAGI presentation. Mirrors the i18n FOUC fix above;
+        the <ThemeToggle> component at runtime keeps localStorage +
+        attribute + icon state in sync. */}
     <script is:inline>
       (function () {
+        var stored = null;
         try {
-          var saved = localStorage.getItem('theme');
-          if (saved === 'dark' || saved === 'light') {
-            document.documentElement.setAttribute('data-magi-theme', saved);
-          }
+          var v = localStorage.getItem('theme');
+          if (v === 'dark' || v === 'light') stored = v;
         } catch (e) {
-          /* localStorage may be blocked; default dark theme is fine. */
+          /* localStorage may be blocked. */
         }
+        var theme = stored;
+        if (!theme) {
+          try {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+          } catch (e) {
+            theme = 'dark';
+          }
+        }
+        document.documentElement.setAttribute('data-magi-theme', theme);
       })();
     </script>
     <meta charset="UTF-8" />
@@ -186,13 +198,37 @@ const currentYear = new Date().getFullYear();
           <div id="lang-switcher" class="relative">
             <button
               id="lang-btn"
-              class="text-xs font-medium text-ink-secondary hover:text-ink-primary transition-colors inline-flex items-center gap-0.5"
-              aria-label="Switch language"
+              class="text-ink-secondary hover:text-ink-primary transition-colors inline-flex items-center gap-0.5"
+              aria-label={`Switch language (current: ${locales.en})`}
               aria-haspopup="listbox"
               aria-expanded="false"
+              title={`Language: ${locales.en}`}
             >
-              <span id="current-lang">{locales.en}</span>
-              <span aria-hidden="true">▾</span>
+              {/* Globe icon — universal language switch signal. Per DS
+                  Experience Guidelines §6, language switch is a
+                  conventional action → icon-only is allowed. The
+                  accessible name ("Switch language") and the dropdown
+                  options (zh / English in their native scripts) carry
+                  the semantic content. */}
+              <svg
+                class="h-[14px] w-[14px]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M2 12h20" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg>
+              {/* Visually-hidden live region — keeps screen readers
+                  informed of the currently active language so they
+                  don't have to open the dropdown to find out. */}
+              <span id="current-lang" class="sr-only">{locales.en}</span>
+              <span aria-hidden="true" class="text-[10px]">▾</span>
             </button>
             <div
               id="lang-dropdown"
@@ -379,6 +415,14 @@ const currentYear = new Date().getFullYear();
         });
         const currentEl = document.getElementById('current-lang');
         if (currentEl) currentEl.textContent = locales[locale];
+        // Reflect the current locale in the toggle button's accessible
+        // name so screen-reader users know which language is active
+        // without opening the dropdown.
+        const langBtn = document.getElementById('lang-btn');
+        if (langBtn) {
+          langBtn.setAttribute('aria-label', `Switch language (current: ${locales[locale]})`);
+          langBtn.setAttribute('title', `Language: ${locales[locale]}`);
+        }
       }
 
       function syncActiveLocaleButton() {
