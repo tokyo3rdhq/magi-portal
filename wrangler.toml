@@ -1,3 +1,8 @@
 name = "magi-portal"
 compatibility_date = "2024-01-01"
 pages_build_output_dir = "./dist"
+
+# Cloudflare Pages build-time Node.js version. Bumped from 20 to 22
+# after Cloudflare deprecated Node 20 on 2025-09-19 (audit F-017). The
+# design-system CI is also on Node 22 (per the DS repo's CHANGELOG).
+NODE_VERSION = "22"

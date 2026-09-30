@@ -35,16 +35,22 @@
    * tokens (var(--magi-*)) — no hex, no rgba duplication. See spec §29.
    */
 
-  /* Apple-style primary CTA — accent filled pill */
+  /* Apple-style primary CTA — accent filled pill.
+   * Foreground uses --magi-text-inverse (per DS Button contract). No raw
+   * `text-black` Tailwind class — the @apply chain references DS tokens
+   * only. (Audit F-005) */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-1.5 rounded-full
-           bg-accent px-6 py-2.5 text-sm font-medium text-black
+           bg-accent px-6 py-2.5 text-sm font-medium
            transition-all duration-200
            hover:bg-accent-hover;
     color: var(--magi-text-inverse);
   }
 
-  /* Apple-style secondary CTA — ghost outline pill */
+  /* Apple-style secondary CTA — ghost outline pill.
+   * bg-white/5 + hover:border-white/30 are product-only tints — no DS
+   * token equivalent. Documented in docs/audits/design-system-compliance.md
+   * (F-004). */
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-1.5 rounded-full
            border border-line-strong px-6 py-2.5 text-sm font-medium text-ink-primary
@@ -52,11 +58,12 @@
            hover:bg-white/5 hover:border-white/30;
   }
 
-  /* Card surface — Apple product card */
+  /* Card surface — Apple product card. Hover background uses
+   * --magi-bg-card-hover (per DS Card contract). (Audit F-004) */
   .card-surface {
     @apply rounded-2xl border border-line bg-bg-card
            transition-all duration-300
-           hover:border-line-strong hover:bg-white/[0.06];
+           hover:border-line-strong hover:bg-bg-card-hover;
   }
 
   /* Text link with arrow */

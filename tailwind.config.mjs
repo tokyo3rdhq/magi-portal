@@ -8,6 +8,7 @@ export default {
           base: 'var(--magi-bg-base)',
           raised: 'var(--magi-bg-raised)',
           card: 'var(--magi-bg-card)',
+          'card-hover': 'var(--magi-bg-card-hover)',
         },
         ink: {
           primary: 'var(--magi-text-primary)',
@@ -40,11 +41,26 @@ export default {
         tightest: '-0.045em',
         tighter: '-0.03em',
       },
-      borderRadius: {
-        xl: '14px',
-        '2xl': '20px',
-        '3xl': '28px',
-      },
+      /* Apple-style radius scale (audit F-010, option (b) — document).
+ *
+ * magi-portal uses Apple's tighter radii (14 / 20 / 28) for the product
+ * surface language, distinct from --magi-radius-{md,lg,xl,full} in the
+ * design system (6 / 10 / 16 / 9999). The values were intentionally
+ * chosen to match the Apple aesthetic and are product-specific.
+ *
+ * Sites that currently use these classes:
+ *   rounded-full  — buttons + chips (matches --magi-radius-full)
+ *   rounded-xl    — lang dropdown (Layout.astro) + contact cards (About)
+ *   rounded-2xl   — card-surface (.card-surface global utility) +
+ *                   feature visual tiles (Features.astro)
+ *
+ * If the design system ever adds an "Apple radius" tier, migrate.
+ * Otherwise keep this scale product-owned per docs/plan.md. */
+borderRadius: {
+  xl: '14px',
+  '2xl': '20px',
+  '3xl': '28px',
+},
       maxWidth: {
         prose: '720px',
         wide: '980px',

@@ -31,6 +31,22 @@ const currentYear = new Date().getFullYear();
 <!doctype html>
 <html lang="en" data-magi-app>
   <head>
+    {/* Set <html lang> synchronously before paint to prevent FOUC for
+        returning zh users (audit F-008). Inline script runs on parse,
+        before any CSS or content paints. Keeps in sync with the full
+        i18n bootstrap at the end of <body>. */}
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem('locale');
+          if (saved === 'zh' || saved === 'en') {
+            document.documentElement.lang = saved === 'zh' ? 'zh-CN' : 'en';
+          }
+        } catch (e) {
+          /* localStorage may be blocked; default lang="en" from SSR is fine. */
+        }
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
@@ -82,23 +98,21 @@ const currentYear = new Date().getFullYear();
     <MatrixBackground />
 
     <!-- Top navigation -->
-    <header class="sticky top-0 z-40 backdrop-blur-xl bg-black/60 border-b border-line">
+    <header class="sticky top-0 z-40 backdrop-blur-xl bg-bg-raised/95 border-b border-line">
       <nav class="mx-auto flex h-11 max-w-page items-center justify-between px-6">
         <a href="/" aria-label="MAGI — home" class="text-ink-primary">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 280 64"
+          {/* Single source of truth: public/magi-lockup.svg is copied from
+              @tokyo3rdhq/magi-design-system/dist/assets/logo/magi-lockup.svg
+              on every npm install (see docs/audits/design-system-compliance.md
+              F-001/F-006). Update the DS source-of-truth, re-copy, and every
+              consumer gets the same brand geometry. */}
+          <img
+            src="/magi-lockup.svg"
+            alt=""
             width="80"
             height="18"
             class="h-[18px] w-auto opacity-90 hover:opacity-100 transition-opacity"
-            aria-hidden="true"
-            fill="currentColor"
-          >
-            <circle cx="32" cy="14" r="6" />
-            <circle cx="14" cy="48" r="6" />
-            <circle cx="50" cy="48" r="6" />
-            <text x="80" y="50" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', system-ui, sans-serif" font-size="48" font-weight="700" letter-spacing="-2.16">MAGI</text>
-          </svg>
+          />
         </a>
         <ul class="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
@@ -379,27 +393,83 @@ const currentYear = new Date().getFullYear();
         const langBtn = document.getElementById('lang-btn');
         const langDropdown = document.getElementById('lang-dropdown');
         if (langBtn && langDropdown) {
+          const langOptions = Array.from(
+            langDropdown.querySelectorAll('button[data-locale]')
+          );
+          let langFocusIndex = langOptions.findIndex(
+            (b) => b.dataset.locale === getLocale()
+          );
+          if (langFocusIndex < 0) langFocusIndex = 0;
+
           const setOpen = (open) => {
             langDropdown.classList.toggle('hidden', !open);
             langBtn.setAttribute('aria-expanded', String(open));
+            if (open) {
+              // Move focus into the listbox per WAI-ARIA listbox pattern.
+              langFocusIndex = Math.max(
+                0,
+                langOptions.findIndex(
+                  (b) => b.dataset.locale === getLocale()
+                )
+              );
+              langOptions[langFocusIndex]?.focus();
+            }
           };
+
           langBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             const isOpen = !langDropdown.classList.contains('hidden');
             setOpen(!isOpen);
           });
           document.addEventListener('click', () => setOpen(false));
-          // Escape closes the dropdown (per WAI-ARIA listbox keyboard pattern)
+
+          // WAI-ARIA listbox keyboard pattern (audit F-019):
+          // ArrowDown / ArrowUp move focus; Home / End jump to first / last;
+          // Enter / Space activate; Escape closes and returns focus to the button.
           langBtn.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') setOpen(false);
+            if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setOpen(true);
+            } else if (e.key === 'Escape') {
+              setOpen(false);
+            }
           });
-          langDropdown.querySelectorAll('button[data-locale]').forEach((btn) => {
+          langDropdown.addEventListener('keydown', (e) => {
+            const last = langOptions.length - 1;
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              langFocusIndex = Math.min(last, langFocusIndex + 1);
+              langOptions[langFocusIndex].focus();
+            } else if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              langFocusIndex = Math.max(0, langFocusIndex - 1);
+              langOptions[langFocusIndex].focus();
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              langFocusIndex = 0;
+              langOptions[0].focus();
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              langFocusIndex = last;
+              langOptions[last].focus();
+            } else if (e.key === 'Escape') {
+              setOpen(false);
+              langBtn.focus();
+            } else if (e.key === 'Tab') {
+              // Tab closes the dropdown and lets focus continue to the
+              // next focusable element (default browser behavior).
+              setOpen(false);
+            }
+          });
+          langOptions.forEach((btn, i) => {
             btn.addEventListener('click', (e) => {
               e.stopPropagation();
               const code = btn.dataset.locale;
               if (code) {
                 setLocale(code);
+                langFocusIndex = i;
                 setOpen(false);
+                langBtn.focus();
               }
             });
           });
