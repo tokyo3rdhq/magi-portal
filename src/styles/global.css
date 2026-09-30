@@ -79,9 +79,12 @@
     transform: translateX(2px);
   }
 
-  /* Nav link */
+  /* Nav link — line-height: 1 so the text baseline aligns with
+     the row center (matches the 14px icon button glyphs). Without
+     this, text-xs (12px / 16px line-height) sits ~2px lower than the
+     14px SVGs because of line-height's extra descender space. */
   .nav-link {
-    @apply text-xs font-normal text-ink-secondary
+    @apply text-xs leading-none font-normal text-ink-secondary
            transition-colors duration-200
            hover:text-ink-primary;
   }

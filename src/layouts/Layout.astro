@@ -181,9 +181,9 @@ const currentYear = new Date().getFullYear();
              reserved for user-related + operational controls only:
              language + theme. Destination links (GitHub, Discord,
              Status) live in the footer Community / Support columns. */}
-        <ul class="hidden md:flex items-center gap-8 justify-self-center">
+        <ul class="hidden md:flex items-stretch gap-8 justify-self-center">
           {navItems.map((item) => (
-            <li>
+            <li class="inline-flex items-center">
               <a href={item.href} class="nav-link" data-i18n={`nav.${item.key}`}>
                 {item.key}
               </a>
