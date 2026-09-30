@@ -123,3 +123,13 @@
     justify-content: center;
   }
 }
+
+/* The lang-switcher wrapper contains only the button (14px) and a
+   `display: none` dropdown. Without an explicit line-height, the div
+   falls back to the inherited line-height (24px from the body),
+   making the wrapper 25px tall — which throws the button 5.5px above
+   the navbar centerline (since align-items: center on the parent
+   flex container uses the taller wrapper as the cross-axis anchor). */
+#lang-switcher {
+  line-height: 0;
+}
