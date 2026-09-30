@@ -97,23 +97,29 @@
   }
 }
 
-/* Header utility icons.
-   The wrapper span uses `inline-flex` so its width/height are honored
-   (a plain inline span ignores dimensions and would grow to fit the
-   24×24 Lucide SVG inside it). The Lucide SVGs render at 24×24 by
-   default — we override them to fill the wrapper via width:100%;
-   height:100%. Without this, the icons render at 24×24 inside the
-   button, causing vertical misalignment with the center nav links. */
-.lucide-languages,
-.lucide-sun,
-.lucide-moon {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-.lang-icon,
-.theme-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+/* Header utility icons. Wrapped in @layer utilities so this rule
+   lives in the same Tailwind layer as .hidden, and source order
+   resolves the show/hide correctly (otherwise the unlayered rule
+   below would always win, defeating .hidden).
+   - .theme-icon / .lang-icon: display: inline-flex so the wrapper
+     honors its 14×14 dimensions (a plain inline span would grow to
+     fit the 24×24 Lucide SVG inside).
+   - .lucide-sun / .lucide-moon / .lucide-languages: width/height
+     100% so the Lucide SVGs (intrinsic 24×24) fill the 14×14 box.
+   - The :not(.hidden) guard preserves Tailwind's .hidden utility
+     so only the active theme's icon is visible at a time. */
+@layer utilities {
+  .lucide-languages:not(.hidden),
+  .lucide-sun:not(.hidden),
+  .lucide-moon:not(.hidden) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .lang-icon:not(.hidden),
+  .theme-icon:not(.hidden) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
