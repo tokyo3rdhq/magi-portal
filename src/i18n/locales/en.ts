@@ -1,7 +1,12 @@
 import type { TranslationTree } from '../types';
 
 const en: TranslationTree = {
-  nav: { products: 'Products', features: 'Features', about: 'About' },
+  nav: {
+    products: 'Products',
+    features: 'Features',
+    documents: 'Documents',
+    about: 'About',
+  },
 
   hero: {
     eyebrow: 'Personal AI Lab',
@@ -73,7 +78,7 @@ const en: TranslationTree = {
     brand: 'MAGI',
     tagline: 'Personal AI Lab.',
     community: 'Community',
-    resources: 'Resources',
+    support: 'Support',
     legal: 'Legal',
     docs: 'Documentation',
     status: 'Status',

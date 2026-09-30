@@ -1,7 +1,12 @@
 import type { TranslationTree } from '../types';
 
 const zh: TranslationTree = {
-  nav: { products: '产品', features: '特性', about: '关于' },
+  nav: {
+    products: '产品',
+    features: '特性',
+    documents: '文档',
+    about: '关于',
+  },
 
   hero: {
     eyebrow: '个人 AI 实验室',
@@ -70,7 +75,7 @@ const zh: TranslationTree = {
     brand: 'MAGI',
     tagline: '个人 AI 实验室。',
     community: '社区',
-    resources: '资源',
+    support: '支持',
     legal: '法律',
     docs: '文档',
     status: '状态',

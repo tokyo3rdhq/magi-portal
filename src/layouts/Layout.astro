@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { locales, translations } from '../i18n';
 import MatrixBackground from '../components/MatrixBackground.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 // Read the canonical MAGI lockup SVG (single source of truth in
 // node_modules/@tokyo3rdhq/magi-design-system/dist/assets/logo/, copied
 // into public/ by scripts/sync-brand.mjs on every install — see audit
@@ -26,9 +27,16 @@ const {
 
 const fullTitle = title === 'Home' ? `${siteName} — Personal AI Lab` : `${title} | ${siteName}`;
 
+// Header center nav. Order matches the user-facing IA:
+//   Products → Features → Documents → About
+// "Documents" was previously a top-right utility link; per the
+// Experience Guidelines, GitHub/Discord/Status belong in the footer
+// (Community / Support columns), and operational controls (i18n,
+// theme) belong top-right.
 const navItems = [
   { key: 'products', href: '#products' },
   { key: 'features', href: '#features' },
+  { key: 'documents', href: '/docs' },
   { key: 'about', href: '#about' },
 ];
 
@@ -51,6 +59,23 @@ const currentYear = new Date().getFullYear();
           }
         } catch (e) {
           /* localStorage may be blocked; default lang="en" from SSR is fine. */
+        }
+      })();
+    </script>
+    {/* Theme FOUC prevention. Set <html data-magi-theme> synchronously
+        before paint so the chosen theme (dark or light) applies on
+        first render. Default 'dark' per DS canonical MAGI presentation.
+        Mirrors the i18n FOUC fix above; the <ThemeToggle> component at
+        runtime keeps localStorage + attribute + icon state in sync. */}
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          if (saved === 'dark' || saved === 'light') {
+            document.documentElement.setAttribute('data-magi-theme', saved);
+          }
+        } catch (e) {
+          /* localStorage may be blocked; default dark theme is fine. */
         }
       })();
     </script>
@@ -104,9 +129,13 @@ const currentYear = new Date().getFullYear();
   <body class="min-h-screen relative overflow-x-hidden">
     <MatrixBackground />
 
-    <!-- Top navigation -->
+    <!-- Top navigation.
+         3-column grid: brand (left) | nav center | utility (right).
+         The center column uses justify-self: center so it stays truly
+         centered regardless of brand / utility widths. -->
     <header class="sticky top-0 z-40 backdrop-blur-xl bg-bg-raised/95 border-b border-line">
-      <nav class="mx-auto flex h-11 max-w-page items-center justify-between px-6">
+      <nav class="mx-auto grid h-11 max-w-page items-center px-6 gap-4 [grid-template-columns:auto_1fr_auto]">
+        {/* Brand */}
         {/* Header logo link.
    *
    * Brand contract (per DS docs/component-contracts.md MagiLockup):
@@ -121,11 +150,9 @@ const currentYear = new Date().getFullYear();
    *     wrapper.
    *   - aria-hidden="true" on the SVG; the wrapping <a aria-label>
    *     is the accessible name.
-   *
-   * Size: 80×18 matches the original Apple-style header logo and
-   * falls between the DS sm (20px tall) and lg (48px tall) sizes.
-   * The portal uses its own `.logo-link svg` rule for dimensions
-   * because @astrojs/react is not adopted (Astro boundary).
+   *   - Size modifier `.magi-lockup--sm` sets height: 20px; width
+   *     derives from the SVG's intrinsic viewBox aspect ratio (no
+   *     hard-coded dimensions in the portal).
    *
    * Single source of truth: the SVG content is imported as raw text
    * from public/magi-lockup.svg, which scripts/sync-brand.mjs copies
@@ -134,9 +161,14 @@ const currentYear = new Date().getFullYear();
 <a
           href="/"
           aria-label="MAGI — home"
-          class="magi-lockup magi-lockup--sm opacity-90 hover:opacity-100 transition-opacity"
+          class="magi-lockup magi-lockup--sm opacity-90 hover:opacity-100 transition-opacity justify-self-start"
         ><span aria-hidden="true" set:html={magiLockupSvg} /></a>
-        <ul class="hidden md:flex items-center gap-8">
+
+        {/* Center nav — primary IA. The header utility area (right) is
+             reserved for user-related + operational controls only:
+             language + theme. Destination links (GitHub, Discord,
+             Status) live in the footer Community / Support columns. */}
+        <ul class="hidden md:flex items-center gap-8 justify-self-center">
           {navItems.map((item) => (
             <li>
               <a href={item.href} class="nav-link" data-i18n={`nav.${item.key}`}>
@@ -145,57 +177,12 @@ const currentYear = new Date().getFullYear();
             </li>
           ))}
         </ul>
-        <!--
-          Per docs/guidelines.md §11 (Header utility area):
-          - Avoid the icon dump. Group + prioritize.
-          - Per §6 iconography matrix: GitHub / Discord / Docs / Status are
-            destinations → Text (or Icon + Text when space allows).
-          - Per §8/§9: external destinations get the ↗ indicator + new-tab SR announcement.
-          Order chosen for this portal: GitHub → Discord → Docs → Status → language.
-        -->
-        <div class="flex items-center gap-4">
-          <a
-            href="https://github.com/tokyo3rdhq"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-xs text-ink-secondary hover:text-ink-primary transition-colors inline-flex items-center gap-1"
-          >
-            <svg
-              class="h-[14px] w-[14px]"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
-            </svg>
-            GitHub
-            <span aria-hidden="true" class="opacity-60">↗</span>
-            <span class="sr-only">(opens in new tab)</span>
-          </a>
-          <a
-            href="https://discord.gg/gTGnvTdyec"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-xs text-ink-secondary hover:text-ink-primary transition-colors inline-flex items-center gap-1"
-          >
-            Discord
-            <span aria-hidden="true" class="opacity-60">↗</span>
-            <span class="sr-only">(opens in new tab)</span>
-          </a>
-          <a
-            href="/docs"
-            class="text-xs text-ink-secondary hover:text-ink-primary transition-colors"
-            data-i18n="footer.docs"
-          >
-            Documentation
-          </a>
-          <a
-            href="/status"
-            class="text-xs text-ink-secondary hover:text-ink-primary transition-colors"
-            data-i18n="footer.status"
-          >
-            Status
-          </a>
+
+        {/* Utility area (right). User-related + operational:
+             language switcher + theme toggle. Per DS Experience
+             Guidelines §11: avoid the icon dump, group + prioritize.
+             Sun/Moon are conventional actions → icon-only allowed. */}
+        <div class="flex items-center gap-4 justify-self-end">
           <div id="lang-switcher" class="relative">
             <button
               id="lang-btn"
@@ -225,6 +212,7 @@ const currentYear = new Date().getFullYear();
               ))}
             </div>
           </div>
+          <ThemeToggle />
         </div>
       </nav>
     </header>
@@ -236,10 +224,17 @@ const currentYear = new Date().getFullYear();
     <!-- Footer -->
     <!--
       Per docs/guidelines.md §12 (Footer) and §13 (Product vs System boundary):
-      - Brand-required zones: brand + legal (Privacy / Terms) + copyright + language
-      - Product-owned zones: community destinations, footer column structure
-      Single-column on mobile, three-column on desktop (Community / Legal / Language)
-      plus a baseline row with copyright.
+      - Brand-required zones: brand + legal (Privacy / Terms) + copyright
+      - Product-owned zones: Community / Support / column structure
+
+      IA (revised 2026-09-30 — audit follow-up):
+        Brand       — required
+        Community   — GitHub, Discord   (moved from header utility)
+        Support     — Status            (moved from header utility)
+        Legal       — Privacy, Terms     (required)
+
+      Documents is now a primary nav item (header center). Status lives
+      in footer Support — operational, not destination.
     -->
     <footer class="relative z-10 border-t border-line mt-32">
       <div class="mx-auto max-w-page px-6 py-12">
@@ -280,17 +275,8 @@ const currentYear = new Date().getFullYear();
           </div>
 
           <div>
-            <div class="magi-eyebrow mb-4" data-i18n="footer.resources">Resources</div>
+            <div class="magi-eyebrow mb-4" data-i18n="footer.support">Support</div>
             <ul class="space-y-2 text-sm">
-              <li>
-                <a
-                  href="/docs"
-                  class="text-ink-secondary hover:text-ink-primary transition-colors"
-                  data-i18n="footer.docs"
-                >
-                  Documentation
-                </a>
-              </li>
               <li>
                 <a
                   href="/status"

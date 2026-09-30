@@ -4,6 +4,7 @@ export type TranslationTree = {
   nav: {
     products: string;
     features: string;
+    documents: string;
     about: string;
   };
   hero: {
@@ -38,7 +39,7 @@ export type TranslationTree = {
     brand: string;
     tagline: string;
     community: string;
-    resources: string;
+    support: string;
     legal: string;
     docs: string;
     status: string;

@@ -1,0 +1,100 @@
+---
+/**
+ * Theme toggle — light/dark color mode switch.
+ *
+ * Per DS Theme contract (docs/component-contracts.md AppTheme + ADR-0003):
+ *   - Color mode is orthogonal to accent. `<html data-magi-theme="...">`
+ *     is the contract; React's `<AppTheme>` is one runtime that writes it.
+ *   - The DS provides both `:root, [data-magi-theme="dark"]` (canonical,
+ *     default) and `[data-magi-theme="light"]` CSS rules. Switching the
+ *     attribute flips every color token — no per-component JS needed.
+ *   - Per DS Experience Guidelines: theme switch is a conventional
+ *     action → icon-only is allowed (Sun/Moon icons).
+ *
+ * Astro boundary: @tokyo3rdhq/magi-design-system ships `<AppTheme>` as
+ * a React component. This portal can't import React, so we wire the
+ * same contract via vanilla JS + `<html data-magi-theme>`.
+ *
+ * Persistence: localStorage['theme'] = 'dark' | 'light'. Default 'dark'
+ * (matches the DS canonical MAGI presentation).
+ *
+ * FOUC: an inline <script> in <head> sets data-magi-theme synchronously
+ * before paint, mirroring the i18n FOUC fix (audit F-008).
+ */
+---
+
+<button
+  id="theme-btn"
+  type="button"
+  class="text-ink-secondary hover:text-ink-primary transition-colors inline-flex items-center"
+  aria-label="Switch theme"
+  title="Switch theme"
+>
+  {/* Sun icon — shown when current theme is dark (clicking switches to light). */}
+  <svg
+    id="theme-icon-light"
+    class="h-[14px] w-[14px]"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+  </svg>
+  {/* Moon icon — shown when current theme is light (clicking switches to dark). */}
+  <svg
+    id="theme-icon-dark"
+    class="h-[14px] w-[14px] hidden"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+  </svg>
+</button>
+
+<script is:inline>
+  (function () {
+    function getTheme() {
+      try {
+        var saved = localStorage.getItem('theme');
+        if (saved === 'dark' || saved === 'light') return saved;
+      } catch (e) {
+        /* localStorage may be blocked. */
+      }
+      return 'dark';
+    }
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-magi-theme', theme);
+      var lightIcon = document.getElementById('theme-icon-light');
+      var darkIcon = document.getElementById('theme-icon-dark');
+      if (lightIcon && darkIcon) {
+        // Show the icon for the theme the user would switch TO.
+        // dark mode → show sun (suggests switching to light)
+        // light mode → show moon (suggests switching to dark)
+        lightIcon.classList.toggle('hidden', theme === 'light');
+        darkIcon.classList.toggle('hidden', theme === 'dark');
+      }
+    }
+    // Apply on initial mount (the head FOUC script already set the attribute;
+    // this just keeps the icon state in sync).
+    applyTheme(getTheme());
+
+    var btn = document.getElementById('theme-btn');
+    if (btn) {
+      btn.addEventListener('click', function () {
+        var next = getTheme() === 'dark' ? 'light' : 'dark';
+        try {
+          localStorage.setItem('theme', next);
+        } catch (e) {
+          /* ignore */
+        }
+        applyTheme(next);
+      });
+    }
+  })();
+</script>
