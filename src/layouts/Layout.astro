@@ -198,18 +198,24 @@ const currentYear = new Date().getFullYear();
           <div id="lang-switcher" class="relative">
             <button
               id="lang-btn"
-              class="text-ink-secondary hover:text-ink-primary transition-colors inline-flex items-center gap-0.5"
+              class="text-ink-secondary hover:text-ink-primary transition-colors inline-flex items-center"
               aria-label={`Switch language (current: ${locales.en})`}
               aria-haspopup="listbox"
               aria-expanded="false"
               title={`Language: ${locales.en}`}
             >
-              {/* Globe icon — universal language switch signal. Per DS
-                  Experience Guidelines §6, language switch is a
-                  conventional action → icon-only is allowed. The
-                  accessible name ("Switch language") and the dropdown
-                  options (zh / English in their native scripts) carry
-                  the semantic content. */}
+              {/* Lucide "languages" stroke icon. Hand-port of the
+                  source-of-truth shape — single 24×24 viewBox,
+                  stroke-width 2, same line-weight as the Sun/Moon
+                  icons next to it. Per DS Experience Guidelines §6,
+                  language switch is a conventional action → icon-only
+                  is allowed. The accessible name ("Switch language")
+                  and the dropdown options (English / 中文 in their
+                  native scripts) carry the semantic content. No ▾
+                  caret — the aria-haspopup="listbox" + aria-expanded
+                  already convey listbox affordance to assistive tech,
+                  and the visual dropdown below signals state to
+                  sighted users. */}
               <svg
                 class="h-[14px] w-[14px]"
                 viewBox="0 0 24 24"
@@ -220,15 +226,18 @@ const currentYear = new Date().getFullYear();
                 stroke-linejoin="round"
                 aria-hidden="true"
               >
-                <circle cx="12" cy="12" r="10" />
-                <path d="M2 12h20" />
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                <path d="m5 8 5-5" />
+                <path d="m2 13 5 5" />
+                <path d="m5 16 5-5" />
+                <path d="M11 5h8" />
+                <path d="M11 9h8" />
+                <path d="M11 13h8" />
+                <path d="M11 17h8" />
               </svg>
               {/* Visually-hidden live region — keeps screen readers
                   informed of the currently active language so they
                   don't have to open the dropdown to find out. */}
               <span id="current-lang" class="sr-only">{locales.en}</span>
-              <span aria-hidden="true" class="text-[10px]">▾</span>
             </button>
             <div
               id="lang-dropdown"
