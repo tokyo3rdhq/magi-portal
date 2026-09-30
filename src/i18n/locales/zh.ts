@@ -37,7 +37,7 @@ const zh: TranslationTree = {
 
   features: {
     eyebrow: '特性',
-    headline: '为生产而生。',
+    headline: '为线上环境精心打造。',
     items: [
       {
         eyebrow: '性能',
