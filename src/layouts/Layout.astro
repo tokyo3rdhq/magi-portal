@@ -2,6 +2,13 @@
 import '../styles/global.css';
 import { locales, translations } from '../i18n';
 import MatrixBackground from '../components/MatrixBackground.astro';
+// Read the canonical MAGI lockup SVG (single source of truth in
+// node_modules/@tokyo3rdhq/magi-design-system/dist/assets/logo/, copied
+// into public/ by scripts/sync-brand.mjs on every install — see audit
+// F-001/F-006). We import as raw text so `set:html` inlines it and
+// `fill="currentColor"` resolves from the host element's `color`,
+// honoring the DS Logo Contrast Rule (--magi-logo-color).
+import magiLockupSvg from '../../public/magi-lockup.svg?raw';
 
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://magi.website';
 const siteName = import.meta.env.PUBLIC_SITE_NAME || 'MAGI';
@@ -100,20 +107,11 @@ const currentYear = new Date().getFullYear();
     <!-- Top navigation -->
     <header class="sticky top-0 z-40 backdrop-blur-xl bg-bg-raised/95 border-b border-line">
       <nav class="mx-auto flex h-11 max-w-page items-center justify-between px-6">
-        <a href="/" aria-label="MAGI — home" class="text-ink-primary">
-          {/* Single source of truth: public/magi-lockup.svg is copied from
-              @tokyo3rdhq/magi-design-system/dist/assets/logo/magi-lockup.svg
-              on every npm install (see docs/audits/design-system-compliance.md
-              F-001/F-006). Update the DS source-of-truth, re-copy, and every
-              consumer gets the same brand geometry. */}
-          <img
-            src="/magi-lockup.svg"
-            alt=""
-            width="80"
-            height="18"
-            class="h-[18px] w-auto opacity-90 hover:opacity-100 transition-opacity"
-          />
-        </a>
+        <a
+          href="/"
+          aria-label="MAGI — home"
+          class="text-ink-primary inline-flex items-center opacity-90 hover:opacity-100 transition-opacity"
+        ><span set:html={magiLockupSvg} /></a>
         <ul class="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <li>
