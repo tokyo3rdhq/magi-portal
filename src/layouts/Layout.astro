@@ -110,8 +110,8 @@ const currentYear = new Date().getFullYear();
         <a
           href="/"
           aria-label="MAGI — home"
-          class="text-ink-primary inline-flex items-center opacity-90 hover:opacity-100 transition-opacity"
-        ><span set:html={magiLockupSvg} /></a>
+          class="logo-link text-ink-primary opacity-90 hover:opacity-100 transition-opacity"
+        ><span aria-hidden="true" set:html={magiLockupSvg} /></a>
         <ul class="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <li>
