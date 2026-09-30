@@ -96,3 +96,24 @@
     text-wrap: balance;
   }
 }
+
+/* Header utility icons.
+   The wrapper span uses `inline-flex` so its width/height are honored
+   (a plain inline span ignores dimensions and would grow to fit the
+   24×24 Lucide SVG inside it). The Lucide SVGs render at 24×24 by
+   default — we override them to fill the wrapper via width:100%;
+   height:100%. Without this, the icons render at 24×24 inside the
+   button, causing vertical misalignment with the center nav links. */
+.lucide-languages,
+.lucide-sun,
+.lucide-moon {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.lang-icon,
+.theme-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

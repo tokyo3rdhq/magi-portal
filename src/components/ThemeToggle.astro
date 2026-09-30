@@ -44,13 +44,13 @@ import { Sun as SunSvg, Moon as MoonSvg } from 'lucide-static';
   {/* Sun icon — shown when current theme is dark (clicking switches to light). */}
   <span
     id="theme-icon-light"
-    class="lucide-sun h-[14px] w-[14px]"
+    class="theme-icon h-[14px] w-[14px]"
     set:html={SunSvg}
   />
   {/* Moon icon — shown when current theme is light (clicking switches to dark). */}
   <span
     id="theme-icon-dark"
-    class="lucide-moon h-[14px] w-[14px] hidden"
+    class="theme-icon h-[14px] w-[14px] hidden"
     set:html={MoonSvg}
   />
 </button>
