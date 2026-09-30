@@ -107,10 +107,34 @@ const currentYear = new Date().getFullYear();
     <!-- Top navigation -->
     <header class="sticky top-0 z-40 backdrop-blur-xl bg-bg-raised/95 border-b border-line">
       <nav class="mx-auto flex h-11 max-w-page items-center justify-between px-6">
-        <a
+        {/* Header logo link.
+   *
+   * Brand contract (per DS docs/component-contracts.md MagiLockup):
+   *   - Inline <svg> with fill="currentColor" (currentColor cascades
+   *     from the host element's `color`).
+   *   - Stable across product accents (no --magi-accent).
+   *   - Logo Color Rule: brand components inherit --magi-logo-color
+   *     (which equals --magi-text-primary in both themes today, but
+   *     is independently overridable per DS). The .magi-lockup class
+   *     triggers the DS rule in packages/design-system/src/brand/
+   *     brand.css that sets `color: var(--magi-logo-color)` on the
+   *     wrapper.
+   *   - aria-hidden="true" on the SVG; the wrapping <a aria-label>
+   *     is the accessible name.
+   *
+   * Size: 80×18 matches the original Apple-style header logo and
+   * falls between the DS sm (20px tall) and lg (48px tall) sizes.
+   * The portal uses its own `.logo-link svg` rule for dimensions
+   * because @astrojs/react is not adopted (Astro boundary).
+   *
+   * Single source of truth: the SVG content is imported as raw text
+   * from public/magi-lockup.svg, which scripts/sync-brand.mjs copies
+   * from node_modules/@tokyo3rdhq/magi-design-system/dist/assets/logo/
+   * on every install. */}
+<a
           href="/"
           aria-label="MAGI — home"
-          class="logo-link text-ink-primary opacity-90 hover:opacity-100 transition-opacity"
+          class="magi-lockup logo-link opacity-90 hover:opacity-100 transition-opacity"
         ><span aria-hidden="true" set:html={magiLockupSvg} /></a>
         <ul class="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
