@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { locales, translations } from '../i18n';
 import MatrixBackground from '../components/MatrixBackground.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import { Languages as LanguagesSvg } from 'lucide-static';
 // Read the canonical MAGI lockup SVG (single source of truth in
 // node_modules/@tokyo3rdhq/magi-design-system/dist/assets/logo/, copied
 // into public/ by scripts/sync-brand.mjs on every install — see audit
@@ -204,36 +205,14 @@ const currentYear = new Date().getFullYear();
               aria-expanded="false"
               title={`Language: ${locales.en}`}
             >
-              {/* Lucide "languages" stroke icon. Hand-port of the
-                  source-of-truth shape — single 24×24 viewBox,
-                  stroke-width 2, same line-weight as the Sun/Moon
-                  icons next to it. Per DS Experience Guidelines §6,
-                  language switch is a conventional action → icon-only
-                  is allowed. The accessible name ("Switch language")
-                  and the dropdown options (English / 中文 in their
-                  native scripts) carry the semantic content. No ▾
-                  caret — the aria-haspopup="listbox" + aria-expanded
-                  already convey listbox affordance to assistive tech,
-                  and the visual dropdown below signals state to
-                  sighted users. */}
-              <svg
-                class="h-[14px] w-[14px]"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="m5 8 5-5" />
-                <path d="m2 13 5 5" />
-                <path d="m5 16 5-5" />
-                <path d="M11 5h8" />
-                <path d="M11 9h8" />
-                <path d="M11 13h8" />
-                <path d="M11 17h8" />
-              </svg>
+              {/* Lucide "languages" stroke icon, imported from lucide-static
+                  (SVG strings only — no React runtime). Per DS
+                  Iconography contract (docs/iconography.md §3), generic
+                  UI icons come from Lucide; do not hand-port. */}
+              <span
+                class="lucide-languages h-[14px] w-[14px]"
+                set:html={LanguagesSvg}
+              />
               {/* Visually-hidden live region — keeps screen readers
                   informed of the currently active language so they
                   don't have to open the dropdown to find out. */}

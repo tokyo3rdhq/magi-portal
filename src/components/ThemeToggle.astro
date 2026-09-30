@@ -8,8 +8,8 @@
  *   - The DS provides both `:root, [data-magi-theme="dark"]` (canonical,
  *     default) and `[data-magi-theme="light"]` CSS rules. Switching the
  *     attribute flips every color token — no per-component JS needed.
- *   - Per DS Experience Guidelines: theme switch is a conventional
- *     action → icon-only is allowed (Sun/Moon icons).
+ *   - Per DS Experience Guidelines + docs/iconography.md: theme switch
+ *     is a conventional action → icon-only is allowed with Sun/Moon.
  *
  * Astro boundary: @tokyo3rdhq/magi-design-system ships `<AppTheme>` as
  * a React component. This portal can't import React, so we wire the
@@ -26,7 +26,12 @@
  * FOUC: an inline <script> in <head> sets data-magi-theme synchronously
  * before paint, applying the same system+localStorage resolution so
  * the very first paint is correct.
+ *
+ * Per DS Iconography contract (docs/iconography.md): generic UI icons
+ * come from Lucide. The portal imports Sun/Moon from lucide-static
+ * (SVG strings only — no React/JS runtime; Astro can't import React).
  */
+import { Sun as SunSvg, Moon as MoonSvg } from 'lucide-static';
 ---
 
 <button
@@ -37,30 +42,17 @@
   title="Switch theme"
 >
   {/* Sun icon — shown when current theme is dark (clicking switches to light). */}
-  <svg
+  <span
     id="theme-icon-light"
-    class="h-[14px] w-[14px]"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
-  >
-    <circle cx="12" cy="12" r="4" />
-    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-  </svg>
+    class="lucide-sun h-[14px] w-[14px]"
+    set:html={SunSvg}
+  />
   {/* Moon icon — shown when current theme is light (clicking switches to dark). */}
-  <svg
+  <span
     id="theme-icon-dark"
-    class="h-[14px] w-[14px] hidden"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    aria-hidden="true"
-  >
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
-  </svg>
+    class="lucide-moon h-[14px] w-[14px] hidden"
+    set:html={MoonSvg}
+  />
 </button>
 
 <script is:inline>
