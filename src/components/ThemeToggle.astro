@@ -119,14 +119,21 @@ import {
       var monitor = document.getElementById('theme-icon-monitor');
       if (sun && moon && monitor) {
         /* Icon visibility:
-           - Sun    when the effective theme is dark (regardless of mode)
-           - Moon   when the effective theme is light
-           - Monitor when the user has explicitly chosen 'system' — even
-                     when the OS is dark/light, this signals "system mode" */
+           - In 'dark' or 'light' mode: show only the matching icon
+             (Sun for dark, Moon for light). Monitor is hidden because
+             the user has committed to a fixed theme.
+           - In 'system' mode: show ONLY the Monitor icon. Sun/Moon are
+             hidden because the user's *choice* is "follow the OS",
+             not a fixed theme — the icon should reflect the choice,
+             not the OS's current state. When the OS flips, the page
+             follows automatically; the icon stays as Monitor. */
         var isSystem = mode === 'system';
-        sun.classList.toggle('hidden', theme !== 'dark');
-        moon.classList.toggle('hidden', theme !== 'light');
-        monitor.classList.toggle('hidden', !isSystem);
+        var showSun = !isSystem && theme === 'dark';
+        var showMoon = !isSystem && theme === 'light';
+        var showMonitor = isSystem;
+        sun.classList.toggle('hidden', !showSun);
+        moon.classList.toggle('hidden', !showMoon);
+        monitor.classList.toggle('hidden', !showMonitor);
       }
     }
 
