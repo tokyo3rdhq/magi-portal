@@ -1,6 +1,6 @@
 ---
 /**
- * Theme toggle — light/dark color mode switch.
+ * Theme toggle — light/dark/system color mode switch.
  *
  * Per DS Theme contract (docs/component-contracts.md AppTheme + ADR-0003):
  *   - Color mode is orthogonal to accent. `<html data-magi-theme="...">`
@@ -9,29 +9,42 @@
  *     default) and `[data-magi-theme="light"]` CSS rules. Switching the
  *     attribute flips every color token — no per-component JS needed.
  *   - Per DS Experience Guidelines + docs/iconography.md: theme switch
- *     is a conventional action → icon-only is allowed with Sun/Moon.
+ *     is a conventional action → icon-only is allowed (Sun / Moon /
+ *     Monitor).
  *
- * Astro boundary: @tokyo3rdhq/magi-design-system ships `<AppTheme>` as
- * a React component. This portal can't import React, so we wire the
- * same contract via vanilla JS + `<html data-magi-theme>`.
- *
- * System auto-switching (prefers-color-scheme):
- *   - First visit (no localStorage): read OS preference and follow it.
- *   - User explicit toggle: persist to localStorage; explicit choice
- *     always wins over subsequent OS theme changes.
- *   - Subsequent OS theme changes: only applied while the user hasn't
- *     explicitly toggled yet. Once they have, OS changes are ignored
- *     until they manually pick a different theme.
- *
- * FOUC: an inline <script> in <head> sets data-magi-theme synchronously
- * before paint, applying the same system+localStorage resolution so
- * the very first paint is correct.
+ * Three-state cycle (click): dark → light → system → dark.
+ * The icon shown in the button reflects the EFFECTIVE theme:
+ *   - Sun    when the page is rendering in dark
+ *   - Moon   when the page is rendering in light
+ *   - Monitor when the user has explicitly chosen "system"
+ *             (i.e., the icon is constant regardless of OS; the click
+ *             goes to the next state in the cycle).
  *
  * Per DS Iconography contract (docs/iconography.md): generic UI icons
- * come from Lucide. The portal imports Sun/Moon from lucide-static
- * (SVG strings only — no React/JS runtime; Astro can't import React).
+ * come from Lucide. The portal imports Sun/Moon/Monitor from
+ * lucide-static (SVG strings only — no React/JS runtime; Astro can't
+ * import React).
+ *
+ * Astro boundary: @tokyo3rdhq/magi-design-system ships `<AppTheme>`
+ * as a React component. This portal can't import React, so we wire
+ * the same contract via vanilla JS + `<html data-magi-theme>`.
+ *
+ * Resolution rule:
+ *   - localStorage['theme'] === 'dark' | 'light' → user wins
+ *   - localStorage['theme'] === 'system' → follow OS preference;
+ *     localStorage stays as 'system' (NOT removed, so the cycle is
+ *     preserved on next render).
+ *   - no localStorage → follow OS preference.
+ *
+ * FOUC: an inline <script> in <head> sets data-magi-theme synchronously
+ * before paint, applying the same resolution so the very first paint
+ * is correct.
  */
-import { Sun as SunSvg, Moon as MoonSvg } from 'lucide-static';
+import {
+  Sun as SunSvg,
+  Moon as MoonSvg,
+  Monitor as MonitorSvg,
+} from 'lucide-static';
 ---
 
 <button
@@ -41,17 +54,25 @@ import { Sun as SunSvg, Moon as MoonSvg } from 'lucide-static';
   aria-label="Switch theme"
   title="Switch theme"
 >
-  {/* Sun icon — shown when current theme is dark (clicking switches to light). */}
+  {/* Sun — shown when the effective theme is dark (click → light). */}
   <span
-    id="theme-icon-light"
+    id="theme-icon-sun"
     class="theme-icon h-[14px] w-[14px]"
     set:html={SunSvg}
   />
-  {/* Moon icon — shown when current theme is light (clicking switches to dark). */}
+  {/* Moon — shown when the effective theme is light (click → system). */}
   <span
-    id="theme-icon-dark"
+    id="theme-icon-moon"
     class="theme-icon h-[14px] w-[14px] hidden"
     set:html={MoonSvg}
+  />
+  {/* Monitor — shown when the user has explicitly chosen "system"
+      (click → dark). The icon is constant regardless of the OS
+      preference — it signals "follow the system". */}
+  <span
+    id="theme-icon-monitor"
+    class="theme-icon h-[14px] w-[14px] hidden"
+    set:html={MonitorSvg}
   />
 </button>
 
@@ -66,71 +87,89 @@ import { Sun as SunSvg, Moon as MoonSvg } from 'lucide-static';
       mq = null;
     }
 
+    /* Read the user's stored preference. Three valid values:
+         'dark' | 'light' | 'system'
+       Anything else (including missing) is treated as 'system'. */
     function getStored() {
       try {
         var v = localStorage.getItem(STORAGE_KEY);
-        if (v === 'dark' || v === 'light') return v;
+        if (v === 'dark' || v === 'light' || v === 'system') return v;
       } catch (e) {
         /* localStorage may be blocked. */
       }
-      return null;
+      return 'system';
     }
 
-    /* Effective theme = explicit choice, else OS preference, else default. */
+    /* The theme actually rendered on screen. Falls back to OS
+       preference when the user's choice is 'system' (or unset). */
     function getEffective() {
       var stored = getStored();
-      if (stored) return stored;
+      if (stored === 'dark' || stored === 'light') return stored;
       if (mq && typeof mq.matches === 'boolean') return mq.matches ? 'dark' : 'light';
       return DEFAULT_THEME;
     }
 
-    function applyTheme(theme) {
+    function applyTheme(theme, mode) {
+      /* mode:
+           'dark' | 'light'   → user has chosen a fixed theme
+           'system'           → user has chosen to follow the OS */
       document.documentElement.setAttribute('data-magi-theme', theme);
-      var lightIcon = document.getElementById('theme-icon-light');
-      var darkIcon = document.getElementById('theme-icon-dark');
-      if (lightIcon && darkIcon) {
-        /* Sun = "click to switch to light" (shown in dark mode)
-           Moon = "click to switch to dark" (shown in light mode) */
-        lightIcon.classList.toggle('hidden', theme === 'light');
-        darkIcon.classList.toggle('hidden', theme === 'dark');
+      var sun = document.getElementById('theme-icon-sun');
+      var moon = document.getElementById('theme-icon-moon');
+      var monitor = document.getElementById('theme-icon-monitor');
+      if (sun && moon && monitor) {
+        /* Icon visibility:
+           - Sun    when the effective theme is dark (regardless of mode)
+           - Moon   when the effective theme is light
+           - Monitor when the user has explicitly chosen 'system' — even
+                     when the OS is dark/light, this signals "system mode" */
+        var isSystem = mode === 'system';
+        sun.classList.toggle('hidden', theme !== 'dark');
+        moon.classList.toggle('hidden', theme !== 'light');
+        monitor.classList.toggle('hidden', !isSystem);
       }
     }
 
-    function setTheme(theme, persist) {
-      applyTheme(theme);
-      if (persist) {
-        try {
-          localStorage.setItem(STORAGE_KEY, theme);
-        } catch (e) {
-          /* ignore */
-        }
+    function setTheme(mode) {
+      try {
+        localStorage.setItem(STORAGE_KEY, mode);
+      } catch (e) {
+        /* ignore */
       }
+      applyTheme(getEffective(), mode);
     }
 
-    /* Initial sync (header <head> FOUC script already set the attribute;
-       this keeps the icon state in sync and ensures the OS-driven case
-       is handled even if the head script didn't pick up media-query
-       support on older browsers). */
-    applyTheme(getEffective());
+    function syncIconsForCurrentMode() {
+      applyTheme(getEffective(), getStored());
+    }
 
-    /* Follow the OS only if no explicit choice yet. Once the user has
-       toggled, localStorage takes over and OS changes are ignored. */
+    /* Click cycle: dark → light → system → dark → … */
+    var btn = document.getElementById('theme-btn');
+    if (btn) {
+      btn.addEventListener('click', function () {
+        var current = getStored();
+        var next;
+        if (current === 'dark') next = 'light';
+        else if (current === 'light') next = 'system';
+        else next = 'dark';
+        setTheme(next);
+      });
+    }
+
+    /* Follow the OS only if the user hasn't picked a fixed theme.
+       Once the user has chosen 'dark' or 'light', OS changes are
+       ignored. In 'system' mode, every OS flip re-renders. */
     if (mq && mq.addEventListener) {
       var onSystemChange = function () {
-        if (getStored() === null) {
-          applyTheme(mq.matches ? 'dark' : 'light');
-        }
+        var stored = getStored();
+        if (stored === 'dark' || stored === 'light') return;
+        applyTheme(mq.matches ? 'dark' : 'light', stored);
       };
       mq.addEventListener('change', onSystemChange);
     }
 
-    /* Toggle button: explicit override, always persisted. */
-    var btn = document.getElementById('theme-btn');
-    if (btn) {
-      btn.addEventListener('click', function () {
-        var next = getEffective() === 'dark' ? 'light' : 'dark';
-        setTheme(next, true);
-      });
-    }
+    /* Initial sync (header <head> FOUC script already set the attribute;
+       this keeps the icon state in sync). */
+    syncIconsForCurrentMode();
   })();
 </script>
