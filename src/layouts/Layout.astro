@@ -50,17 +50,27 @@ const currentYear = new Date().getFullYear();
     {/* Set <html lang> synchronously before paint to prevent FOUC for
         returning zh users (audit F-008). Inline script runs on parse,
         before any CSS or content paints. Keeps in sync with the full
-        i18n bootstrap at the end of <body>. */}
+        i18n bootstrap at the end of <body>.
+
+        Resolution order:
+          1. localStorage explicit choice (user has picked before)
+          2. navigator.language startsWith 'zh' → 'zh'
+          3. fallback → 'en' (only zh/en are supported) */}
     <script is:inline>
       (function () {
         try {
           var saved = localStorage.getItem('locale');
           if (saved === 'zh' || saved === 'en') {
             document.documentElement.lang = saved === 'zh' ? 'zh-CN' : 'en';
+            return;
           }
         } catch (e) {
-          /* localStorage may be blocked; default lang="en" from SSR is fine. */
+          /* localStorage may be blocked. Fall through to browser detection. */
         }
+        var browser = (navigator.languages && navigator.languages[0]) ||
+                      navigator.language || '';
+        var lang = browser.toLowerCase().startsWith('zh') ? 'zh-CN' : 'en';
+        document.documentElement.lang = lang;
       })();
     </script>
     {/* Theme FOUC prevention. Set <html data-magi-theme> synchronously
@@ -382,6 +392,12 @@ const currentYear = new Date().getFullYear();
       function getLocale() {
         const saved = localStorage.getItem('locale');
         if (saved === 'zh' || saved === 'en') return saved;
+        // Fall through to browser language detection. Only zh / en are
+        // supported — every other language (or undefined) defaults to
+        // English. This matches the SSR <head> resolution.
+        const list = (navigator.languages && navigator.languages[0]) ||
+                    navigator.language || '';
+        if (list.toLowerCase().startsWith('zh')) return 'zh';
         return 'en';
       }
 
