@@ -104,17 +104,28 @@
    - .theme-icon / .lang-icon: display: inline-flex so the wrapper
      honors its 14×14 dimensions (a plain inline span would grow to
      fit the 24×24 Lucide SVG inside).
-   - .lucide-sun / .lucide-moon / .lucide-languages: width/height
-     100% so the Lucide SVGs (intrinsic 24×24) fill the 14×14 box.
+   - descendant `svg`: 100% so the Lucide SVG (intrinsic 24×24) fills
+     the 14×14 box. Targeting via the parent class (which IS in the
+     source content) instead of the Lucide class (which only exists at
+     runtime via set:html) — otherwise Tailwind's content purge
+     strips the rule because the lucide-* class isn't found in any
+     source file.
+   - Optical alignment: translateY(1px) compensates for the fact
+     that Lucide's stroke-based icons (Sun, Moon, Languages) have
+     visual mass concentrated near the top of the bounding box (rays
+     extending to y=3, etc.), which makes them APPEAR slightly higher
+     than the actual centerline when measured against body text.
+     Without this offset the icons read as sitting 1-2px above the
+     centerline of the navbar vs the nav text body.
    - The :not(.hidden) guard preserves Tailwind's .hidden utility
      so only the active theme's icon is visible at a time. */
 @layer utilities {
-  .lucide-languages:not(.hidden),
-  .lucide-sun:not(.hidden),
-  .lucide-moon:not(.hidden) {
+  .lang-icon:not(.hidden) svg,
+  .theme-icon:not(.hidden) svg {
     width: 100%;
     height: 100%;
     display: block;
+    transform: translateY(1px);
   }
   .lang-icon:not(.hidden),
   .theme-icon:not(.hidden) {
