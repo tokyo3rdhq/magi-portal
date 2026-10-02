@@ -259,19 +259,22 @@ const currentYear = new Date().getFullYear();
     <!--
       Per docs/guidelines.md §12 (Footer) and §13 (Product vs System boundary):
       - Brand-required zones: brand + legal (Privacy / Terms) + copyright
-      - Product-owned zones: Community / Resources / column structure
+      - Product-owned zones: Resources / Community / column structure
 
-      IA (revised 2026-09-30 — audit follow-up, final):
+      IA (revised 2026-10-02 — Resources / Community swap):
         Brand       — required
-        Community   — GitHub, Discord   (moved from header utility)
-        Resources   — Documentation, Status  (both are product destinations)
-        Legal       — Privacy, Terms     (required)
+        Resources   — Documentation, Status  (product destinations)
+        Community   — GitHub, Discord       (external destinations)
+        Legal       — Privacy, Terms         (required)
 
-      The earlier Support column (with Status only) was redundant since
-      Status is also a destination link — it now lives in Resources next
-      to Documentation. Documents remains a primary nav item in the
-      header, but is also surfaced in the footer for users who scroll
-      to the bottom.
+      The user-feedback-driven order change puts product destinations
+      (Documentation, Status) immediately next to the brand column, so
+      users scrolling for product info land there first. External
+      community destinations follow second. Legal closes the row.
+
+      Status (the only entry that was previously in a dedicated
+      'Support' column) lives in Resources next to Documentation —
+      both are product destinations, so they share a column.
     -->
     <footer class="relative z-10 border-t border-line mt-32">
       <div class="mx-auto max-w-page px-6 py-12">
@@ -281,6 +284,30 @@ const currentYear = new Date().getFullYear();
             <p class="magi-caption text-ink-tertiary" data-i18n="footer.tagline">
               Personal AI Lab.
             </p>
+          </div>
+
+          <div>
+            <div class="magi-eyebrow mb-4" data-i18n="footer.resources">Resources</div>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <a
+                  href="/docs"
+                  class="text-ink-secondary hover:text-ink-primary transition-colors"
+                  data-i18n="footer.docs"
+                >
+                  Documentation
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/status"
+                  class="text-ink-secondary hover:text-ink-primary transition-colors"
+                  data-i18n="footer.status"
+                >
+                  Status
+                </a>
+              </li>
+            </ul>
           </div>
 
           <div>
@@ -306,30 +333,6 @@ const currentYear = new Date().getFullYear();
                 >
                   Discord <span aria-hidden="true" class="opacity-60">↗</span>
                   <span class="sr-only">(opens in new tab)</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <div class="magi-eyebrow mb-4" data-i18n="footer.resources">Resources</div>
-            <ul class="space-y-2 text-sm">
-              <li>
-                <a
-                  href="/docs"
-                  class="text-ink-secondary hover:text-ink-primary transition-colors"
-                  data-i18n="footer.docs"
-                >
-                  Documentation
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/status"
-                  class="text-ink-secondary hover:text-ink-primary transition-colors"
-                  data-i18n="footer.status"
-                >
-                  Status
                 </a>
               </li>
             </ul>
