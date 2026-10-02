@@ -153,11 +153,20 @@ const currentYear = new Date().getFullYear();
     <MatrixBackground />
 
     <!-- Top navigation.
-         3-column grid: brand (left) | nav center | utility (right).
-         The center column uses justify-self: center so it stays truly
-         centered regardless of brand / utility widths. -->
+         3-column grid with EQUAL-WEIGHT outer columns: brand (left) |
+         1fr (spacer) | utility (right). Wait — we want the center
+         <ul> truly centered at the viewport's horizontal middle. The
+         earlier `auto_1fr_auto` placed the 1fr between brand and
+         utility; since brand (87.5px) is wider than utility (44px),
+         the 1fr column's midpoint was offset right by half the
+         difference (21.75px). Switching to `1fr_auto_1fr` makes all
+         three tracks have explicit widths; the middle `auto` track
+         is now bounded by equal-weight 1fr columns on each side, so
+         its midpoint falls exactly at the viewport's center. The
+         middle <ul> stays centered within its track via
+         justify-self: center. -->
     <header class="sticky top-0 z-40 backdrop-blur-xl bg-bg-raised/95 border-b border-line">
-      <nav class="mx-auto grid h-11 max-w-page items-center px-6 gap-4 [grid-template-columns:auto_1fr_auto]">
+      <nav class="mx-auto grid h-11 max-w-page items-center px-6 gap-4 [grid-template-columns:1fr_auto_1fr]">
         {/* Brand */}
         {/* Header logo link.
    *
