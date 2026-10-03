@@ -1,6 +1,6 @@
 ---
 /**
- * Theme toggle — light/dark/system cycle.
+ * Theme toggle — system-aware light/dark cycle.
  *
  * Per DS Theme contract (docs/component-contracts.md AppTheme + ADR-0003):
  *   - Color mode is orthogonal to accent. `<html data-magi-theme="...">`
@@ -11,13 +11,16 @@
  * Per DS Experience Guidelines + docs/iconography.md: theme switch is a
  * conventional action → icon-only is allowed (Sun / Moon / Monitor).
  *
- * Click cycle: system → dark → light → system → …
+ * Click cycle adapts to system preference:
+ *   If system prefers dark:  system → light → dark → system → …
+ *   If system prefers light: system → dark → light → system → …
  *
  * The first option is "system" (the default state on first visit / no
- * localStorage value). One click moves to dark, another to light, then
- * back to system. This makes the most common case — "I want it to just
- * follow my OS" — the natural starting point; users explicitly opt
- * into dark or light only if they want a fixed theme.
+ * localStorage value). One click moves to the OPPOSITE of system
+ * preference, another click moves to the SAME as system preference
+ * (explicitly locked), then back to system. This makes the most common
+ * case — "I want it to just follow my OS" — the natural starting point;
+ * users explicitly opt into a fixed theme only if they want to override.
  *
  * The trigger icon reflects the user's CHOICE:
  *   - Sun     when mode === 'dark'
@@ -129,16 +132,20 @@ import {
     var btn = document.getElementById('theme-btn');
     if (btn) {
       btn.addEventListener('click', function () {
-        /* Cycle: system → dark → light → system.
-           The first click from default ('system') moves to 'dark';
-           the next to 'light'; the next back to 'system'. */
+        /* Cycle adapts to the system preference:
+             If system prefers dark:  system → light → dark → system → …
+             If system prefers light: system → dark → light → system → …
+           Click 1 moves to the OPPOSITE of system, click 2 to the SAME
+           as system (explicitly locked), click 3 back to system. */
         var current = getStoredMode();
+        var sysDark = mq && typeof mq.matches === 'boolean' ? mq.matches : true;
+        var sysTheme = sysDark ? 'dark' : 'light';
+        var otherTheme = sysDark ? 'light' : 'dark';
         var next;
-        if (current === 'system') next = 'dark';
-        else if (current === 'dark') next = 'light';
+        if (current === 'system') next = otherTheme;
+        else if (current === otherTheme) next = sysTheme;
         else next = 'system';
         setMode(next);
-      });
     }
 
     /* When the user has chosen 'light' or 'dark', OS flips are ignored.
