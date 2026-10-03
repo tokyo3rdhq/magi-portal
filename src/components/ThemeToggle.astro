@@ -117,7 +117,7 @@ import {
     function applyAll(mode) {
       var theme = getEffectiveTheme(mode);
       document.documentElement.setAttribute('data-magi-theme', theme);
-      applyIcon(theme);
+      applyIcon(mode);
     }
 
     function setMode(mode) {
