@@ -33,6 +33,21 @@ const zh: TranslationTree = {
       name: 'MAGI Agent',
       description: '可长时运行的 AI Agent,支持工具调用、持久记忆与结构化任务分解,适合真实工作流。',
     },
+    tfi: {
+      eyebrow: 'AI 基础设施',
+      name: 'Token Factory Initializr',
+      tagline: '配置模型栈,生成开箱即用的网关配置。',
+      description:
+        '浏览模型目录,挑选需要的模型,选择 Token Factory 实现,一键生成可部署的配置。',
+      cta: '打开 Token Factory Initializr',
+      steps: [
+        '浏览模型',
+        '按需选择',
+        '选择网关实现',
+        '生成配置',
+      ],
+      implementations: 'LiteLLM · New API · Bifrost',
+    },
   },
 
   features: {

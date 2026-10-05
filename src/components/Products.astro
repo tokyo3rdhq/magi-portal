@@ -6,6 +6,8 @@ const products = [
   { key: 'chat', url: 'https://chat.magi.website' },
   { key: 'agent', url: 'https://agent.magi.website' },
 ];
+
+const tfiUrl = 'https://start.magi.website/';
 ---
 
 <section id="products" class="relative px-6 py-32 md:py-40">
@@ -27,6 +29,78 @@ One platform.
       </p>
     </div>
 
+    {/* Featured product: Token Factory Initializr.
+       Apple-style two-column bento: copy on the left, workflow strip
+       on the right. Uses the existing card-surface primitive plus DS
+       tokens (no new primitives introduced — per spec §9). */}
+    <a
+      href={tfiUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Open Token Factory Initializr (opens in a new tab)"
+      class="card-surface group block p-8 md:p-12 mb-6 no-underline transition-all duration-300"
+    >
+      <div class="grid gap-10 md:gap-16 md:grid-cols-[1fr_auto] md:items-center">
+        {/* Copy side */}
+        <div class="max-w-prose">
+          <p
+            class="magi-eyebrow mb-5"
+            data-i18n="products.tfi.eyebrow"
+          >AI Infrastructure</p>
+          <h3 class="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tighter text-ink-primary mb-4 text-balance">
+            <span data-i18n="products.tfi.name">Token Factory Initializr</span>
+          </h3>
+          <p
+            class="text-base md:text-lg text-ink-secondary leading-relaxed mb-8 text-balance"
+            data-i18n="products.tfi.description"
+          >
+            Browse the model catalog, pick the models you need, choose a
+            Token Factory implementation, and generate a deployable
+            configuration.
+          </p>
+          <span
+            class="link-arrow"
+            data-i18n="products.tfi.cta"
+          >Open Token Factory Initializr</span>
+        </div>
+
+        {/* Workflow strip — communicates the four steps of TFI at a glance.
+           Single column on mobile, compact 2x2 grid on desktop (per spec §14
+           responsive note). Each step is a small bordered surface; no new
+           component introduced. */}
+        <ol
+          class="grid grid-cols-2 gap-3 md:gap-4 md:min-w-[320px] md:max-w-[380px] w-full md:w-auto self-stretch"
+          aria-label="Token Factory Initializr workflow"
+        >
+          {Array.from({ length: 4 }).map((_, i) => (
+            <li class="rounded-xl border border-line bg-bg-card p-4 flex flex-col gap-1.5 min-h-[88px]">
+              <span class="text-[11px] font-medium uppercase tracking-[0.14em] text-accent">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span
+                class="text-sm font-medium text-ink-primary leading-snug text-balance"
+                data-i18n={`products.tfi.steps.${i}`}
+              >
+                Step
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      {/* Supporting line: implementation targets. Secondary information
+         (per spec §6) — kept low-prominence so the page doesn't read as a
+         configuration form. */}
+      <p
+        class="mt-8 pt-6 border-t border-line text-xs text-ink-tertiary text-balance"
+        data-i18n="products.tfi.implementations"
+      >
+        LiteLLM · New API · Bifrost
+      </p>
+    </a>
+
+    {/* Existing three-product grid — preserved per spec §3 ("Preserve the
+        existing homepage information architecture"). */}
     <div class="grid gap-6 md:grid-cols-3">
       {products.map((product) => (
         <ProductCard key={product.key} url={product.url} />

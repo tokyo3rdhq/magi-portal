@@ -21,6 +21,15 @@ export type TranslationTree = {
     api: { name: string; description: string };
     chat: { name: string; description: string };
     agent: { name: string; description: string };
+    tfi: {
+      eyebrow: string;
+      name: string;
+      tagline: string;
+      description: string;
+      cta: string;
+      steps: string[];
+      implementations: string;
+    };
   };
   features: {
     eyebrow: string;

@@ -36,6 +36,21 @@ const en: TranslationTree = {
       description:
         'Long-running AI agents with tool calling, persistent memory, and structured task decomposition for real workflows.',
     },
+    tfi: {
+      eyebrow: 'AI Infrastructure',
+      name: 'Token Factory Initializr',
+      tagline: 'Configure your model stack. Generate a ready-to-use gateway.',
+      description:
+        'Browse the model catalog, pick the models you need, choose a Token Factory implementation, and generate a deployable configuration.',
+      cta: 'Open Token Factory Initializr',
+      steps: [
+        'Browse models',
+        'Select what you need',
+        'Choose your gateway',
+        'Generate configuration',
+      ],
+      implementations: 'LiteLLM · New API · Bifrost',
+    },
   },
 
   features: {
