@@ -1,6 +1,10 @@
 # MAGI Portal
 
-Personal AI Lab portal — static site at https://magi.website that links to three Cloudflare Edge services (API, Chat, Agent) operated by an independent developer.
+[![Build & Lint](https://github.com/tokyo3rdhq/magi-portal/actions/workflows/ci.yml/badge.svg)](https://github.com/tokyo3rdhq/magi-portal/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![Live](https://img.shields.io/website?url=https%3A%2F%2Fmagi.website)](https://magi.website)
+
+Personal AI Lab portal — static site at https://magi.website that links to four Cloudflare Edge services (API, Chat, Agent, and Token Factory Initializr) operated by an independent developer.
 
 ## Stack
 
