@@ -15,7 +15,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
     "@astrojs/tailwind": "^5.1.4",
-    "@tokyo3rdhq/magi-design-system": "^0.6.0",
+    "@tokyo3rdhq/magi-design-system": "file:../magi-design-system/packages/design-system",
     "astro": "^4.16.18",
     "lucide-static": "^1.49.0",
     "tailwindcss": "^3.4.17"
