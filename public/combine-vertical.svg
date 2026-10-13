@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 180 130"
+  fill="currentColor">
+  <g transform="translate(61 4)">
+    <path d="M4 7 L28 57 H4 Z"/>
+    <path d="M10 7 H52 L31 36 Z"/>
+    <path d="M58 7 L58 57 H34 Z"/>
+  </g>
+  <text x="90" y="108"
+    text-anchor="middle"
+    font-family="Inter, sans-serif"
+    font-size="34"
+    font-weight="500"
+    letter-spacing="7">MAGI</text>
+</svg>
