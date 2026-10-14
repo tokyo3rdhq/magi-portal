@@ -163,9 +163,8 @@ const currentYear = new Date().getFullYear();
          three tracks have explicit widths; the middle `auto` track
          is now bounded by equal-weight 1fr columns on each side, so
          its midpoint falls exactly at the viewport's center. The
-         middle <ul> stays centered within its track via
-         justify-self: center. -->
-    <header class="sticky top-0 z-40 backdrop-blur-xl bg-bg-raised/95 border-b border-line">
+         middle <ul> stays centered within its track via -->
+    <header class="sticky top-0 z-50 backdrop-blur-xl bg-bg-raised/95 border-b border-line">
       <nav class="mx-auto grid h-11 max-w-page items-center px-6 gap-4 [grid-template-columns:1fr_auto_1fr]">
         {/* Brand */}
         {/* Header logo link.
@@ -257,7 +256,12 @@ const currentYear = new Date().getFullYear();
           </div>
           <ThemeToggle />
         </div>
-                <MobileMenu items={navItems} locale={locales.en} locales={locales} />
+
+        {/* Mobile hamburger trigger (mobile-only). Sits in the nav's
+             right utility column; the overlay itself is fixed-position
+             so it escapes the grid. z-index: header z-50 > overlay z-40,
+             keeping logo / language / theme controls visible above it. */}
+        <MobileMenu items={navItems} />
       </nav>
     </header>
 
