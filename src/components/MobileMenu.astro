@@ -1,0 +1,173 @@
+---
+/**
+ * MobileMenu — accessible hamburger menu for responsive navigation.
+ * 
+ * Shows a hamburger icon on mobile, expands to full-screen overlay on open.
+ * Closes on link click, Escape key, or outside click.
+ * Maintains keyboard accessibility and ARIA states.
+ */
+import { Menu as MenuIcon, X as CloseIcon } from 'lucide-static';
+
+interface Props {
+  items: Array<{ key: string; href: string }>;
+  locale: string;
+  locales: Record<string, string>;
+}
+
+const { items, locale, locales } = Astro.props;
+---
+
+<button
+  id="mobile-menu-btn"
+  type="button"
+  class="md:hidden text-ink-secondary hover:text-ink-primary transition-colors inline-flex items-center p-2"
+  aria-expanded="false"
+  aria-controls="mobile-menu"
+  aria-label="Open navigation menu"
+>
+  <span class="h-[18px] w-[18px]" set:html={MenuIcon} />
+</button>
+
+<div
+  id="mobile-menu"
+  class="fixed inset-0 z-50 hidden flex-col bg-bg-base/98 backdrop-blur-xl md:hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Main navigation"
+>
+  {/* Header row: close button + utilities */}
+  <div class="flex items-center justify-between px-6 py-4 border-b border-line">
+    <a href="/" aria-label="MAGI — home" class="text-lg font-semibold text-ink-primary">
+      MAGI
+    </a>
+    <div class="flex items-center gap-3">
+      {/* Mobile language switcher */}
+      <div class="relative">
+        <button
+          id="mobile-lang-btn"
+          class="text-ink-secondary hover:text-ink-primary transition-colors p-2"
+          aria-label="Switch language"
+        >
+          <span class="h-[18px] w-[18px]" set:html={MenuIcon} />
+        </button>
+        <div
+          id="mobile-lang-dropdown"
+          class="absolute right-0 top-full mt-2 min-w-[140px] rounded-xl border border-line bg-bg-raised/95 backdrop-blur-xl shadow-2xl overflow-hidden hidden"
+          role="listbox"
+          aria-label="Language"
+        >
+          {Object.entries(locales).map(([code, name]) => (
+            <button
+              role="option"
+              aria-selected={code === locale}
+              data-locale={code}
+              class="block w-full px-4 py-2 text-left text-xs text-ink-secondary hover:bg-white/5 hover:text-ink-primary transition-colors"
+            >
+              {name}
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      <button
+        id="mobile-close-btn"
+        type="button"
+        class="text-ink-secondary hover:text-ink-primary transition-colors p-2"
+        aria-label="Close navigation menu"
+      >
+        <span class="h-[18px] w-[18px]" set:html={CloseIcon} />
+      </button>
+    </div>
+  </div>
+
+  {/* Navigation links */}
+  <nav class="flex-1 overflow-y-auto px-6 py-8">
+    <ul class="space-y-4">
+      {items.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class="text-lg font-medium text-ink-primary hover:text-accent transition-colors block py-2"
+            data-i18n={`nav.${item.key}`}
+          >
+            {item.key}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  {/* Footer info */}
+  <div class="px-6 py-4 border-t border-line text-xs text-ink-tertiary">
+    <p>© {new Date().getFullYear()} MAGI</p>
+  </div>
+</div>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const closeBtn = document.getElementById('mobile-close-btn');
+  const langBtn = document.getElementById('mobile-lang-btn');
+  const langDropdown = document.getElementById('mobile-lang-dropdown');
+
+  if (btn && menu && closeBtn) {
+    const toggleMenu = (open: boolean) => {
+      menu.classList.toggle('hidden', !open);
+      btn.setAttribute('aria-expanded', String(open));
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+
+    btn.addEventListener('click', () => {
+      const isOpen = !menu.classList.contains('hidden');
+      toggleMenu(!isOpen);
+      if (!isOpen) {
+        closeBtn.focus();
+      }
+    });
+
+    closeBtn.addEventListener('click', () => toggleMenu(false));
+
+    // Close on link click
+    menu.querySelectorAll('a[href]').forEach(link => {
+      link.addEventListener('click', () => toggleMenu(false));
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
+        toggleMenu(false);
+        btn.focus();
+      }
+    });
+
+    // Close on outside click
+    menu.addEventListener('click', (e) => {
+      if (e.target === menu) {
+        toggleMenu(false);
+      }
+    });
+  }
+
+  // Mobile language switcher
+  if (langBtn && langDropdown) {
+    langBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langDropdown.classList.toggle('hidden');
+    });
+
+    langDropdown.querySelectorAll('button[data-locale]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const code = btn.dataset.locale;
+        if (code) {
+          localStorage.setItem('locale', code);
+          window.location.reload();
+        }
+      });
+    });
+
+    document.addEventListener('click', () => {
+      langDropdown.classList.add('hidden');
+    });
+  }
+</script>

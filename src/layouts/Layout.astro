@@ -1,12 +1,12 @@
 ---
 import '../styles/global.css';
 import { locales, translations } from '../i18n';
+import '../styles/global.css';
+import { locales, translations } from '../i18n';
 import MatrixBackground from '../components/MatrixBackground.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import MobileMenu from '../components/MobileMenu.astro';
 import { Languages as LanguagesSvg } from 'lucide-static';
-// Read the canonical MAGI lockup SVG (single source of truth in
-// node_modules/@tokyo3rdhq/magi-design-system/dist/assets/logo/, copied
-// into public/ by scripts/sync-brand.mjs on every install — see audit
 // F-001/F-006). We import as raw text so `set:html` inlines it and
 // `fill="currentColor"` resolves from the host element's `color`,
 // honoring the DS Logo Contrast Rule (--magi-logo-color).
@@ -257,6 +257,7 @@ const currentYear = new Date().getFullYear();
           </div>
           <ThemeToggle />
         </div>
+                <MobileMenu items={navItems} locale={locales.en} locales={locales} />
       </nav>
     </header>
 
