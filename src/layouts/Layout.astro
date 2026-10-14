@@ -164,8 +164,8 @@ const currentYear = new Date().getFullYear();
          is now bounded by equal-weight 1fr columns on each side, so
          its midpoint falls exactly at the viewport's center. The
          middle <ul> stays centered within its track via -->
-    <header class="sticky top-0 z-50 backdrop-blur-xl bg-bg-raised/95 border-b border-line">
-      <nav class="mx-auto grid h-11 max-w-page items-center px-6 gap-4 [grid-template-columns:1fr_auto_1fr]">
+    <header class="sticky top-0 z-50 bg-elevated backdrop-blur-xl border-b border-line">
+      <nav class="mx-auto flex h-11 max-w-page items-center justify-between px-6 md:grid md:gap-4 md:[grid-template-columns:1fr_auto_1fr]">
         {/* Brand */}
         {/* Header logo link.
    *
@@ -240,7 +240,7 @@ const currentYear = new Date().getFullYear();
               id="lang-dropdown"
               role="listbox"
               aria-label="Language"
-              class="hidden absolute right-0 top-full mt-2 min-w-[140px] rounded-xl border border-line bg-bg-raised/95 backdrop-blur-xl shadow-2xl overflow-hidden z-50"
+              class="hidden absolute right-0 top-full mt-2 min-w-[140px] rounded-xl border border-line bg-elevated backdrop-blur-xl shadow-2xl overflow-hidden z-50"
             >
               {Object.entries(locales).map(([code, name]) => (
                 <button
@@ -255,13 +255,16 @@ const currentYear = new Date().getFullYear();
             </div>
           </div>
           <ThemeToggle />
+          {/* Mobile hamburger trigger. Lives inside the utility
+             cluster so the three icons (language, theme, hamburger)
+             right-align together as a group. The trigger itself is
+             inline-flex (flow), while the overlay it toggles is
+             position: fixed (escapes this flex container to cover
+             the viewport below the header). z-index: header z-50 >
+             overlay z-40, so logo / language / theme stay visible
+             and clickable above the open menu. */}
+          <MobileMenu items={navItems} />
         </div>
-
-        {/* Mobile hamburger trigger (mobile-only). Sits in the nav's
-             right utility column; the overlay itself is fixed-position
-             so it escapes the grid. z-index: header z-50 > overlay z-40,
-             keeping logo / language / theme controls visible above it. */}
-        <MobileMenu items={navItems} />
       </nav>
     </header>
 

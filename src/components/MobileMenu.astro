@@ -34,7 +34,7 @@ const { items } = Astro.props;
 
 <div
   id="mobile-menu"
-  class="md:hidden fixed left-0 right-0 top-11 bottom-0 z-40 hidden flex-col bg-bg-base/98 backdrop-blur-xl"
+  class="md:hidden fixed inset-0 top-11 z-40 hidden flex flex-col bg-overlay backdrop-blur-xl"
   role="dialog"
   aria-modal="true"
   aria-label="Main navigation"
@@ -59,7 +59,17 @@ const { items } = Astro.props;
     const btn = document.getElementById('mobile-menu-btn');
     const menu = document.getElementById('mobile-menu');
 
+    /* The header has backdrop-blur, which makes it a containing block
+       for fixed descendants. A fixed overlay inside the header would be
+       sized to the 45px-tall header (top-11 + bottom-0 = ~1px strip:
+       links render but the background covers nothing). Move the
+       overlay to <body> so `position: fixed` resolves against the
+       viewport. The overlay starts hidden, so no visual flash. */
+    if (menu) document.body.appendChild(menu);
+
     if (btn && menu) {
+      let previousScrollY = 0;
+
       const toggleMenu = (open: boolean) => {
         menu.classList.toggle('hidden', !open);
         btn.setAttribute('aria-expanded', String(open));
@@ -67,7 +77,17 @@ const { items } = Astro.props;
           'aria-label',
           open ? 'Close navigation menu' : 'Open navigation menu'
         );
-        document.documentElement.style.overflow = open ? 'hidden' : '';
+        if (open) {
+          previousScrollY = window.scrollY;
+          /* Lock scrolling on body only. Locking on documentElement
+             breaks position:sticky for ancestor (head bar fix). */
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = '';
+          /* Restore scroll position in case an anchor left us positioned
+             halfway down the document. */
+          if (previousScrollY) window.scrollTo(0, previousScrollY);
+        }
       };
 
       btn.addEventListener('click', () => {
@@ -85,7 +105,6 @@ const { items } = Astro.props;
       });
     }
   </script>
-
   <style>
     /* Lucide ships 24x24 SVGs; the icon spans are 18x18 (smaller,
        navbar-sized). Scale the inline SVG to fill the box. */

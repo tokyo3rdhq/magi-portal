@@ -144,3 +144,20 @@
 #lang-switcher {
   line-height: 0;
 }
+/* Opaque surface helpers.
+   Tailwind's opacity modifier syntax (`bg-x/95`) produces
+   `rgb(var(--magi-x) / 0.95)`, which resolves to `rgba(0,0,0,0)`
+   because `--magi-bg-*` are hex literals — the computed background
+   is fully transparent. Same bug hits the header, language dropdown
+   and mobile menu. These utilities use the project's existing
+   `color-mix` idiom (see Features.astro) so the var() color is
+   composited toward transparent correctly, preserving the subtle
+   translucency while staying readable over content. */
+@layer utilities {
+  .bg-elevated {
+    background-color: color-mix(in srgb, var(--magi-bg-raised) 96%, transparent);
+  }
+  .bg-overlay {
+    background-color: color-mix(in srgb, var(--magi-bg-base) 96%, transparent);
+  }
+}
