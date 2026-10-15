@@ -157,7 +157,15 @@
   .bg-elevated {
     background-color: color-mix(in srgb, var(--magi-bg-raised) 96%, transparent);
   }
-  .bg-overlay {
-    background-color: color-mix(in srgb, var(--magi-bg-base) 96%, transparent);
+  /* Mobile nav panel: a translucent frosted-glass sheet instead of an
+     opaque black wall. The gradient fades from 72% to 55% of the
+     surface color, so the page content behind shows through softly
+     while the accent/backdrop blur keeps nav text perfectly readable. */
+  .bg-gradient-overlay {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--magi-bg-raised) 72%, transparent) 0%,
+      color-mix(in srgb, var(--magi-bg-raised) 55%, transparent) 100%
+    );
   }
 }

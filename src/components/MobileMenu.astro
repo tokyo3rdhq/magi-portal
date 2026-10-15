@@ -2,15 +2,30 @@
 /**
  * MobileMenu — accessible hamburger menu for responsive navigation.
  *
- * A mobile-only hamburger button toggles a full overlay that expands
- * from below the sticky header (top-11). The overlay sits at z-40 —
- * BELOW the header (z-50) — so the brand lockup, language switcher
- * and theme toggle stay visible and clickable while the menu is open.
- * Only the nav links live in the overlay; language/theme controls are
- * NOT duplicated here.
+ * A mobile-only hamburger button toggles a dropdown panel that hangs
+ * below the sticky header (top-11). Two deliberate design choices:
+ *
+ *   - Height: content-sized (no bottom-0 inset). The panel only wraps
+ *     the nav links — roughly 4 rows — instead of veiling the whole
+ *     viewport. The page below stays visible for context.
+ *   - Background: a translucent gradient (bg-gradient-overlay in
+ *     global.css, color-mix on --magi-bg-raised) plus backdrop-blur,
+ *     so content behind reads as frosted glass instead of a black wall.
+ *
+ * z-index: the panel sits at z-40 — BELOW the header (z-50) — so the
+ * brand lockup, language switcher and theme toggle stay visible and
+ * clickable while the menu is open. Only nav links live in the panel;
+ * language/theme controls are NOT duplicated here.
+ *
+ * The header applies backdrop-blur, which per the Filter Effects spec
+ * makes it a containing block for fixed descendants. A fixed overlay
+ * inside the header would be sized to the 45px-tall header instead of
+ * the viewport width, so the script teleports the panel to <body> on
+ * boot. It starts `hidden`, so there is no flash.
  *
  * A11y: aria-expanded + label swap on the trigger, dialog semantics,
- * Escape to close, body scroll lock while open.
+ * Escape to close, click outside the panel to close, body scroll lock
+ * while open with the pre-open scroll position restored on close.
  */
 import { Menu } from 'lucide-static';
 
@@ -34,12 +49,12 @@ const { items } = Astro.props;
 
 <div
   id="mobile-menu"
-  class="md:hidden fixed inset-0 top-11 z-40 hidden flex flex-col bg-overlay backdrop-blur-xl"
+  class="md:hidden fixed inset-x-0 top-11 z-40 hidden flex-col bg-gradient-overlay backdrop-blur-md shadow-lg shadow-black/20 ring-1 ring-white/5"
   role="dialog"
   aria-modal="true"
   aria-label="Main navigation"
 >
-  <nav class="flex-1 overflow-y-auto px-6 py-8">
+  <nav class="px-6 pt-6 pb-7">
     <ul class="space-y-1">
       {items.map((item) => (
         <li>
@@ -54,68 +69,74 @@ const { items } = Astro.props;
       ))}
     </ul>
   </nav>
+</div>
 
-  <script>
-    const btn = document.getElementById('mobile-menu-btn');
-    const menu = document.getElementById('mobile-menu');
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
 
-    /* The header has backdrop-blur, which makes it a containing block
-       for fixed descendants. A fixed overlay inside the header would be
-       sized to the 45px-tall header (top-11 + bottom-0 = ~1px strip:
-       links render but the background covers nothing). Move the
-       overlay to <body> so `position: fixed` resolves against the
-       viewport. The overlay starts hidden, so no visual flash. */
-    if (menu) document.body.appendChild(menu);
+  /* Move the fixed overlay out of the backdrop-blurred header (see
+     component doc comment above). Starts hidden → no visual change. */
+  if (menu) document.body.appendChild(menu);
 
-    if (btn && menu) {
-      let previousScrollY = 0;
+  if (btn && menu) {
+    let previousScrollY = 0;
 
-      const toggleMenu = (open: boolean) => {
-        menu.classList.toggle('hidden', !open);
-        btn.setAttribute('aria-expanded', String(open));
-        btn.setAttribute(
-          'aria-label',
-          open ? 'Close navigation menu' : 'Open navigation menu'
-        );
-        if (open) {
-          previousScrollY = window.scrollY;
-          /* Lock scrolling on body only. Locking on documentElement
-             breaks position:sticky for ancestor (head bar fix). */
-          document.body.style.overflow = 'hidden';
-        } else {
-          document.body.style.overflow = '';
-          /* Restore scroll position in case an anchor left us positioned
-             halfway down the document. */
-          if (previousScrollY) window.scrollTo(0, previousScrollY);
-        }
-      };
+    const toggleMenu = (open: boolean) => {
+      menu.classList.toggle('hidden', !open);
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute(
+        'aria-label',
+        open ? 'Close navigation menu' : 'Open navigation menu'
+      );
+      if (open) {
+        previousScrollY = window.scrollY;
+        /* Lock scrolling on body only. Locking on documentElement
+           breaks position:sticky for the ancestor header (it scrolls
+           out of view and the page gets stuck unscrollable). */
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+        if (previousScrollY) window.scrollTo(0, previousScrollY);
+      }
+    };
 
-      btn.addEventListener('click', () => {
-        toggleMenu(menu.classList.contains('hidden'));
-      });
+    btn.addEventListener('click', () => {
+      toggleMenu(menu.classList.contains('hidden'));
+    });
 
-      menu.querySelectorAll('a[href]').forEach((link) => {
-        link.addEventListener('click', () => toggleMenu(false));
-      });
+    menu.querySelectorAll('a[href]').forEach((link) => {
+      link.addEventListener('click', () => toggleMenu(false));
+    });
 
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
-          toggleMenu(false);
-        }
-      });
-    }
-  </script>
-  <style>
-    /* Lucide ships 24x24 SVGs; the icon spans are 18x18 (smaller,
-       navbar-sized). Scale the inline SVG to fill the box. */
-    .mobile-menu-icon {
-      display: inline-flex;
-      height: 20px;
-      width: 20px;
-      line-height: 0;
-    }
-    .mobile-menu-icon :global(svg) {
-      width: 100%;
-      height: 100%;
-    }
-  </style>
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
+        toggleMenu(false);
+      }
+    });
+
+    /* Click outside the panel (the page area below it, now visible
+       since the overlay only wraps the links) dismisses the menu. */
+    document.addEventListener('click', (e) => {
+      if (menu.classList.contains('hidden')) return;
+      const target = e.target as Node;
+      if (menu.contains(target) || btn.contains(target)) return;
+      toggleMenu(false);
+    });
+  }
+</script>
+
+<style>
+  /* Lucide ships 24x24 SVGs; the icon spans are 20x20. Scale the
+     inline SVG to fill the box. */
+  .mobile-menu-icon {
+    display: inline-flex;
+    height: 20px;
+    width: 20px;
+    line-height: 0;
+  }
+  .mobile-menu-icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+</style>
