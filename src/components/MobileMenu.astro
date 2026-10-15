@@ -24,8 +24,8 @@
  * boot. It starts `hidden`, so there is no flash.
  *
  * A11y: aria-expanded + label swap on the trigger, dialog semantics,
- * Escape to close, click outside the panel to close, body scroll lock
- * while open with the pre-open scroll position restored on close.
+ * Escape to close, click outside the panel to close. The page keeps
+ * scrolling behind the fixed panel (no body scroll lock).
  */
 import { Menu } from 'lucide-static';
 
@@ -80,8 +80,6 @@ const { items } = Astro.props;
   if (menu) document.body.appendChild(menu);
 
   if (btn && menu) {
-    let previousScrollY = 0;
-
     const toggleMenu = (open: boolean) => {
       menu.classList.toggle('hidden', !open);
       btn.setAttribute('aria-expanded', String(open));
@@ -89,16 +87,13 @@ const { items } = Astro.props;
         'aria-label',
         open ? 'Close navigation menu' : 'Open navigation menu'
       );
-      if (open) {
-        previousScrollY = window.scrollY;
-        /* Lock scrolling on body only. Locking on documentElement
-           breaks position:sticky for the ancestor header (it scrolls
-           out of view and the page gets stuck unscrollable). */
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.style.overflow = '';
-        if (previousScrollY) window.scrollTo(0, previousScrollY);
-      }
+      /* NO page-level scroll lock. The panel hangs from the header and
+         covers only a few link rows — scrolling the page behind it is
+         expected behavior on mobile (iOS/Android sheet menus behave
+         this way). A blanket body overflow:hidden wedged the sticky
+         header and left the page unscrollable (bug #3). The panel
+         itself is position:fixed, so it stays pinned while the page
+         scrolls behind it. */
     };
 
     btn.addEventListener('click', () => {

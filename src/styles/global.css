@@ -157,15 +157,26 @@
   .bg-elevated {
     background-color: color-mix(in srgb, var(--magi-bg-raised) 96%, transparent);
   }
-  /* Mobile nav panel: a translucent frosted-glass sheet instead of an
-     opaque black wall. The gradient fades from 72% to 55% of the
-     surface color, so the page content behind shows through softly
-     while the accent/backdrop blur keeps nav text perfectly readable. */
+  /* Mobile nav panel: frosted glass. Dark theme can afford a low
+     alpha ramp (72% -> 55%) because the surface is near-black and
+     page text is light — the blur plus dark tint keeps contrast.
+     Light theme cannot: its surface is near-WHITE, so a 55%-alpha
+     bottom lets dark page text punch straight through the panel
+     and collide with the menu items. The light-theme override
+     raises the ramp (92% -> 88%) — still glassy at the edge, but
+     opaque enough that menu copy never fights the page copy. */
   .bg-gradient-overlay {
     background: linear-gradient(
       to bottom,
       color-mix(in srgb, var(--magi-bg-raised) 72%, transparent) 0%,
       color-mix(in srgb, var(--magi-bg-raised) 55%, transparent) 100%
+    );
+  }
+  [data-magi-theme='light'] .bg-gradient-overlay {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--magi-bg-raised) 92%, transparent) 0%,
+      color-mix(in srgb, var(--magi-bg-raised) 88%, transparent) 100%
     );
   }
 }
