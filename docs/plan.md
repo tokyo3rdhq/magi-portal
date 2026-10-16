@@ -189,7 +189,7 @@ export type TranslationTree = {
 
 ### ✅ Phase 7 — 接入共享设计系统（完成）
 
-- 安装 [`@tokyo3rdhq/magi-design-system`](https://github.com/tokyo3rdhq/magi-design-system) `0.1.x` 作为 dependencies
+- 安装 [`@tokyo3rdhq/magi-design-system`](https://github.com/tokyo3rdhq/magi-design-system) `0.8.3` 作为 dependencies
 - `tailwind.config.mjs` 颜色 token 全部改为 `var(--magi-*)` CSS 变量（`bg`/`ink`/`accent`/`line`）
 - `src/styles/global.css` 导入 `@tokyo3rdhq/magi-design-system/styles.css`，删除重复的 reset/globals/typography 规则
 - `<body>` 加 `data-magi-app`，scrollbar 行为改用 design-system 的 `[data-scrolling]` 选择器

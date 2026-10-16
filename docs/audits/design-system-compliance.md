@@ -1,7 +1,7 @@
 # MAGI Portal — Design System Compliance Audit
 
-> **Audit target**: `magi.website` (Astro 4 + Tailwind 3 + `@tokyo3rdhq/magi-design-system@^0.6.0`)
-> **Installed design-system version**: `0.6.0` (npm tarball, before the 0.6.1 subtree-accent patch)
+> **Audit target**: `magi.website` (Astro 4 + Tailwind 3 + `@tokyo3rdhq/magi-design-system@^0.8.3`)
+> **Installed design-system version**: `0.8.3` (npm tarball, before the 0.6.1 subtree-accent patch)
 > **Audit date**: 2026-09-30
 > **Method**: read-only. Per the audit doc, no business code was modified.
 
@@ -300,7 +300,7 @@ magi.website
 
 | Dependency | Version | Status |
 |---|---|---|
-| `@tokyo3rdhq/magi-design-system` | `^0.6.0` (installed 0.6.0) | ✅ npm package, no local copy, no git dep, no vendoring |
+| `@tokyo3rdhq/magi-design-system` | `^0.6.0` (installed 0.8.3) | ✅ npm package, no local copy, no git dep, no vendoring |
 | `astro` | `^4.16.18` | ✅ Latest 4.x |
 | `@astrojs/tailwind` | `^5.1.4` | ✅ Compatible with Astro 4 |
 | `tailwindcss` | `^3.4.17` | ✅ |
@@ -493,7 +493,7 @@ F-021/F-022/F-023: Product-owned decoration (MatrixBackground), product IA (seo/
 
 ## 16. Final Judgment
 
-`magi.website` is **MOSTLY COMPLIANT** with `@tokyo3rdhq/magi-design-system@0.6.0`.
+`magi.website` is **MOSTLY COMPLIANT** with `@tokyo3rdhq/magi-design-system@0.8.3`.
 
 **Strengths:**
 - Zero parallel token system. All colors, surfaces, text, borders, accents bind to `var(--magi-*)`.
