@@ -1,13 +1,22 @@
 ---
 import ProductCard from './ProductCard.astro';
+import { productLinks, withUtm } from '../lib/site-links';
 
-const products = [
-  { key: 'api', url: 'https://api.magi.website' },
-  { key: 'chat', url: 'https://chat.magi.website' },
-  { key: 'agent', url: 'https://agent.magi.website' },
-];
+// Homepage product cards. Base URLs live in src/lib/site-links.ts;
+// UTM params are appended here at build time so attribution reaches
+// the destination product while the config stays free of tracking
+// state (see the 2026-10-16 link-management discussion).
+const products = productLinks
+  .filter((p) => p.key !== 'tokenFactory')
+  .map((p) => ({
+    key: p.key,
+    url: withUtm(p.url, { campaign: 'homepage', content: `products-${p.key}-card` }),
+  }));
 
-const tfiUrl = 'https://start.magi.website/';
+const tfiUrl = withUtm(productLinks[0].url, {
+  campaign: 'homepage',
+  content: 'products-tfi-card',
+});
 ---
 
 <section id="products" class="relative px-6 py-32 md:py-40">

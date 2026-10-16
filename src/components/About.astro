@@ -1,4 +1,5 @@
 ---
+import { communityLinks } from '../lib/site-links';
 const techStack = ['Astro', 'TypeScript', 'Cloudflare Workers', 'Tailwind CSS', 'Python', 'AI/ML'];
 ---
 
@@ -43,7 +44,7 @@ Maintained with care.
         <ul class="space-y-5">
           <li>
             <a
-              href="mailto:hi@magi.website"
+              href={communityLinks.email}
               class="group flex items-center justify-between rounded-xl border border-line bg-bg-card px-6 py-5 hover:border-line-strong hover:bg-bg-card-hover transition-all"
             >
               <div>
@@ -55,7 +56,7 @@ Maintained with care.
           </li>
           <li>
             <a
-              href="https://github.com/tokyo3rdhq"
+              href={communityLinks.github}
               target="_blank"
               rel="noopener noreferrer"
               class="group flex items-center justify-between rounded-xl border border-line bg-bg-card px-6 py-5 hover:border-line-strong hover:bg-bg-card-hover transition-all"

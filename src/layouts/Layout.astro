@@ -1,8 +1,6 @@
 ---
 import '../styles/global.css';
 import { locales, translations } from '../i18n';
-import '../styles/global.css';
-import { locales, translations } from '../i18n';
 import MatrixBackground from '../components/MatrixBackground.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import MobileMenu from '../components/MobileMenu.astro';
@@ -11,6 +9,7 @@ import { Languages as LanguagesSvg } from 'lucide-static';
 // `fill="currentColor"` resolves from the host element's `color`,
 // honoring the DS Logo Contrast Rule (--magi-logo-color).
 import magiLockupSvg from '../../public/magi-lockup.svg?raw';
+import { communityLinks } from '../lib/site-links';
 
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://magi.website';
 const siteName = import.meta.env.PUBLIC_SITE_NAME || 'MAGI';
@@ -332,7 +331,7 @@ const currentYear = new Date().getFullYear();
             <ul class="space-y-2 text-sm">
               <li>
                 <a
-                  href="https://github.com/tokyo3rdhq"
+                  href={communityLinks.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   class="text-ink-secondary hover:text-ink-primary transition-colors inline-flex items-center gap-1"
@@ -343,7 +342,7 @@ const currentYear = new Date().getFullYear();
               </li>
               <li>
                 <a
-                  href="https://discord.gg/gTGnvTdyec"
+                  href={communityLinks.discord}
                   target="_blank"
                   rel="noopener noreferrer"
                   class="text-ink-secondary hover:text-ink-primary transition-colors inline-flex items-center gap-1"
@@ -391,7 +390,7 @@ const currentYear = new Date().getFullYear();
           <p class="flex items-center gap-1">
             <span aria-hidden="true" class="opacity-60">@</span>
             <a
-              href="mailto:hi@magi.website"
+              href={communityLinks.email}
               class="text-ink-secondary hover:text-ink-primary transition-colors"
               data-i18n="footer.contact"
             >
